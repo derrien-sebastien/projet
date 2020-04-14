@@ -1,0 +1,95 @@
+/**********************************************************************
+**                              Entête                               **
+**                    Bootstrap.css pour la Navbar                   **
+**********************************************************************/
+
+/**********************************************************************
+**                                                                   **
+**                        Page d'accueil                             **
+**                                                                   **
+**********************************************************************/
+
+div#conteneur-accueilP
+{
+	display:block;
+	overflow:hidden;
+        margin: 0 ;
+        padding: 0;
+        text-align: center;
+        color : rgba(255, 136, 0, 0.952);
+        background: rgba(65, 64, 64, 0.24) ;
+}
+
+.imageEcole 
+{
+        position:absolute;
+        display: block;
+        margin-left: 0;
+        margin-right: auto;
+        margin-top: 5em;
+        width: 20%;
+}
+
+a
+{
+        text-align:center;
+}
+.accueilP 
+{
+        border:1px double black;
+        padding:3px;
+        box-shadow: 6px 6px 0px black;
+        text-shadow: 2px 2px 4px black;
+        border-radius: 10px;
+        background: coral;
+        margin-right:10em;
+}
+
+div#site
+{
+        text-align:center;
+}
+
+div#info
+{
+        text-align: justify;
+        width:50%;
+        height:50%;
+        margin-left: 25%;
+        text-align:center;
+}
+h1
+{
+        text-align: center;
+        height: 10%;
+        color : #fc5000f5;
+}
+
+
+/**********************************************************************
+**                                                                   **
+**                           Page login                              **
+**                                                                   **
+**********************************************************************/
+#login
+{
+        text-align: center;
+        color : #ec5c30c2;  
+}
+
+body
+{
+        margin: 10px 0 ;
+        padding: 0 ;
+        text-align: center ;
+}
+#entete, #menu, #contenu, #footer 
+{
+        padding:1px 0;
+}
+      
+
+
+     
+     
+      
