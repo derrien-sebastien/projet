@@ -1,5 +1,6 @@
 <?php
 //require_once(APPPATH."controllers/Visiteur.php");//coucou
+//aurevoior
 class Administrateur extends CI_Controller
 {
 
