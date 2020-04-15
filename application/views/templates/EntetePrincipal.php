@@ -132,14 +132,13 @@ defined('BASEPATH')OR exit('No direct script access allowed');
                   <?php if ($this->session->userdata('email') == False) {?>
                     <li>
                       <a href="<?php echo site_url('visiteur/seConnecter') ?>">Connexion</a>                    
+                    </li>  
+                  <?php }elseif ($this->session->userdata('email') == True) { ?>
+                    <li>
+                      <a href="<?php echo site_url('visiteur/seDeConnecter') ?>">Déconnexion</a>
                     </li>
-                    <?php }elseif ($this->session->userdata('email') == True) { ?>
-                      <li>
-                        <a href="<?php echo site_url('visiteur/seDeConnecter') ?>">Déconnexion</a>
-                      </li>
-                    <?php } ?>
+                  <?php } ?>
                   </ul>            
-              
 			      </ul>
           </div>
         </nav>

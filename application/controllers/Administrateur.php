@@ -1,5 +1,5 @@
 <?php
-
+//require_once(APPPATH."controllers/Visiteur.php");
 class Administrateur extends CI_Controller
 {
 
@@ -53,12 +53,10 @@ class Administrateur extends CI_Controller
     **                           Accueil                                 **
 	**********************************************************************/
 	
-
 	public function accueil() //page d'accueil admin
 	{
-		$this->load->view('templates/EnteteAdmin');
+		$this->load->view('templates/EntetePrincipal');
 		$this->load->view('administrateur/vueAccueilAdministrateur');
-		//$this->load->view('templates/PiedDePagePrincipal');
 	}
 
 	/*********************************************************************************************************************************************/

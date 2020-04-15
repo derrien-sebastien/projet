@@ -3,16 +3,13 @@
 class Visiteur extends CI_Controller 
 {
 
-
    /**********************************************************************
    **                           Constructeur                            **
    **********************************************************************/
 
-
    public function __construct()
    {	
-      parent::__construct();  
-      
+      parent::__construct();   
       $this->load->model('ModeleIdentifiantSite');
       $this->load->model('ModeleAdministrateur');
       /* $this->load->model('ModeleClasse'); */
@@ -50,30 +47,28 @@ class Visiteur extends CI_Controller
    public function accueil()
    {
       $this->load->view('templates/EntetePrincipal');
-      $this->load->view('templates/vueAccueilPrincipal');
-      
+      $this->load->view('templates/vueAccueilPrincipal');  
    }
 
    /**********************************************************************
    **                           INSCRIPTION                             **
    **********************************************************************/
+   // A REVOIR
 
-
-   public function inscription()//génère l'inscription
+   public function inscription()
    {  
       $this->load->view('templates/EntetePrincipal');
       $this->form_validation->set_rules( 'txtEmail', 'Identifiant', 'required'); 
       $this->form_validation->set_rules( 'password', 'mot de passe', 'required');
       $this->form_validation->set_rules( 'password2', 'repetez mot de passe', 'required'); 
-      if ($this->form_validation->run() === TRUE)                                      // si les règles sont respectées 
+      if ($this->form_validation->run() === TRUE)                                     
       {
          if($_POST['password']==$_POST['password2'])
          {
-            $donnees = array(                                                               // on associe l'email a un tableau 
+            $donnees = array(                                                              
                'Email' => $this->input->post('txtEmail'),
-               'MotDePasse'=>$this->input->post('password')                                     //
-            );                                                                                    //
-            $this->ModelePersonne->insererInformationPersonne($donnees);
+               'MotDePasse'=>$this->input->post('password')                                    
+            );                                                                                   
             $this->seConnecter();    
          }
          else
@@ -83,30 +78,30 @@ class Visiteur extends CI_Controller
             $this->load->view('templates/PiedDePagePrincipal');
          }
       }
-      else                                                                             // si les règles ne sont pas respectées
+      else                                                                             
       {                                                                                                 
          
-         $this->load->view('templates/PiedDePagePrincipal');                                                 // on redirige vers notre fonction 'erreur'
+         $this->load->view('templates/PiedDePagePrincipal');                                                 
       }
    }
-
 
    /**********************************************************************
    **                        SE CONNECTER                               **
    **********************************************************************/
 
+   //A REVOIR
 
    public function seConnecter()
    {  
       $this->load->view('templates/EntetePrincipal');   
       $this->form_validation->set_rules('txtEmail', 'email', 'trim|required|valid_email');
       $this->form_validation->set_rules('password','mot de passe');      
-      $DonneesInjectees['TitreDeLaPage'] = 'Se Connecter';                             // on injecte dans notre variable TitreDeLaPage ='Se Connecter'
-      if($this->form_validation->run() === FALSE)                                     // les règles ne sont pas respectées
+      $DonneesInjectees['TitreDeLaPage'] = 'Se Connecter';                             
+      if($this->form_validation->run() === FALSE)                                     
       {         
          $this->load->view('visiteur/vueLogin',$DonneesInjectees);
       }
-      else                                                                             // Sinon 
+      else                                                                             
       {  
          $email=$_POST['txtEmail'];
          if($_POST['password']=='')
@@ -138,9 +133,20 @@ class Visiteur extends CI_Controller
 			   $this->session_save_path;
                redirect('Administrateur/accueil');
             }
+            elseif ($this->session->profil=='client')
+            {
+               $donneesSession=array(
+               'email'=>$this->session->__ci_last_regenerate,
+               'mdp'=>$personne->Email,
+               'profil'=>$personne->profil
+               );
+               $this->ModeleIdentifiantSite->insererInformationSession($donneesSession);
+			      $this->session_save_path;
+               redirect('client/vueAccueilPersonne');
+            }
             else
             {
-               $this->load->view('visiteur/vueAccueilPersonne'); 
+               $this->load->view('visiteur/vueCatalogue');
             }
             
          }
@@ -166,7 +172,7 @@ class Visiteur extends CI_Controller
    /**********************************************************************
    **                      SE DECONNECTER                               **
    **********************************************************************/
-
+   // OK
 
    public function seDeConnecter() 
    {
@@ -174,164 +180,19 @@ class Visiteur extends CI_Controller
       redirect('visiteur/accueil');
    }
 
-
-   /**********************************************************************
-   **                      MOT DE PASSE OUBLIE                          **
-   **********************************************************************/
-   public function oublieMotDePasse()
-	{
-      $this->load->view('templates/EntetePrincipal');
-      $this->form_validation->set_rules('txtLogin','email','required');
-      if($this->form_validation->run() === FALSE)
-      {
-         
-         $this->load->view('visiteur/vueMotDePasseOublie');
-         $this->load->view('templates/PiedDePagePrincipal');
-      }
-      else
-      {
-            
-         if (!($rechercherEmailPresent($_POST['txtLogin'])))
-         {  //erreure de mail a refaire
-            $Value['Value'] = 'Adresse e-mail incorrect';
-            $this->load->view('vueErreur');
-            $this->load->view('visiteur/vueMotDePasseOublie');
-            $this->load->view('templates/PiedDePagePrincipal');
-         }
-         else
-         {
-            $nouveauMdp='';
-            for ($i=1;$i<=10;$i++)
-            {
-               $nouveauMdp= chr(floor(rand(0, 25)+97));
-            }   
-            $this->email->from('ge_personne');
-            $this->email->to($DonneesPersonne['Email']);
-            $this->email->subject('MOT DE PASSE GES');
-            $message = "Votre mot de passe est : '".$nouveauMdp."'. Pensez à changer votre mot de passe.";
-            $this->email->message($message);
-            if (!$this->email->send())
-            {
-               $this->email->print_debugger();
-            }
-            redirect('visiteur/nosEvenements');
-         }          
-      }
-   }
-
-
-
-   public function ModificationMdp()//Modification mot de passe
-   {  
-      $this->load->view('templates/EntetePrincipal');
-      $this->form_validation->set_rules( 'password', 'mot de passe','required');
-      $this->form_validation->set_rules( 'password2', 'repetez mot de passe','required');
-      if($this->form_validation->run() === FALSE)
-      {
-         $this->load->view('visiteur/vueModifierMotDePasse');
-         $this->load->view('templates/PiedDePagePrincipal');
-      }
-      else 
-      {
-         if($_POST['password']==$_POST['password2'])
-         {
-            
-            $donnees=array(
-               'email'=>$_SESSION['email'],
-               'MotDePasse'=>$_POST['password']
-            );
-            $this->ModelePersonne->modifierInfoPersonne($donnees);
-            $this->seDeConnecter();
-         }
-         else
-         {
-            echo '<h1>le mot de passe saisi n\'est pas identique a la confirmation<h1>';
-            $this->load->view('visiteur/vueModifierMotDePasse');
-            $this->load->view('templates/PiedDePagePrincipal');
-         }
-      }
-   }
-
    /**********************************************************************
    **                    Mention légales et cookies                     **
    **********************************************************************/
-  
+   //A REVOIR
     
    public function mentionsLegales()
    {
-      $DonneesInjectees['TitreDeLaPage'] = 'Informations Légales';                     // on injecte dans notre variable TitreDeLaPage ='Informations Légales'
-      $this->load->view('templates/EntetePrincipal');                                  // on charge l'entete de notre dossier templates
-      $this->load->view('visiteur/vueMentionsLegales', $DonneesInjectees);             // on charge la vue des ML de notre dossier visiteur dans laquelle on injecte notre variable
-      $this->load->view('templates/PiedDePagePrincipal');                              // on charge le pied de page de note dossier template
+      $DonneesInjectees['TitreDeLaPage'] = 'Informations Légales';                     
+      $this->load->view('templates/EntetePrincipal');                                  
+      $this->load->view('visiteur/vueMentionsLegales', $DonneesInjectees);            
+      $this->load->view('templates/PiedDePagePrincipal');                              
    }
   
-
-   /*********************************************************************************************************************************************/
-   /*********************************************************************************************************************************************/
-   /*********************************************************************************************************************************************/
-   /**************************                                                                              *************************************/
-   /**************************                        DONNEES PAGE GESTION DE COMPTE                        *************************************/
-   /**************************                                                                              *************************************/
-   /*********************************************************************************************************************************************/
-   /*********************************************************************************************************************************************/
-   /*********************************************************************************************************************************************/
-  
-
-
-   
-
-   /**********************************************************************
-   **        AJOUTER | VOIR | MODIFIER LES INFORMATIONS DU COMPTE       **
-   **********************************************************************/
-
-   public function infosCompte ()	
-   {	
-      $this->load->view('templates/EntetePrincipal'); 
-      
-      $this->form_validation->set_rules('txtNom','Nom','required');
-      $this->form_validation->set_rules('txtPrenom','Prenom');
-      $this->form_validation->set_rules('txtAdresse','Adresse');
-      $this->form_validation->set_rules('txtCp','Code postal');
-      $this->form_validation->set_rules('txtVille','Ville');
-      $this->form_validation->set_rules('txtTelP','TelPortable');
-      $this->form_validation->set_rules('txtTelF','TelFixe');
-      if ($this->form_validation->run() === FALSE)
-      {  
-         
-         
-         if($this->ModelePersonne->presenceMdp($this->session->email))
-         {   
-            $DonneesInjectees['Personne']=$this->ModelePersonne->rechercheInfoPersonne($this->session->email);                                                                                                
-            $this->load->view('visiteur/vueGestionDeCompte',$DonneesInjectees);//charge la vue formulaire eventuelment prérempli
-         }
-         else
-         {
-            echo '</br>';
-            echo '</br>';
-            echo '<h1>le mot de passe est obligatoire pour modifier ses informations personnel</h1>';
-         
-            $this->ModificationMdp();
-         }   
-		}         
-      else
-      {
-         $donneesInsererPersonne = array(
-            'email'=>$_SESSION['email'],
-            'Nom' => $this->input->post('txtNom'),//$_POST['txtNom]
-            'Prenom' => $this->input->post('txtPrenom'),    
-            'Adresse' => $this->input->post('txtAdresse'),
-            'CodePostal' => $this->input->post('txtCp'),
-            'Ville' => $this->input->post('txtVille'),
-            'TelPortable' => $this->input->post('txtTelP'),
-            'TelFixe' => $this->input->post('txtTelF'),
-            );           
-            $this->ModelePersonne->modifierInfoPersonne($donneesInsererPersonne);
-            $this->load->view('templates/EntetePrincipal');
-            $this->load->view('Visiteur/vueInsertionReussi');
-            $this->load->view('templates/PiedDePagePrincipal');
-         } 
-        
-      }
 
 
    /*********************************************************************************************************************************************/
@@ -358,6 +219,13 @@ class Visiteur extends CI_Controller
             ////////////////////////////////////////////////////////////////////////////
 
 
+   /*   Afficher tous les évènements en catalogue en deux parties Ev_Marchand et Ev_Non_Marchand cliquable  
+   /*   Afficher un seul évènement avec tous ses produits en stock + vue si stock vide  
+   /*   Afficher le panier avec un lien passer commande (DANS LE RESUMER DU PANIER) et rediriger vers seConnecter
+   /*   Si email pas dans la bdd affichage d'une vue nom, prenom, adresse puis valider pour Achat
+   /*   ajouter élément cours sur paiement en ligne
+
+
 
    /**********************************************************************
    **                 LiISTER LES EVENEMENTS EN COURS                  ***
@@ -366,7 +234,10 @@ class Visiteur extends CI_Controller
 
    public function catalogueEvenement()            
    {  
-      $donnees['Evenements']=$this->ModeleEvenement->getEvMarchParent();
+         $DonneesInjectees['lesEvenements'] = $this->ModeleEvenement->getEvMarchParent();
+         $DonneesInjectees['TitreDeLaPage'] = 'Nos Evènements';
+         $this->load->view('templates/EntetePrincipal');
+         $this->load->view('visiteur/vueCatalogues', $DonneesInjectees);
    } 
 
 
@@ -379,13 +250,13 @@ class Visiteur extends CI_Controller
    {
       if (!isset($_POST['valider']))
 		{
-			$Donnees['LesProduits']=$this->ModeleProduit->GetProduit();
-			$this->load->view('/templates/Entete');
-			$this->load->view('/visiteur/vueCatalogue.php',$Donnees);
+			$Donnees['LesProduits']=$this->ModeleProduit->get_all_produit();
+			$this->load->view('templates/EntetePrincipal');
+			$this->load->view('visiteur/vueCatalogue.php',$Donnees);
 		}
 		else
 		{
-			$LesProduits=$this->ModeleProduit->GetProduit();
+			$LesProduits=$this->ModeleProduit->get_all_produit();
 			
 			
 			$Compteur=0;
@@ -402,7 +273,7 @@ class Visiteur extends CI_Controller
 						);
 			}
 			$this->cart->insert($DonneesPanier);
-			$this->load->view('/visiteur/vuePanier');
+			$this->load->view('  visiteur/vuePanier');
 		}
 
 	
@@ -424,7 +295,7 @@ class Visiteur extends CI_Controller
    /*********************************************************************************************************************************************/
 
    /**********************************************************************
-   **                    fonction propre aux produits                  ***
+   **                                    ***
    **********************************************************************/
 
    
