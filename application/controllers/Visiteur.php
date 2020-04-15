@@ -133,7 +133,7 @@ class Visiteur extends CI_Controller
 			   $this->session_save_path;
                redirect('Administrateur/accueil');
             }
-            elseif ($this->session->profil=='client')
+            elseif ($this->session->profil=='membre')
             {
                $donneesSession=array(
                'email'=>$this->session->__ci_last_regenerate,
@@ -142,7 +142,7 @@ class Visiteur extends CI_Controller
                );
                $this->ModeleIdentifiantSite->insererInformationSession($donneesSession);
 			      $this->session_save_path;
-               redirect('client/vueAccueilPersonne');
+               redirect('membre/vueAccueilPersonne');
             }
             else
             {

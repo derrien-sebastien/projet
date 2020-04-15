@@ -1,6 +1,6 @@
 <?php
 //require_once(APPPATH."controllers/Administrateur.php");
-class Client extends CI_Controller 
+class Membre extends CI_Controller 
 {
 
 
@@ -12,30 +12,32 @@ class Client extends CI_Controller
     public function __construct()
     {	
         parent::__construct();
-        if ($this->user->is_logged_in() === FALSE) {
+        if ($this->user->is_logged_in() === FALSE) 
+        {
             redirect('visiteur/accueil');
-        };   
-        $this->load->model('ModeleIdentifiantSite');
-        $this->load->model('ModeleAdministrateur');
-        /* $this->load->model('ModeleClasse'); */
-        $this->load->model('ModeleCommande');
-        /* $this->load->model('ModeleEnfant'); */
-        $this->load->model('ModeleEvenement');
-        /* $this->load->model('ModeleIdentifiantSite'); */    	
-        $this->load->model('ModelePersonne');
-        $this->load->model('ModeleProduit');
-        //constante AnneeEnCour
-        if(date('m')<8)
-		{
-			$annee=date('Y');
-			define('AnneeEnCour',$annee);				 
-		}
-		else
-		{
-			$annee=date('Y')+1;
-			define('AnneeEnCour',$annee); 
-		}
-    }
+            };   
+            $this->load->model('ModeleIdentifiantSite');
+            $this->load->model('ModeleAdministrateur');
+            /* $this->load->model('ModeleClasse'); */
+            $this->load->model('ModeleCommande');
+            /* $this->load->model('ModeleEnfant'); */
+            $this->load->model('ModeleEvenement');
+            /* $this->load->model('ModeleIdentifiantSite'); */    	
+            $this->load->model('ModelePersonne');
+            $this->load->model('ModeleProduit');
+        
+            //constante AnneeEnCour
+            if(date('m')<8)
+		    {
+		    	$annee=date('Y');
+			    define('AnneeEnCour',$annee);				 
+		    }
+		    else
+		    {
+			    $annee=date('Y')+1;
+			    define('AnneeEnCour',$annee); 
+		    }
+        }
 
     /*********************************************************************************************************************************************/
     /*********************************************************************************************************************************************/
@@ -63,7 +65,7 @@ class Client extends CI_Controller
         $this->form_validation->set_rules('txtLogin','email','required');
         if($this->form_validation->run() === FALSE)
         { 
-            $this->load->view('client/vueMotDePasseOublie');
+            $this->load->view('membre/vueMotDePasseOublie');
             $this->load->view('templates/PiedDePagePrincipal');
         }
         else
@@ -72,7 +74,7 @@ class Client extends CI_Controller
             {   //erreure de mail a refaire
                 $Value['Value'] = 'Adresse e-mail incorrect';
                 //$this->load->view('vueErreur');
-                $this->load->view('client/vueMotDePasseOublie');
+                $this->load->view('membre/vueMotDePasseOublie');
                 $this->load->view('templates/PiedDePagePrincipal');
             }
             else
@@ -115,7 +117,7 @@ class Client extends CI_Controller
             if($this->ModelePersonne->presenceMdp($this->session->email))
             {   
                 $DonneesInjectees['Personne']=$this->ModelePersonne->rechercheInfoPersonne($this->session->email);                                                                                                
-                $this->load->view('client/vueGestionDeCompte',$DonneesInjectees);//charge la vue formulaire eventuelment prérempli
+                $this->load->view('membre/vueGestionDeCompte',$DonneesInjectees);//charge la vue formulaire eventuelment prérempli
             }
             else
             {
@@ -139,7 +141,7 @@ class Client extends CI_Controller
             );           
             $this->ModelePersonne->modifierInfoPersonne($donneesInsererPersonne);
             $this->load->view('templates/EntetePrincipal');
-            $this->load->view('client/vueInsertionReussi');
+            $this->load->view('membre/vueInsertionReussi');
             $this->load->view('templates/PiedDePagePrincipal');
         } 
        
@@ -153,7 +155,7 @@ class Client extends CI_Controller
         $this->form_validation->set_rules( 'password2', 'repetez mot de passe','required');
         if($this->form_validation->run() === FALSE)
         {
-            $this->load->view('client/vueModifierMotDePasse');
+            $this->load->view('membre/vueModifierMotDePasse');
             $this->load->view('templates/PiedDePagePrincipal');
         }
         else 
@@ -170,7 +172,7 @@ class Client extends CI_Controller
             else
             {
                 echo '<h1>le mot de passe saisi n\'est pas identique a la confirmation<h1>';
-                $this->load->view('client/vueModifierMotDePasse');
+                $this->load->view('membre/vueModifierMotDePasse');
                 $this->load->view('templates/PiedDePagePrincipal');
             }
         }
