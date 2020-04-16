@@ -22,15 +22,15 @@ class Visiteur extends CI_Controller
       
       
       if(date('m')<8)
-			 {
-				 $annee=date('Y');
-				 define('AnneeEnCour',$annee);				 
-			 }
-			 else
-			 {
-				$annee=date('Y')+1;
-				define('AnneeEnCour',$annee); 
-			 }
+		{
+			$annee=date('Y');
+			define('AnneeEnCour',$annee);				 
+		}
+		else
+		{
+			$annee=date('Y')+1;
+			define('AnneeEnCour',$annee); 
+		}
    }
 
 
@@ -221,7 +221,7 @@ class Visiteur extends CI_Controller
 
    /*   Afficher tous les évènements en catalogue en deux parties Ev_Marchand et Ev_Non_Marchand cliquable  
    /*   Afficher un seul évènement avec tous ses produits en stock + vue si stock vide  
-   /*   Afficher le panier avec un lien passer commande (DANS LE RESUMER DU PANIER) et rediriger vers seConnecter
+   /*   Afficher le panier avec un lien passer commande (DANS LE RESUMER DU PANIER) + box pour connaitre info 
    /*   Si email pas dans la bdd affichage d'une vue nom, prenom, adresse puis valider pour Achat
    /*   ajouter élément cours sur paiement en ligne
 
