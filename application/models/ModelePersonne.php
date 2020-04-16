@@ -124,7 +124,14 @@ class ModelePersonne extends CI_Model
       $Liste = $this->db->get();
       return $Liste->row();     
    }
-
+   public function getPersonneParent($noPersonne)
+   {
+      $this->db->select('*');
+      $this->db->from('ge_pers_parent'); 
+      $this->db->where('NoPersonne', $noPersonne);      
+      $Liste = $this->db->get();
+      return $Liste->row(); 
+   }
    /**********************************************************************
    **                   Récupérer des données uniques                   **
    **********************************************************************/
@@ -206,7 +213,11 @@ class ModelePersonne extends CI_Model
       $this->db->where('email',  $pDonneesAInserer['email']);      
       return $this->db->update('ge_personne', $pDonneesAInserer);
    }
-
+   public function modifierPersParent($donnees)
+   {
+      $this->db->where('NoPersonne',  $donnees['NoPersonne']);      
+      return $this->db->update('ge_pers_parent', $donnees);
+   }
 
    /*********************************************************************************************************************************************/
    /*********************************************************************************************************************************************/

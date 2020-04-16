@@ -767,7 +767,45 @@ class Administrateur extends CI_Controller
 
 		}
 	}
+	public function afficherProbleme()
+	{
+		$donnees['enfantSansCorrepondant']=$this->ModeleEnfant->enfantSansCorrespondant();
+		$donnees['classesSansEnfants']=$this->ModeleClasse->nbEleveParClasse();	
+		$this->load->view('templates/EntetePrincipal');
+		$this->load->view('administrateur/vueProbleme',$donnees);
+		$this->load->view('templates/PiedDePagePrincipal');
+	}
+	public function modifCorrespondantEnfant()
+	{
+		foreach($_POST as $key=>$value)
+		{
+			if($key != 'submit')
+			{
+				if($this->ModelePersonne->rechercherEmailPresent($value))
+				{
+					$personne=$this->ModelePersonne->rechercheInfoPersonne($value);
+					$donnees=array(
+						'NoPersonne'=>$personne->NoPersonne,
+						'EtreCorrespondant'=>1
+					);
+					$personneParent=$this->ModelePersonne->getPersonneParent($personne->NoPersonne);
+					if($personneParent!=null)
+					{
+						if($personneParent->EtreCorrepondant==0)
+						{
+							$this->ModelePersonne->modifierPersParent($donnees);
+						}
+					}
+					else
+					{
+						$this->ModelePersonne->insererInformationPersonneParent($donnees);
+					}
+
+				}
+			}
+		}		
+		$this->afficherProbleme();
+	}
 
 
 }//fin  de class
-?>

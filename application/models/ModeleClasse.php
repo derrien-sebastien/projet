@@ -37,7 +37,15 @@ class ModeleClasse extends CI_Model
 		return $maListe->result_array();
 		
 	} 
-
+	public function nbEleveParClasse()
+	{
+		$this->db->select('NoClasse,Nom,COUNT(*) as NbEleves');
+		$this->db->from('ge_classe');
+		$this->db->join('ge_appartenir','ge_appartenir.NoClasse=ge_classe.NoClasse');
+		$this->db->group_by(array('NoClasse','Nom'));   
+		$maListe = $this->db->get();		
+		return $maListe->result();
+	}
 	/*********************************************************************************************************************************************/
 	/*********************************************************************************************************************************************/
 	/*********************************************************************************************************************************************/
