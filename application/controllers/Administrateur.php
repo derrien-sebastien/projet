@@ -17,6 +17,7 @@ class Administrateur extends CI_Controller
 		$this->load->model('ModeleProduit');
 		$this->load->model('ModeleEvenement');
 		$this->load->model('ModeleClasse');
+		$this->load->model('ModeleEnfant');
 		$this->load->model('ModeleCommande'); 
 		$this->load->helper('url'); // pour utiliser redirect
 		$this->load->library('session');
@@ -808,7 +809,14 @@ class Administrateur extends CI_Controller
 		$this->load->view('administrateur/vueSelectionClasse',$donnees);
 		if(isset($_POST['envoyer']))
 		{
-				
+			$donneesEleves=array(
+				'eleves'=>$this->ModeleEnfant->getEnfantClasse($_POST['classe'])
+			);
+			if($_POST['classe']!=0)
+			{
+				$donneesEleves['classe']=$this->ModeleClasse->retournerinfoClasse($_POST['classe']);
+			}
+			$this->load->view('administrateur/vueTableauEleves',$donneesEleves);
 		}
 	}
 

@@ -37,6 +37,15 @@ class ModeleClasse extends CI_Model
 		return $maListe->result_array();
 		
 	} 
+	public function retournerinfoClasse($NoClasse)
+	{
+	   	$this->db->select('*');
+		$this->db->from('ge_classe');
+		$this->db->where('ge_classe.NoClasse',$NoClasse);   
+		$maListe = $this->db->get();		
+		return $maListe->row();
+		
+	} 
 	public function nbEleveParClasse()
 	{
 		$this->db->select('NoClasse,Nom,COUNT(*) as NbEleves');
