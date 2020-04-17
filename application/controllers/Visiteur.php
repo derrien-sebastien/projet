@@ -218,51 +218,106 @@ class Visiteur extends CI_Controller
 
    public function catalogueEvenement()            
    {  
-         $DonneesInjectees['lesEvenementsMarchands'] = $this->ModeleEvenement->retournerEvenementsMarchands();
-         $DonneesInjectees['lesEvenementsNonMarchands'] = $this->ModeleEvenement->retournerEvenementsNonMarchands();
-         $DonneesInjectees['TitreDeLaPage'] = 'Nos Evènements';
-         $this->load->view('templates/EntetePrincipal');
-         $this->load->view('visiteur/vueCatalogueEvenements', $DonneesInjectees);
+      
+      $DonneesInjectees['lesEvenementsMarchands'] = $this->ModeleEvenement->retournerEvenementsMarchands();
+      $DonneesInjectees['lesEvenementsNonMarchands'] = $this->ModeleEvenement->retournerEvenementsNonMarchands();
+      $this->load->view('templates/EntetePrincipal');
+      $this->load->view('visiteur/vueCatalogueEvenements', $DonneesInjectees);
    } 
  
-   public function catalogueEvenementAvecPagination() 
-   {
-      
-      $config = array();
-      $config["base_url"] = site_url('visiteur/catalogueEvenementAvecPagination');
-      $config["total_rows"] = $this->ModeleEvenement->nombreDEvenements();
-      $config["per_page"] = 3;
-      $config["uri_segment"] = 3;
-      $config['first_link'] = 'Premier';
-      $config['last_link'] = 'Dernier';
-      $config['next_link'] = 'Suivant';
-      $config['prev_link'] = 'Précédent';
-      $this->pagination->initialize($config);
-      $noPage = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
-      $DonneesInjectees['TitreDeLaPage'] = 'Nos Evènements, avec pagination';
-      $DonneesInjectees["lesEvenements"] = $this->ModeleEvenement->retournerEvenementsLimite($config["per_page"], $noPage);
-      $DonneesInjectees["liensPagination"] = $this->pagination->create_links();
-      $this->load->view('templates/Entete');
-      $this->load->view('visiteur/catalogueEvenementAvecPagination', $DonneesInjectees);
-   } 
-
    /**********************************************************************
    **                        VOIR UN EVENEMENT                         ***
    **********************************************************************/
 
-   public function Evenement($noEvenement = NULL,$Annee =NULL)
+   public function EvenementMarchand($noEvenement = NULL,$Annee =NULL)
    {
-      $DonneesInjectees['unEvenement'] = $this->ModeleEvenement->retournerEvenements($noEvenement);
-      if (empty($DonneesInjectees['unEvenement']))
+      
+      $DonneesInjectees['unEvenementMarchand'] = $this->ModeleEvenement->retournerEvenements($noEvenement);
+      if (empty($DonneesInjectees['unEvenementMarchand']))
       {   
          show_404();
       }
-      $DonneesInjectees['TitreDeLaPage'] = $DonneesInjectees['unEvenement']['TxtHTMLEntete'];
+      $DonneesInjectees['TitreDeLaPage'] = $DonneesInjectees['unEvenementMarchand']['TxtHTMLEntete'];
       $this->load->view('templates/EntetePrincipal');
-      $this->load->view('visiteur/vueVoirUnEvenementEntete', $DonneesInjectees);
+      $this->load->view('visiteur/vueEvenementMarchandEntete', $DonneesInjectees);
+      $this->indexPanier();//à finir affichage en catalogue des produit EN STOCK 
+   }
+   
+   public function EvenementNonMarchand($noEvenement = NULL,$Annee =NULL)
+   {
+      
+      $DonneesInjectees['unEvenementNonMarchand'] = $this->ModeleEvenement->retournerEvenements($noEvenement);
+      if (empty($DonneesInjectees['unEvenementNonMarchand']))
+      {   
+         show_404();
+      }
+      $DonneesInjectees['TitreDeLaPage'] = $DonneesInjectees['unEvenementNonMarchand']['TxtHTMLEntete'];
+      $this->load->view('templates/EntetePrincipal');
+      $this->load->view('visiteur/vueEvenementNonMarchandEntete', $DonneesInjectees);
    }
 
+   /**********************************************************************
+   **                    fonction propre au panier                     ***
+   **********************************************************************/
+   function indexPanier()
+   {
+      $this->load->view('templates/EntetePrincipal');
+      $data['data']=$this->ModeleProduit->get_all_produit();
+      $this->load->view('visiteur/vuePanier',$data);
+   }
 
+   function ajouterProduitAuPanier()
+   { 
+      $data = array(
+                        'id' => $this->input->post('NoProduit'), 
+                        'name' => $this->input->post('LibelleCourt'), 
+                        'price' => $this->input->post('Prix'), 
+                        'qty' => $this->input->post('Stock'), 
+                     );
+      $this->cart->insert($data);
+      echo $this->voirPanier(); 
+   }
+
+   function voirPanier()
+   { 
+      $output = '';
+      $no = 0;
+      foreach ($this->cart->contents() as $items) 
+      {
+         $no++;
+         $output .='
+         <tr>
+            <td>'.$items['name'].'</td>
+            <td>'.number_format($items['price']).'</td>
+            <td>'.$items['qty'].'</td>
+            <td>'.number_format($items['subtotal']).'</td>
+            <td><button type="button" id="'.$items['rowid'].'" class="romove_cart btn btn-danger btn-sm">Cancel</button></td>
+         </tr>
+         ';
+      }
+      $output .= '
+      <tr>
+         <th colspan="3">Total</th>
+         <th colspan="2">'.'TotalHT '.number_format($this->cart->total()).'</th>
+      </tr>
+      ';
+      return $output;
+   }
+
+   function chargerPanier()
+   { 
+      echo $this->voirPanier();
+   }
+
+   function suppressionPanier()
+   { 
+      $data = array(
+                        'rowid' => $this->input->post('row_id'), 
+                        'qty' => 0, 
+                     );
+      $this->cart->update($data);
+      echo $this->voirPanier();
+   }
 
 
 
@@ -386,64 +441,7 @@ class Visiteur extends CI_Controller
    } */
 
 
-   /**********************************************************************
-   **                    fonction propre au panier                     ***
-   **********************************************************************/
-   function indexPanier()
-   {
-      $this->load->view('templates/EntetePrincipal');
-      $data['data']=$this->ModeleProduit->get_all_produit();
-      $this->load->view('visiteur/vuePanier',$data);
-   }
-
-function ajouterProduitAuPanier(){ 
-   $data = array(
-      'id' => $this->input->post('NoProduit'), 
-      'name' => $this->input->post('LibelleCourt'), 
-      'price' => $this->input->post('Prix'), 
-      'qty' => $this->input->post('Stock'), 
-   );
-   $this->cart->insert($data);
-   echo $this->voirPanier(); 
-}
-
-function voirPanier(){ 
-   $output = '';
-   $no = 0;
-   foreach ($this->cart->contents() as $items) {
-      $no++;
-      $output .='
-         <tr>
-            <td>'.$items['name'].'</td>
-            <td>'.number_format($items['price']).'</td>
-            <td>'.$items['qty'].'</td>
-            <td>'.number_format($items['subtotal']).'</td>
-            <td><button type="button" id="'.$items['rowid'].'" class="romove_cart btn btn-danger btn-sm">Cancel</button></td>
-         </tr>
-      ';
-   }
-   $output .= '
-      <tr>
-         <th colspan="3">Total</th>
-         <th colspan="2">'.'TotalHT '.number_format($this->cart->total()).'</th>
-      </tr>
-   ';
-   return $output;
-}
-
-function chargerPanier(){ 
-   echo $this->voirPanier();
-}
-
-function suppressionPanier()
-{ 
-   $data = array(
-      'rowid' => $this->input->post('row_id'), 
-      'qty' => 0, 
-   );
-   $this->cart->update($data);
-   echo $this->voirPanier();
-}
+   
 
    /* function indexPanier()
    {

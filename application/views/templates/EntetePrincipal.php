@@ -50,7 +50,9 @@ defined('BASEPATH')OR exit('No direct script access allowed');
             <ul class="nav navbar-nav">
 
                   <!--visiteur-->
-
+                  <li>
+                        <a href="<?php echo site_url('visiteur/catalogueEvenement') ?>">Nos Evenements</a>
+                  </li>
                   <?php if ($this->session->profil!='admin') : ?>
                     <?php if (isset($this->session->email)) : ?>
                       <li>
