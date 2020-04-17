@@ -8,7 +8,7 @@
 			<h4>Nos Produits</h4>
 			<div class="row">
 			<?php foreach ($data->result() as $row) : ?>
-				<?php echo form_hidden($i.'[rowid]', $items['rowid']); ?>
+				
 				<div class="col-md-4">
 					<div class="thumbnail">
 						<img width="200" src="<?php echo base_url().'assets/images/'.$row->Img_Produit;?>">
@@ -26,7 +26,7 @@
 						</div>
 					</div>
 				</div>
-				<?php $i++; ?>
+				
 			<?php endforeach;?>
                 
             
@@ -92,5 +92,8 @@
 		});
 	});
 </script>
+<?php
+echo '<p>'.anchor('visiteur/catalogueEvenement','Retour à la liste de nos évènements').'</p>';
+?>
 </body>
 </html>

@@ -11,7 +11,6 @@ class Visiteur extends CI_Controller
    {	
       parent::__construct();   
       $this->load->model('ModeleIdentifiantSite');
-      $this->load->model('ModeleAdministrateur');
       /* $this->load->model('ModeleClasse'); */
       $this->load->model('ModeleCommande');
       /* $this->load->model('ModeleEnfant'); */
@@ -20,17 +19,16 @@ class Visiteur extends CI_Controller
       $this->load->model('ModelePersonne');
       $this->load->model('ModeleProduit');
       
-      
       if(date('m')<8)
-			 {
-				 $annee=date('Y');
-				 define('AnneeEnCour',$annee);				 
-			 }
-			 else
-			 {
-				$annee=date('Y')+1;
-				define('AnneeEnCour',$annee); 
-			 }
+		{
+			$annee=date('Y');
+			define('AnneeEnCour',$annee);				 
+		}
+		else
+		{
+			$annee=date('Y')+1;
+			define('AnneeEnCour',$annee); 
+		}
    }
 
 
@@ -205,23 +203,9 @@ class Visiteur extends CI_Controller
    /*********************************************************************************************************************************************/
    /*********************************************************************************************************************************************/
 
-
-
-
-
-
-            ////////////////////////////////////////////////////////////////////////////
-         ////////////////////////////////////////////////////////////////////////////////////
-      /////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////// A FINIR ///////////////////////////////////////////////////////
-      /////////////////////////////////////////////////////////////////////////////////////////////
-         ////////////////////////////////////////////////////////////////////////////////////
-            ////////////////////////////////////////////////////////////////////////////
-
-
    /*   Afficher tous les évènements en catalogue en deux parties Ev_Marchand et Ev_Non_Marchand cliquable  
    /*   Afficher un seul évènement avec tous ses produits en stock + vue si stock vide  
-   /*   Afficher le panier avec un lien passer commande (DANS LE RESUMER DU PANIER) et rediriger vers seConnecter
+   /*   Afficher le panier avec un lien passer commande (DANS LE RESUMER DU PANIER) + box pour connaitre info 
    /*   Si email pas dans la bdd affichage d'une vue nom, prenom, adresse puis valider pour Achat
    /*   ajouter élément cours sur paiement en ligne
 
@@ -234,19 +218,142 @@ class Visiteur extends CI_Controller
 
    public function catalogueEvenement()            
    {  
-         $DonneesInjectees['lesEvenements'] = $this->ModeleEvenement->getEvMarchParent();
-         $DonneesInjectees['TitreDeLaPage'] = 'Nos Evènements';
-         $this->load->view('templates/EntetePrincipal');
-         $this->load->view('visiteur/vueCatalogues', $DonneesInjectees);
+      
+      $DonneesInjectees['lesEvenementsMarchands'] = $this->ModeleEvenement->retournerEvenementsMarchands();
+      $DonneesInjectees['lesEvenementsNonMarchands'] = $this->ModeleEvenement->retournerEvenementsNonMarchands();
+      $this->load->view('templates/EntetePrincipal');
+      $this->load->view('visiteur/vueCatalogueEvenements', $DonneesInjectees);
    } 
-
-
+ 
    /**********************************************************************
    **                        VOIR UN EVENEMENT                         ***
    **********************************************************************/
 
+   public function EvenementMarchand($noEvenement = NULL,$Annee =NULL)
+   {
+      
+      $DonneesInjectees['unEvenementMarchand'] = $this->ModeleEvenement->retournerEvenements($noEvenement);
+      if (empty($DonneesInjectees['unEvenementMarchand']))
+      {   
+         show_404();
+      }
+      $DonneesInjectees['TitreDeLaPage'] = $DonneesInjectees['unEvenementMarchand']['TxtHTMLEntete'];
+      $this->load->view('templates/EntetePrincipal');
+      $this->load->view('visiteur/vueEvenementMarchandEntete', $DonneesInjectees);
+      $this->indexPanier();//à finir affichage en catalogue des produit EN STOCK 
+   }
+   
+   public function EvenementNonMarchand($noEvenement = NULL,$Annee =NULL)
+   {
+      
+      $DonneesInjectees['unEvenementNonMarchand'] = $this->ModeleEvenement->retournerEvenements($noEvenement);
+      if (empty($DonneesInjectees['unEvenementNonMarchand']))
+      {   
+         show_404();
+      }
+      $DonneesInjectees['TitreDeLaPage'] = $DonneesInjectees['unEvenementNonMarchand']['TxtHTMLEntete'];
+      $this->load->view('templates/EntetePrincipal');
+      $this->load->view('visiteur/vueEvenementNonMarchandEntete', $DonneesInjectees);
+   }
 
-   public function voirUnEvenement($NoEvenement = NULL,$Annee =NULL) 
+   /**********************************************************************
+   **                    fonction propre au panier                     ***
+   **********************************************************************/
+   function indexPanier()
+   {
+      $this->load->view('templates/EntetePrincipal');
+      $data['data']=$this->ModeleProduit->get_all_produit();
+      $this->load->view('visiteur/vuePanier',$data);
+   }
+
+   function ajouterProduitAuPanier()
+   { 
+      $data = array(
+                        'id' => $this->input->post('NoProduit'), 
+                        'name' => $this->input->post('LibelleCourt'), 
+                        'price' => $this->input->post('Prix'), 
+                        'qty' => $this->input->post('Stock'), 
+                     );
+      $this->cart->insert($data);
+      echo $this->voirPanier(); 
+   }
+
+   function voirPanier()
+   { 
+      $output = '';
+      $no = 0;
+      foreach ($this->cart->contents() as $items) 
+      {
+         $no++;
+         $output .='
+         <tr>
+            <td>'.$items['name'].'</td>
+            <td>'.number_format($items['price']).'</td>
+            <td>'.$items['qty'].'</td>
+            <td>'.number_format($items['subtotal']).'</td>
+            <td><button type="button" id="'.$items['rowid'].'" class="romove_cart btn btn-danger btn-sm">Cancel</button></td>
+         </tr>
+         ';
+      }
+      $output .= '
+      <tr>
+         <th colspan="3">Total</th>
+         <th colspan="2">'.'TotalHT '.number_format($this->cart->total()).'</th>
+      </tr>
+      ';
+      return $output;
+   }
+
+   function chargerPanier()
+   { 
+      echo $this->voirPanier();
+   }
+
+   function suppressionPanier()
+   { 
+      $data = array(
+                        'rowid' => $this->input->post('row_id'), 
+                        'qty' => 0, 
+                     );
+      $this->cart->update($data);
+      echo $this->voirPanier();
+   }
+
+
+
+
+
+
+
+
+
+
+
+
+
+   /*********************************************************************************************************************************************/
+   /*********************************************************************************************************************************************/
+   /*********************************************************************************************************************************************/
+   /**************************                                                                              *************************************/
+   /**************************                                    A REVOIR                                  *************************************/
+   /**************************                                                                              *************************************/
+   /*********************************************************************************************************************************************/
+   /*********************************************************************************************************************************************/
+   /*********************************************************************************************************************************************/
+
+
+
+
+
+
+
+
+
+
+
+
+
+   public function voirUnEvenementAutre($NoEvenement = NULL,$Annee =NULL) 
    {
       if (!isset($_POST['valider']))
 		{
@@ -334,64 +441,7 @@ class Visiteur extends CI_Controller
    } */
 
 
-   /**********************************************************************
-   **                    fonction propre au panier                     ***
-   **********************************************************************/
-   function indexPanier()
-   {
-      $this->load->view('templates/EntetePrincipal');
-      $data['data']=$this->ModeleProduit->get_all_produit();
-      $this->load->view('visiteur/vuePanier',$data);
-   }
-
-function ajouterProduitAuPanier(){ 
-   $data = array(
-      'id' => $this->input->post('NoProduit'), 
-      'name' => $this->input->post('LibelleCourt'), 
-      'price' => $this->input->post('Prix'), 
-      'qty' => $this->input->post('Stock'), 
-   );
-   $this->cart->insert($data);
-   echo $this->voirPanier(); 
-}
-
-function voirPanier(){ 
-   $output = '';
-   $no = 0;
-   foreach ($this->cart->contents() as $items) {
-      $no++;
-      $output .='
-         <tr>
-            <td>'.$items['name'].'</td>
-            <td>'.number_format($items['price']).'</td>
-            <td>'.$items['qty'].'</td>
-            <td>'.number_format($items['subtotal']).'</td>
-            <td><button type="button" id="'.$items['rowid'].'" class="romove_cart btn btn-danger btn-sm">Cancel</button></td>
-         </tr>
-      ';
-   }
-   $output .= '
-      <tr>
-         <th colspan="3">Total</th>
-         <th colspan="2">'.'TotalHT '.number_format($this->cart->total()).'</th>
-      </tr>
-   ';
-   return $output;
-}
-
-function chargerPanier(){ 
-   echo $this->voirPanier();
-}
-
-function suppressionPanier()
-{ 
-   $data = array(
-      'rowid' => $this->input->post('row_id'), 
-      'qty' => 0, 
-   );
-   $this->cart->update($data);
-   echo $this->voirPanier();
-}
+   
 
    /* function indexPanier()
    {

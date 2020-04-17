@@ -12,12 +12,15 @@ class Membre extends CI_Controller
     public function __construct()
     {	
         parent::__construct();
-        if ($this->user->is_logged_in() === FALSE) 
+        /* if ($this->session->is_logged_in() === FALSE) 
         {
             redirect('visiteur/accueil');
-            };   
+        }
+        else
+        { */
+
+           
             $this->load->model('ModeleIdentifiantSite');
-            $this->load->model('ModeleAdministrateur');
             /* $this->load->model('ModeleClasse'); */
             $this->load->model('ModeleCommande');
             /* $this->load->model('ModeleEnfant'); */
@@ -38,6 +41,8 @@ class Membre extends CI_Controller
 			    define('AnneeEnCour',$annee); 
 		    }
         }
+    /* } */
+         
 
     /*********************************************************************************************************************************************/
     /*********************************************************************************************************************************************/

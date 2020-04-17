@@ -50,7 +50,9 @@ defined('BASEPATH')OR exit('No direct script access allowed');
             <ul class="nav navbar-nav">
 
                   <!--visiteur-->
-
+                  <li>
+                        <a href="<?php echo site_url('visiteur/catalogueEvenement') ?>">Nos Evenements</a>
+                  </li>
                   <?php if ($this->session->profil!='admin') : ?>
                     <?php if (isset($this->session->email)) : ?>
                       <li>
@@ -84,7 +86,7 @@ defined('BASEPATH')OR exit('No direct script access allowed');
                         </a>
                         <ul class="dropdown-menu">
                           <li>
-                            <a href="<?php echo site_url('visiteur/InfosCompte') ?>">Gérer votre compte</a>
+                            <a href="<?php echo site_url('membre/InfosCompte') ?>">Gérer votre compte</a>
                           </li>
                           <li>
                             <a href="<?php echo site_url('visiteur/ModificationMdp') ?>">Modifier votre mot de passe</a>

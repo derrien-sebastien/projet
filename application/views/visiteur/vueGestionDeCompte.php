@@ -62,7 +62,7 @@ if(isset($Personne->TelPortable))
 
 
 
-echo form_open('visiteur/infosCompte');
+echo form_open('membre/infosCompte');
 
                 
 echo "<table>";
@@ -105,7 +105,7 @@ echo form_submit('submit', 'Ajouter');
 echo "</td></tr></table></form></br></br>";
 echo "<p>Pour modifier votre mot de passe cliquez ici"; 
 echo "<a href='";
-echo site_url('visiteur/vueModifierMotDePasse');
+echo site_url('membre/vueModifierMotDePasse');
 echo "'><button type='submit' name='changeMdp' class='btn btn-primary btn-xs'>Modifier le mot de passe</button></a></p>";
                 
 ?>
