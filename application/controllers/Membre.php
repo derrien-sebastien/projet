@@ -149,7 +149,7 @@ class Membre extends CI_Controller
             'CodePostal' => $this->input->post('txtCp'),
             'Ville' => $this->input->post('txtVille'),
             'TelPortable' => $this->input->post('txtTelP'),
-            'TelFixe' => $this->input->post('txtTelF'),
+            'TelFixe' => $this->input->post('txtTelF')
             );           
             $this->ModelePersonne->modifierInfoPersonne($donneesInsererPersonne);
             $this->load->view('templates/EntetePrincipal');

@@ -22,3 +22,12 @@ Pourrais-tu retoucher dans visiteur/seConnecter pour le nouveau controller membr
 
 Bonne journée... MAJ           17 / 04  à 10h00
 ========================
+ on va avoir un bug a la modification d'info compte 
+ deja il serait bien de la proposer si la personne desire s'enregistré
+ ensuite vu qu'on utilise la meme fonction pour un admin ou un membre il faut qu'on requete pour savoir 
+ si la personne est admin membre ou rien dans se cas on doit modifier le profil en membre ou le conserver en admin 
+ eventuelement on peu faire un if ($_SESSION['profil']==admin ){$donné['profil']=admin;}else{$donné['profil']=membre;}
+
+ je t'ai fait la securité si tu utilise le controleur admin il faut que ton profil soit admin si tu utilise le controleur membre 
+ il faut que ton profil soit admin ou membre 
+ 
