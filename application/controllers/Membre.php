@@ -12,6 +12,13 @@ class Membre extends CI_Controller
     public function __construct()
     {	
         parent::__construct();
+        if($_SESSION['profil']!='admin')
+		{	
+            if($_SESSION['profil']!='membre')	
+            {	
+			redirect('/visiteur/seConnecter'); // pas les droits : redirection vers connexion
+            }
+        }
         /* if ($this->session->is_logged_in() === FALSE) 
         {
             redirect('visiteur/accueil');

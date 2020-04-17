@@ -119,27 +119,14 @@ class Visiteur extends CI_Controller
                'email'=>$personne->Email,
                'profil'=>$personne->profil
             );                    
-            $this->session->set_userdata($dataSession);                     
+            $this->session->set_userdata($dataSession);
+            $this->session_save_path;                     
             if($this->session->profil=='admin')
-            {
-               $donneesSession=array(
-                  'email'=>$this->session->__ci_last_regenerate,
-                  'mdp'=>$personne->Email,
-                  'profil'=>$personne->profil
-               );
-               $this->ModeleIdentifiantSite->insererInformationSession($donneesSession);
-			   $this->session_save_path;
+            {              
                redirect('Administrateur/accueil');
             }
             elseif ($this->session->profil=='membre')
-            {
-               $donneesSession=array(
-               'email'=>$this->session->__ci_last_regenerate,
-               'mdp'=>$personne->Email,
-               'profil'=>$personne->profil
-               );
-               $this->ModeleIdentifiantSite->insererInformationSession($donneesSession);
-			      $this->session_save_path;
+            {               
                redirect('membre/vueAccueilPersonne');
             }
             else

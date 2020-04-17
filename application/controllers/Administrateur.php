@@ -21,17 +21,11 @@ class Administrateur extends CI_Controller
 		$this->load->helper('url'); // pour utiliser redirect
 		$this->load->library('session');
 		$this->load->model('ModeleIdentifiantSite');
-		
-		$personne=$this->ModeleIdentifiantSite->rechercheSession($this->session->__ci_last_regenerate);
-		
-		/* $dataSession=array(
-			'email'=>$personne->Mdp,
-			'profil'=>$personne->Profil
-		 ); */                    
-		/*  $this->session->set_userdata($dataSession); */
-		
-		/*redirect('/visiteur/seConnecter'); // pas les droits : redirection vers connexion
-			 }*/
+			
+		if($_SESSION['profil']!='admin')
+		{			
+			redirect('/visiteur/seConnecter'); // pas les droits : redirection vers connexion
+		}
 		$this->load->helper('form');
 		$this->load->library('form_validation');
 		
