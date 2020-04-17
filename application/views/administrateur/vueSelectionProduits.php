@@ -1,4 +1,4 @@
-</br>
+
 <?php
 echo form_open('Administrateur/formulaireProduit');
 echo "<table>\n";

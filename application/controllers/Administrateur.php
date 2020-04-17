@@ -800,6 +800,17 @@ class Administrateur extends CI_Controller
 		}		
 		$this->afficherProbleme();
 	}
+	public function afficherEleveClasse()
+	{
+		$donnees=array(
+			'lesClasses'=>$this->ModeleClasse->retournerClasse()
+		);
+		$this->load->view('administrateur/vueSelectionClasse',$donnees);
+		if(isset($_POST['envoyer']))
+		{
+				
+		}
+	}
 
 
 }//fin  de class
