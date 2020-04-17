@@ -28,17 +28,17 @@ class ModeleEvenement extends CI_Model
    /*********************************************************************
    **                       Table Evenement                            **
    **********************************************************************/
-  public function getEvMarchParent()
-  {
-     $this->db->select('*');
-     $this->db->from('ge_evenement');
-     $this->db->join('ge_ev_marchand','ge_evenement.NoEvenement=ge_ev_marchand.NoEvenement AND ge_evenement.Annee=ge_ev_marchand.Annee AND ge_personne.NoPersonne=ge_scolariser.NoPersonne AND ge_enfant.NoEnfant=ge_scolariser.Noenfant');
-     $this->db->where('ge_evenement.EnCours','1'); 
-     $this->db->order_by('ge_evenement.NoEvenement','ge_evenement.Annee','asc');
-     $maListe = $this->db->get();
-     var_dump($maListe);
-     return $maListe->result(); 
-  } 
+  /* public function getEvMarchParent()
+   {
+      $this->db->select('*');
+      $this->db->from('ge_evenement');
+      $this->db->join('ge_ev_marchand','ge_evenement.NoEvenement=ge_ev_marchand.NoEvenement AND ge_evenement.Annee=ge_ev_marchand.Annee AND ge_personne.NoPersonne=ge_scolariser.NoPersonne AND ge_enfant.NoEnfant=ge_scolariser.Noenfant');
+      $this->db->where('ge_evenement.EnCours','1'); 
+      $this->db->order_by('ge_evenement.NoEvenement','ge_evenement.Annee','asc');
+      $maListe = $this->db->get();
+      var_dump($maListe);
+      return $maListe->result(); 
+   } */ 
 
    public function getEvenement()
    {
@@ -48,6 +48,33 @@ class ModeleEvenement extends CI_Model
       return $maListe->result(); 
    }
 
+   /**********************************************************************
+   **      Fonction qui va compter tout les évènements d'une année      **
+   **********************************************************************/
+
+   public function nombreDEvenements() 
+   { 
+      return $this->db->count_all('ge_evenement');
+   }
+
+   /**********************************************************************
+   **Fonction qui va retourner la limite d'évènements pour la pagination**
+   **********************************************************************/
+  
+   public function retournerEvenementsLimite($nombreDeLignesARetourner, $noPremiereLigneARetourner)
+   {
+      $this->db->limit($nombreDeLignesARetourner, $noPremiereLigneARetourner);
+      $requete = $this->db->get('ge_evenement');
+      if ($requete->num_rows() > 0) 
+      { 
+         foreach ($requete->result() as $ligne) 
+         {
+            $jeuDEnregsitrements[] = $ligne;
+         }
+      return $jeuDEnregsitrements;
+      } 
+      return false;
+}
 
    /**********************************************************************
    **    Fonction qui va retourner tout les évènements d'une année     **
@@ -85,7 +112,7 @@ class ModeleEvenement extends CI_Model
    **********************************************************************************************/
 
 
-   public function retournerEvenements()
+   public function retournerEvenements($pNoEvenement = FALSE)
    {
       if ($pNoEvenement === FALSE)
          {
@@ -125,12 +152,15 @@ class ModeleEvenement extends CI_Model
 
    public function getEvenementMarchand($Annee,$NoEvenement)
    {
-        $this->db->select('*');
-        $this->db->from('ge_ev_marchand');   
-        $this->db->where('ge_ev_marchand.Annee', $Annee);
-        $this->db->where('ge_ev_marchand.NoEvenement', $NoEvenement);
-        $maListe = $this->db->get();
-        return $maListe->result();
+      $this->db->select('*');
+      $this->db->from('ge_evenement');
+      $this->db->join('ge_ev_marchand','ge_evenement.NoEvenement=ge_ev_marchand.NoEvenement AND ge_evenement.Annee=ge_ev_marchand.Annee');
+      $this->db->where('ge_ev_marchand.Annee', $Annee);
+      $this->db->where('ge_ev_marchand.NoEvenement', $NoEvenement);
+      $this->db->where('ge_evenement.EnCours','1'); 
+      $this->db->order_by('ge_evenement.NoEvenement','ge_evenement.Annee','asc'); 
+      $maListe = $this->db->get();
+      return $maListe->result();
    }
 
 

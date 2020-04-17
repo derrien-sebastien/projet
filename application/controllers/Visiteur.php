@@ -11,7 +11,6 @@ class Visiteur extends CI_Controller
    {	
       parent::__construct();   
       $this->load->model('ModeleIdentifiantSite');
-      $this->load->model('ModeleAdministrateur');
       /* $this->load->model('ModeleClasse'); */
       $this->load->model('ModeleCommande');
       /* $this->load->model('ModeleEnfant'); */
@@ -19,7 +18,6 @@ class Visiteur extends CI_Controller
       /* $this->load->model('ModeleIdentifiantSite'); */    	
       $this->load->model('ModelePersonne');
       $this->load->model('ModeleProduit');
-      
       
       if(date('m')<8)
 		{
@@ -205,20 +203,6 @@ class Visiteur extends CI_Controller
    /*********************************************************************************************************************************************/
    /*********************************************************************************************************************************************/
 
-
-
-
-
-
-            ////////////////////////////////////////////////////////////////////////////
-         ////////////////////////////////////////////////////////////////////////////////////
-      /////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////// A FINIR ///////////////////////////////////////////////////////
-      /////////////////////////////////////////////////////////////////////////////////////////////
-         ////////////////////////////////////////////////////////////////////////////////////
-            ////////////////////////////////////////////////////////////////////////////
-
-
    /*   Afficher tous les évènements en catalogue en deux parties Ev_Marchand et Ev_Non_Marchand cliquable  
    /*   Afficher un seul évènement avec tous ses produits en stock + vue si stock vide  
    /*   Afficher le panier avec un lien passer commande (DANS LE RESUMER DU PANIER) + box pour connaitre info 
@@ -234,19 +218,87 @@ class Visiteur extends CI_Controller
 
    public function catalogueEvenement()            
    {  
-         $DonneesInjectees['lesEvenements'] = $this->ModeleEvenement->getEvMarchParent();
+         $DonneesInjectees['lesEvenementsMarchands'] = $this->ModeleEvenement->retournerEvenementsMarchands();
+         $DonneesInjectees['lesEvenementsNonMarchands'] = $this->ModeleEvenement->retournerEvenementsNonMarchands();
          $DonneesInjectees['TitreDeLaPage'] = 'Nos Evènements';
          $this->load->view('templates/EntetePrincipal');
-         $this->load->view('visiteur/vueCatalogues', $DonneesInjectees);
+         $this->load->view('visiteur/vueCatalogueEvenements', $DonneesInjectees);
    } 
-
+ 
+   public function catalogueEvenementAvecPagination() 
+   {
+      
+      $config = array();
+      $config["base_url"] = site_url('visiteur/catalogueEvenementAvecPagination');
+      $config["total_rows"] = $this->ModeleEvenement->nombreDEvenements();
+      $config["per_page"] = 3;
+      $config["uri_segment"] = 3;
+      $config['first_link'] = 'Premier';
+      $config['last_link'] = 'Dernier';
+      $config['next_link'] = 'Suivant';
+      $config['prev_link'] = 'Précédent';
+      $this->pagination->initialize($config);
+      $noPage = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+      $DonneesInjectees['TitreDeLaPage'] = 'Nos Evènements, avec pagination';
+      $DonneesInjectees["lesEvenements"] = $this->ModeleEvenement->retournerEvenementsLimite($config["per_page"], $noPage);
+      $DonneesInjectees["liensPagination"] = $this->pagination->create_links();
+      $this->load->view('templates/Entete');
+      $this->load->view('visiteur/catalogueEvenementAvecPagination', $DonneesInjectees);
+   } 
 
    /**********************************************************************
    **                        VOIR UN EVENEMENT                         ***
    **********************************************************************/
 
+   public function Evenement($noEvenement = NULL,$Annee =NULL)
+   {
+      $DonneesInjectees['unEvenement'] = $this->ModeleEvenement->retournerEvenements($noEvenement);
+      if (empty($DonneesInjectees['unEvenement']))
+      {   
+         show_404();
+      }
+      $DonneesInjectees['TitreDeLaPage'] = $DonneesInjectees['unEvenement']['TxtHTMLEntete'];
+      $this->load->view('templates/EntetePrincipal');
+      $this->load->view('visiteur/vueVoirUnEvenementEntete', $DonneesInjectees);
+   }
 
-   public function voirUnEvenement($NoEvenement = NULL,$Annee =NULL) 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   /*********************************************************************************************************************************************/
+   /*********************************************************************************************************************************************/
+   /*********************************************************************************************************************************************/
+   /**************************                                                                              *************************************/
+   /**************************                                    A REVOIR                                  *************************************/
+   /**************************                                                                              *************************************/
+   /*********************************************************************************************************************************************/
+   /*********************************************************************************************************************************************/
+   /*********************************************************************************************************************************************/
+
+
+
+
+
+
+
+
+
+
+
+
+
+   public function voirUnEvenementAutre($NoEvenement = NULL,$Annee =NULL) 
    {
       if (!isset($_POST['valider']))
 		{

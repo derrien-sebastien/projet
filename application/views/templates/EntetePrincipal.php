@@ -84,7 +84,7 @@ defined('BASEPATH')OR exit('No direct script access allowed');
                         </a>
                         <ul class="dropdown-menu">
                           <li>
-                            <a href="<?php echo site_url('visiteur/InfosCompte') ?>">Gérer votre compte</a>
+                            <a href="<?php echo site_url('membre/InfosCompte') ?>">Gérer votre compte</a>
                           </li>
                           <li>
                             <a href="<?php echo site_url('visiteur/ModificationMdp') ?>">Modifier votre mot de passe</a>

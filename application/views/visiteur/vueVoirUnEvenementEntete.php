@@ -1,9 +1,10 @@
 <?php
-        echo '<p>'.img($Evenement->ImgEntete).'<p>';
-        echo '<h1>'.$Evenement->TxtHTMLEntete.'</h1>';
+
+        echo '<p>'.img($unEvenement['ImgEntete']).'<p>';
+        echo '<h1>'.$unEvenement['TxtHTMLEntete'].'</h1>';
         echo '</br>';
         echo '</br>';
-        echo '<h2>'.$Evenement->TxtHTMLCorps.'</h2>';
+        echo '<h2>'.$unEvenement['TxtHTMLCorps'].'</h2>';
         echo '</br>';
         echo '</br>';
     
