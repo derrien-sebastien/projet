@@ -8,4 +8,7 @@ les model pers parent et pers autre sont a supprimer pour ma par a chaque fois q
 les parent j'utilise au moins l'info noPersonne donc je fait tout dans le model personne 
 probleme je n'ai pas la vueCatalogue donc aucune possibilité de se connecter en visiteur
 la gestion de compte ne fonctionne plus en administrateur
- 
+ //////////////////
+ il faut que je modifie la selection evenmenet et aussi la selection produit pour n'envoyer 
+ que les paramettre NoEvenement noAnnee et noProduit pour le produit!
+ car la j'envoye toute les donnée et des qu'on 

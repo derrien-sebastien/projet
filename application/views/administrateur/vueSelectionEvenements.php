@@ -22,12 +22,12 @@ echo "<tr><td><label for='Evenement'>choisissez:</label></td>
 <td><select name='Evenement'>
     <option value='//////////'>Aucun evenement selectionné</option>
     <option value='//////////'>Nouvel Evenement</option>";    
-    foreach ($lesEvenements as $unEvenement):
+    foreach ($lesEvenements as $unEvenement):                      
         echo "<option value='";
         echo $unEvenement->Annee."/".$unEvenement->NoEvenement."/".$unEvenement->DateMiseEnLigne."/".$unEvenement->DateMiseHorsLigne
-        ."/".$unEvenement->TxtHTMLEntete."/".$unEvenement->TxtHTMLCorps."/".$unEvenement->TxtHTMLPiedDePage."/".$unEvenement->ImgEntete
-        ."/".$unEvenement->ImgPiedDePage."/".$unEvenement->EmailInformationHTML."/".$unEvenement->EnCours;
-        echo "'>";
+            ."/".$unEvenement->TxtHTMLEntete."/".$unEvenement->TxtHTMLCorps."/";//.$unEvenement->TxtHTMLPiedDePage."/".$unEvenement->ImgEntete
+   //     ."/".$unEvenement->ImgPiedDePage."/".$unEvenement->EmailInformationHTML."/".$unEvenement->EnCours;
+        echo "'>";        
         echo $unEvenement->TxtHTMLEntete;
         echo "</option>";
    endforeach; 

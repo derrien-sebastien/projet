@@ -93,9 +93,9 @@ class Administrateur extends CI_Controller
 		$DonneesInjectees['Provenance']='modifier';		
 		if (!isset($_POST['Evenement']))
 		{
-		$DonneesInjectees['LesEvenements']= $this->ModeleEvenement->getEvenementGeneral(AnneeEnCour);
-		$DonneesInjectees['LesEvenements']= $DonneesInjectees['LesEvenements']+$this->ModeleEvenement->getEvenementGeneral(AnneeEnCour-1);
-		$DonneesInjectees['LesEvenements']= $DonneesInjectees['LesEvenements']+$this->ModeleEvenement->getEvenementGeneral(AnneeEnCour-2);
+		$DonneesInjectees['lesEvenements']= $this->ModeleEvenement->getEvenementGeneral(AnneeEnCour);
+		$DonneesInjectees['lesEvenements']= $DonneesInjectees['lesEvenements']+$this->ModeleEvenement->getEvenementGeneral(AnneeEnCour-1);
+		$DonneesInjectees['lesEvenements']= $DonneesInjectees['lesEvenements']+$this->ModeleEvenement->getEvenementGeneral(AnneeEnCour-2);
 		$this->load->view('administrateur/vueSelectionEvenements',$DonneesInjectees);		
 		//$this->load->view('templates/PiedDePagePrincipal');
 		}
