@@ -35,3 +35,18 @@ Bonne journée... MAJ           17 / 04  à 10h00
  bon j'ai a peu pres fini l'affichage des eleve 
  la fonction est toute conne mais efficasse il me reste plus qu'a utiliser la fonction pour modifier les enfant dans la classe 
  et apres eventuelement les faire migré 
+
+$i=0
+foreach($lignes as $unLigne)
+{
+    $produits[$i]=array(
+        'noEvenement'=>$unLigne->noEvenement,
+        'annee'=>$unLigne->Annee,
+        'noProduit'=>$unLigne->NoProduit,
+        'quantité'=>$unLigne->Quantité
+        );
+    $i++;
+}
+$_SESSION['panier']=$produits;
+
+
