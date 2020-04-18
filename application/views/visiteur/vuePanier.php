@@ -8,7 +8,6 @@
 			<h4>Nos Produits</h4>
 			<div class="row">
 			<?php foreach ($data->result() as $row) : ?>
-				
 				<div class="col-md-4">
 					<div class="thumbnail">
 						<img width="200" src="<?php echo base_url().'assets/images/'.$row->Img_Produit;?>">
@@ -26,7 +25,6 @@
 						</div>
 					</div>
 				</div>
-				
 			<?php endforeach;?>
                 
             
@@ -60,7 +58,7 @@
 <script type="text/javascript" src="<?php echo base_url().'assets/js/bootstrap2.0.js'?>"></script>
 <script type="text/javascript">
 	$(document).ready(function(){
-		$('.ajouterProduitAuPanier').click(function(){
+		$('.add_cart').click(function(){
 			var NoProduit   = $(this).data("productid");
 			var LibelleCourt  = $(this).data("productname");
 			var Prix = $(this).data("productprice");

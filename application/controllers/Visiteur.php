@@ -218,7 +218,7 @@ class Visiteur extends CI_Controller
 
    public function EvenementMarchand($noEvenement = NULL,$Annee =NULL)
    {
-      
+      $DonneesInjectees['Produit'] = $this->ModeleProduit->retournerProduit($noEvenement);
       $DonneesInjectees['unEvenementMarchand'] = $this->ModeleEvenement->retournerEvenements($noEvenement);
       if (empty($DonneesInjectees['unEvenementMarchand']))
       {   
@@ -227,7 +227,6 @@ class Visiteur extends CI_Controller
       $DonneesInjectees['TitreDeLaPage'] = $DonneesInjectees['unEvenementMarchand']['TxtHTMLEntete'];
       $this->load->view('templates/EntetePrincipal');
       $this->load->view('visiteur/vueEvenementMarchandEntete', $DonneesInjectees);
-      $this->indexPanier();//à finir affichage en catalogue des produit EN STOCK 
    }
    
    public function EvenementNonMarchand($noEvenement = NULL,$Annee =NULL)
@@ -255,13 +254,14 @@ class Visiteur extends CI_Controller
 
    function ajouterProduitAuPanier()
    { 
-      $data = array(
+      $produit = array(
                         'id' => $this->input->post('NoProduit'), 
                         'name' => $this->input->post('LibelleCourt'), 
                         'price' => $this->input->post('Prix'), 
                         'qty' => $this->input->post('Stock'), 
                      );
-      $this->cart->insert($data);
+      $this->cart->insert($produit);
+      $this->cart->update($produit );
       echo $this->voirPanier(); 
    }
 
@@ -278,7 +278,7 @@ class Visiteur extends CI_Controller
             <td>'.number_format($items['price']).'</td>
             <td>'.$items['qty'].'</td>
             <td>'.number_format($items['subtotal']).'</td>
-            <td><button type="button" id="'.$items['rowid'].'" class="romove_cart btn btn-danger btn-sm">Cancel</button></td>
+            <td><button type="button" id="'.$items['rowid'].'" class="remove_cart btn btn-danger btn-sm">Cancel</button></td>
          </tr>
          ';
       }
@@ -306,9 +306,19 @@ class Visiteur extends CI_Controller
       echo $this->voirPanier();
    }
 
-
-
-
+   
+   /**********************************************************************
+   **                         Passer commande                          ***
+   **********************************************************************/
+   // garder les infos dans le panier /.....??????
+   // après click on commande envoyer vue "avez vous déjà acheter sur le site oui non en checkbox"
+   // si oui superposition de la vue se connecter 
+   // sinon saisissez votre adresse mail nom prénom adresse et on insert dans la db 
+   // une fois inserer voulez vous payer par carte bancaire 
+   //                                    par cheque 
+   //                                    en liquide
+   // si carte bancaire paiement en ligne 
+   // sinon génération mail date a venir chercher 
 
 
 

@@ -28,9 +28,24 @@ class ModeleProduit extends CI_Model
 		return $result;
 	}
 
-   /**********************************************************************
-   **   Tous les produits en cours de vente de notre table ge_produit   **
-   **********************************************************************/
+   /************************************************************************************
+   **   Tous les produits en cours de vente et en stock de notre table ge_produit     **
+   *************************************************************************************/
+  public function retournerProduit($pNoEvenement = FALSE)
+   {
+     if ($pNoEvenement === FALSE)
+        {
+           $this->db->select('*');
+           $this->db->from('ge_evenement');
+           $this->db->join('ge_produit', 'ge_evenement.NoEvenement=ge_produit.NoEvenement AND ge_evenement.Annee=ge_produit.Annee');   
+           $this->db->where(`ge_produit.stock`>0 );
+           $this->db->where('ge_evenement.EnCours', 1);
+           $maListe = $this->db->get();
+           return $maListe->result_array();
+        }
+        $maListe = $this->db->get_where('ge_produit', array('NoEvenement' => $pNoEvenement));
+        return $maListe->row_array();
+   }
 
    public function getProduits($pNoEvenement, $pAnnee)
    {
@@ -81,14 +96,14 @@ class ModeleProduit extends CI_Model
        $this->db->distinct('*');
        $this->db->from('ge_produit');
        $this->db->join('ge_evenement');
-       $this->db->where(`ge_produit`.`NoEvenement`=`ge_evenement`.`NoEvenement`,$pNoEvenement);
-       $this->db->where(`ge_produit`.`Annee`=`ge_evenement`.`Annee`,$pAnnee);
-       $this->db->where(`ge_produit`.`stock`>0 );
+       $this->db->where(`ge_produit.NoEvenement=ge_evenement.NoEvenement`,$pNoEvenement);
+       $this->db->where(`ge_produit.Annee=ge_evenement.Annee`,$pAnnee);
+       $this->db->where(`ge_produit.stock`>0 );
        $this->db->orderby ('NumeroOrdreApparition');
        $maCde = $this->db->get();
        return $maCde->result_arry(); 
-   }
-   */
+   } */
+  
   //Récupérer les données des produits dans la base de données
   //id renvoie un seul enregistrement s'il est spécifié, sinon tous les enregistrements
    public function obtenirInfosProduits($id = 'NoProduit')

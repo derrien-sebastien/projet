@@ -1,3 +1,25 @@
+<?php
+session_start();
+/* Initialisation du panier */
+if(!isset($_SESSION['panier']))
+{
+        $_SESSION['panier'] = array();
+        /* Subdivision du panier */
+        $_SESSION['panier']['id'] = array();
+        $_SESSION['panier']['qty'] = array();
+        $_SESSION['panier']['name'] = array();
+        $_SESSION['panier']['price'] = array();
+}
+array_push($_SESSION['panier']['id'],$select['id']);
+array_push($_SESSION['panier']['qty'],$select['qty']);
+array_push($_SESSION['panier']['name'],$select['name']);
+array_push($_SESSION['panier']['price'],$select['price']);
+
+?>
+
+<?php
+var_dump($_SESSION['panier']);
+?>
 <?php echo form_open('path/to/controller/update/method'); ?>
 
 <table cellpadding="6" cellspacing="1" style="width:100%" border="0">
