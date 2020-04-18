@@ -820,5 +820,17 @@ class Administrateur extends CI_Controller
 		}
 	}
 
+	public function modifierClasse()
+	{
+		if(isset($_POST['modifier'])||isset($_POST['envoyer']))
+		{
+			$eleves=$this->ModeleEnfant->getEnfantClasse($_POST['classe']);
+
+		}
+		else
+		{
+			//chargement selection classe liste classe et info modifier la classe 
+		}
+	}
 
 }//fin  de class

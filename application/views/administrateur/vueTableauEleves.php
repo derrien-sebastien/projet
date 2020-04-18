@@ -35,7 +35,7 @@ if (isset($eleves['0']->Nom))
 }
 else
 {
-    if(isset($classe->Nom))//a modifier if $classe is object
+    if(isset($classe->Nom))
     {
         echo '<h2>'.$classe->Nom.'</h2>';
     
@@ -46,3 +46,11 @@ else
     }
     echo "<h1>il n'y a pas d'eleve dans la classe</h1>";
 }
+echo form_open('Administrateur/modifierClasse');
+echo form_hidden('classe',$classe->NoClasse );
+echo form_label('modifier les participant de la classe', 'modifier');
+echo form_submit('modifier', 'modifier');
+echo form_close();
+
+
+
