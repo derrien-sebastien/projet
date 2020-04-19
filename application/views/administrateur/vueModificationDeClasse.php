@@ -3,22 +3,24 @@
 donnée entré
 -$classe 
 -$elvesDeLaClasse 
--$eleve
+-$eleves
 */
 echo '<h1>modification des eleve de :';
 echo $classe->Nom;
 echo '</h1></br>';
-echo form_open('Administrateur/modifierClasse');
+echo form_open_multipart('Administrateur/modifierClasse');
+echo form_hidden('classe', $classe->NoClasse);
 echo '<table>';
 echo '<tr><td>Nom</td><td>prenom</td><td>date de naissance</td><td>supprimer de la classe</td><td>date de sortie de la classe</td></tr>';
-foreach($elvesDeLaClasse as $unEleve)
+foreach($elevesDeLaClasse as $unEleve)
 {
     $supprime=array(
-        'name'=>'supprime',
+        'name'=>'supprime[]',
         'value'=>$unEleve->NoEnfant
     );
     $dateFin=array(
         'name'=>$unEleve->NoEnfant,
+        'type'=>'date'
     );
     echo '<tr><td>';
     echo $unEleve->Nom;
@@ -32,8 +34,24 @@ foreach($elvesDeLaClasse as $unEleve)
     echo form_input($dateFin);
     echo '</td></tr>';
 }
-
-echo     
-
-
 echo '</table>';
+echo '<h1>ajouter des eleves</h1>';
+echo 'selection multiple possible';
+$lesEleves=array(
+    '0'=>'selectionner pour ajouter'
+);
+foreach($eleves as $unEleve)
+{
+    $lesEleves[$unEleve->NoEnfant]=$unEleve->Nom.' '.$unEleve->Prenom;
+}
+echo form_multiselect('selection[]', $lesEleves);
+echo '</br>';
+$submit=array(
+    'name'=>'modifications',
+    'value'=>'envoyer les modifications'
+);
+echo form_submit($submit);
+echo form_close();
+
+
+

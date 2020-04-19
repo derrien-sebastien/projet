@@ -119,19 +119,18 @@ class Visiteur extends CI_Controller
                'email'=>$personne->Email,
                'profil'=>$personne->profil
             );                    
-            $this->session->set_userdata($dataSession);
-            $this->session_save_path;                     
+            $this->session->set_userdata($dataSession);                                 
             if($this->session->profil=='admin')
             {              
                redirect('Administrateur/accueil');
             }
             elseif ($this->session->profil=='membre')
             {               
-               redirect('membre/vueAccueilPersonne');
+               redirect('membre/accueil');
             }
             else
             {
-               $this->load->view('visiteur/vueCatalogue');
+               $this->catalogueEvenement();
             }
             
          }

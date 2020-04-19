@@ -110,6 +110,17 @@ class ModeleEnfant extends CI_Model
 		$query=$this->db->get();
 		return $query->result();
 	}
+/*public function getEnfantClasse($classe) a modifier where numero enfant $query row
+	{
+		$this->db->select('*');
+		$this->db->from('ge_enfant');
+		$this->db->join('ge_appartenir','ge_enfant.NoEnfant=ge_appartenir.NoEnfant');
+		$this->db->where('ge_appartenir.DateFin',NULL);
+		$this->db->where('ge_appartenir.NoClasse',$classe);
+		$query=$this->db->get();
+		return $query->result();
+	}*/
+
 
 	/*********************************************************************************************************************************************/
 	/*********************************************************************************************************************************************/

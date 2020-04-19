@@ -118,7 +118,7 @@ class ModelePersonne extends CI_Model
 
    public function rechercheInfoPersonne($Email) 
    {
-      $this->db->select('Email,Nom,Prenom,Adresse,Ville,CodePostal,TelPortable,TelFixe');
+      $this->db->select('NoPesonne,Email,Nom,Prenom,Adresse,Ville,CodePostal,TelPortable,TelFixe');
       $this->db->from('ge_personne'); 
       $this->db->where('Email', $Email);      
       $Liste = $this->db->get();
