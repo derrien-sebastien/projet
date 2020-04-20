@@ -822,14 +822,51 @@ class Administrateur extends CI_Controller
 
 	public function modifierClasse()
 	{
-		if(isset($_POST['modifier'])||isset($_POST['envoyer']))
+		if(isset($_POST['modifications']))
 		{
-			$eleves=$this->ModeleEnfant->getEnfantClasse($_POST['classe']);
-
+			
+			foreach($_POST['supprime'] as $supprime)
+			{
+				var_dump($_POST);
+				if($_POST[$supprime]!='')
+				{
+					$donnees=array(
+						'NoEnfant'=>$supprime,
+						'NoClasse'=>$_POST['classe'],
+						'DateFin'=>$_POST[$supprime]
+					);
+					//modeleClasse update appartenir $donnees						
+				}
+			}
+			foreach($_POST['selection'] as $ajout)
+			{
+				if (!$donnees['enfant'])//$this modele enfant info 
+				{
+					//stock l'enfant dans une variable
+				}
+			}
+			//vue date debut 
+			//nouvelle fonction pour ajouté l'enfant modele enfant insert
 		}
 		else
 		{
-			//chargement selection classe liste classe et info modifier la classe 
+			if(isset($_POST['modifier'])||isset($_POST['envoyer']))
+			{			
+				$classe=$this->ModeleClasse->retournerinfoClasse($_POST['classe']);
+				$elevesDeLaClasse=$this->ModeleEnfant->getEnfantClasse($_POST['classe']);
+				$eleves=$this->ModeleEnfant->getEnfants();
+				$donnees=array(
+					'classe'=>$classe,
+					'elevesDeLaClasse'=>$elevesDeLaClasse,
+					'eleves'=>$eleves
+				);
+				$this->load->view('administrateur/vueModificationDeClasse',$donnees);
+			}
+			else
+			{
+				$donnees['lesClasses']=$this->ModeleClasse->retournerClasse();
+				$this->load->view('administrateur/vueSelectionClasse',$donnees);
+			}
 		}
 	}
 

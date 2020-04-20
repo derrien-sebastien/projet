@@ -121,6 +121,7 @@ class Visiteur extends CI_Controller
                'actif'=>$personne->Actif
             );                    
             $this->session->set_userdata($dataSession);                   
+            $this->session->set_userdata($dataSession);                                 
             if($this->session->profil=='admin')
             {              
                redirect('Administrateur/accueil');
