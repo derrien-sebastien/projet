@@ -49,4 +49,7 @@ foreach($lignes as $unLigne)
 }
 $_SESSION['panier']=$produits;
 
+========
+rester sur url d'arriver apres connection( function se connecter recup url et redirection vers celle ci )
+
 

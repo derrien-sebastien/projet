@@ -41,9 +41,20 @@
         echo                            '</tbody>';			
         echo                    '</table>';
         echo     '</div>';
+        echo     '</div>';
         echo '</br>';
         echo '</br>';
         echo '</br>';
-             
+        echo '</br>';
+        echo '</br>';
+        echo '</br>';
+        echo '<h2>'.$unEvenementMarchand['TxtHTMLPiedDePage'].'</h2>';//affiche le pied de page 
+        echo '</br>';
+        echo '<p>'.img($unEvenementMarchand['ImgPiedDePage']).'<p>';//image de notre pied de page 
+        echo '</br>';
+        echo '</br>';
+        echo '<h2>'.$unEvenementMarchand['DateMiseHorsLigne'].'</h2>';
+        echo '</br>';
+        echo '<p>'.anchor('visiteur/nosEvenements','Retour à la liste des evenements').'</p>';    
                
         

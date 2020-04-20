@@ -1,9 +1,9 @@
 <?php
 class ModelePersonne extends CI_Model 
 {
-   /*private $NoPersonne;
+   /* private $NoPersonne;
    private $Email;
-   private $MotDePasse;*/
+   private $MotDePasse; */
 
    public function __construct()
    {
@@ -118,7 +118,7 @@ class ModelePersonne extends CI_Model
 
    public function rechercheInfoPersonne($Email) 
    {
-      $this->db->select('Email,Nom,Prenom,Adresse,Ville,CodePostal,TelPortable,TelFixe');
+      $this->db->select('NoPersonne,Email,Nom,Prenom,Adresse,Ville,CodePostal,TelPortable,TelFixe,Actif');
       $this->db->from('ge_personne'); 
       $this->db->where('Email', $Email);      
       $Liste = $this->db->get();
@@ -207,14 +207,22 @@ class ModelePersonne extends CI_Model
       return $this->db->update('ge_personne', $pDonneesAInserer);
    }
 
+   public function modifierEtreCorrespondant($pDonneesAInserer)
+   {
+      $this->db->where('Etre_Correspondant', $pDonneesAInserer['Etre_Correspondant']);
+      return $this->db->update('ge_pers_parent', $pDonneesAInserer);
+   }
 
    public function modifierInfoPersonne($pDonneesAInserer)
    {   
-      $this->db->where('email',  $pDonneesAInserer['email']);      
+      
+      $this->db->where('email',  $pDonneesAInserer['Email']);      
       return $this->db->update('ge_personne', $pDonneesAInserer);
    }
+
    public function modifierPersParent($donnees)
    {
+     
       $this->db->where('NoPersonne',  $donnees['NoPersonne']);      
       return $this->db->update('ge_pers_parent', $donnees);
    }

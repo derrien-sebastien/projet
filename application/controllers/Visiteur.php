@@ -117,21 +117,21 @@ class Visiteur extends CI_Controller
             $this->session->session_start;                                   
             $dataSession=array(
                'email'=>$personne->Email,
-               'profil'=>$personne->profil
+               'profil'=>$personne->profil,
+               'actif'=>$personne->Actif
             );                    
-            $this->session->set_userdata($dataSession);
-            $this->session_save_path;                     
+            $this->session->set_userdata($dataSession);                   
             if($this->session->profil=='admin')
             {              
                redirect('Administrateur/accueil');
             }
             elseif ($this->session->profil=='membre')
             {               
-               redirect('membre/vueAccueilPersonne');
+               redirect('membre/accueil');
             }
             else
             {
-               $this->load->view('visiteur/vueCatalogue');
+               $this->catalogueEvenement();
             }
             
          }
@@ -148,8 +148,7 @@ class Visiteur extends CI_Controller
                $this->load->view('visiteur/vueLogin',$DonneesInjectees);
                $this->load->view('templates/PiedDePagePrincipal');
             }
-         }
-         
+         }     
       }
    }
 
@@ -190,22 +189,14 @@ class Visiteur extends CI_Controller
    /*********************************************************************************************************************************************/
    /*********************************************************************************************************************************************/
 
-   /*   Afficher tous les évènements en catalogue en deux parties Ev_Marchand et Ev_Non_Marchand cliquable  
-   /*   Afficher un seul évènement avec tous ses produits en stock + vue si stock vide  
-   /*   Afficher le panier avec un lien passer commande (DANS LE RESUMER DU PANIER) + box pour connaitre info 
-   /*   Si email pas dans la bdd affichage d'une vue nom, prenom, adresse puis valider pour Achat
-   /*   ajouter élément cours sur paiement en ligne
-
-
-
+   
    /**********************************************************************
-   **                 LiISTER LES EVENEMENTS EN COURS                  ***
+   **               CATALOGUE DES EVENEMENTS EN COURS                  ***
    **********************************************************************/
 
 
    public function catalogueEvenement()            
-   {  
-      
+   {   
       $DonneesInjectees['lesEvenementsMarchands'] = $this->ModeleEvenement->retournerEvenementsMarchands();
       $DonneesInjectees['lesEvenementsNonMarchands'] = $this->ModeleEvenement->retournerEvenementsNonMarchands();
       $this->load->view('templates/EntetePrincipal');
@@ -213,7 +204,7 @@ class Visiteur extends CI_Controller
    } 
  
    /**********************************************************************
-   **                        VOIR UN EVENEMENT                         ***
+   **                         UN EVENEMENT                             ***
    **********************************************************************/
 
    public function EvenementMarchand($noEvenement = NULL,$Annee =NULL)
@@ -243,8 +234,9 @@ class Visiteur extends CI_Controller
    }
 
    /**********************************************************************
-   **                    fonction propre au panier                     ***
+   **                               PANIER                             ***
    **********************************************************************/
+  
    function indexPanier()
    {
       $this->load->view('templates/EntetePrincipal');
@@ -306,7 +298,17 @@ class Visiteur extends CI_Controller
       echo $this->voirPanier();
    }
 
-   
+    /*********************************************************************************************************************************************/
+   /*********************************************************************************************************************************************/
+   /*********************************************************************************************************************************************/
+   /**************************                                                                              *************************************/
+   /**************************                                    A REVOIR                                  *************************************/
+   /**************************                                                                              *************************************/
+   /*********************************************************************************************************************************************/
+   /*********************************************************************************************************************************************/
+   /*********************************************************************************************************************************************/
+
+
    /**********************************************************************
    **                         Passer commande                          ***
    **********************************************************************/
@@ -320,74 +322,17 @@ class Visiteur extends CI_Controller
    // si carte bancaire paiement en ligne 
    // sinon génération mail date a venir chercher 
 
+/*   Afficher tous les évènements en catalogue en deux parties Ev_Marchand et Ev_Non_Marchand cliquable//ok  
+   /*   Afficher un seul évènement avec tous ses produits en stock + vue si stock vide //a finir 
+   /*   Afficher le panier avec un lien passer commande (DANS LE RESUMER DU PANIER) + box pour connaitre info 
+   /*   Si email pas dans la bdd affichage d'une vue nom, prenom, adresse puis valider pour Achat
+   /*   ajouter élément cours sur paiement en ligne
 
 
 
-
-
-
-
-
-   /*********************************************************************************************************************************************/
-   /*********************************************************************************************************************************************/
-   /*********************************************************************************************************************************************/
-   /**************************                                                                              *************************************/
-   /**************************                                    A REVOIR                                  *************************************/
-   /**************************                                                                              *************************************/
-   /*********************************************************************************************************************************************/
-   /*********************************************************************************************************************************************/
-   /*********************************************************************************************************************************************/
-
-
-
-
-
-
-
-
-
-
-
-
-
-   public function voirUnEvenementAutre($NoEvenement = NULL,$Annee =NULL) 
-   {
-      if (!isset($_POST['valider']))
-		{
-			$Donnees['LesProduits']=$this->ModeleProduit->get_all_produit();
-			$this->load->view('templates/EntetePrincipal');
-			$this->load->view('visiteur/vueCatalogue.php',$Donnees);
-		}
-		else
-		{
-			$LesProduits=$this->ModeleProduit->get_all_produit();
-			
-			
-			$Compteur=0;
-			
-			$DonneesPanier= array();
-			foreach ($LesProduits as $unProduit) 
-			{
-						$tarif=($unProduit->PRIXHT+(($unProduit->PRIXHT*$unProduit->TAUXTVA)/100));
-						$DonneesPanier[] = array(
-							'id'      => $unProduit->NOPRODUIT,
-							'qty'     => $_POST[$unProduit->NOPRODUIT],
-							'price'   => $tarif,
-							'name'    => $unProduit->LIBELLE,                
-						);
-			}
-			$this->cart->insert($DonneesPanier);
-			$this->load->view('  visiteur/vuePanier');
-		}
+   
 
 	
-      $DonneesInjectees['Evenement'] = $this->ModeleEvenement->retournerUnEvenement($NoEvenement,$Annee);
-      $this->load->view('templates/EntetePrincipal');
-      $this->load->view('visiteur/vueVoirUnEvenementEntete', $DonneesInjectees);
-      $this->load->view('visiteur/vueVoirUnEvenementPiedDePage', $DonneesInjectees);
-      $this->load->view('templates/PiedDePagePrincipal');
-   }
-
    /*********************************************************************************************************************************************/
    /*********************************************************************************************************************************************/ 
    /*********************************************************************************************************************************************/
@@ -402,17 +347,7 @@ class Visiteur extends CI_Controller
    **                                    ***
    **********************************************************************/
 
-   
-   public function lesProduitsEvenement($NoEvenement,$Annee)//index produits
-   {
-      $Donnees=array('LesProduits'=>$this->ModeleProduit->getProduits($NoEvenement,$Annee), 'Evenement'=>$this->ModeleEvenement->retournerUnEvenement($NoEvenement,$Annee));
-      $this->load->view('templates/EntetePrincipal');
-      $this->load->view('visiteur/vueVoirUnEvenementEntete', $Donnees);
-      $this->load->view('visiteur/vuePasserCommande', $Donnees);
-      $this->load->view('visiteur/vueVoirUnEvenementPiedDePage', $Donnees);
-      $this->load->view('templates/PiedDePagePrincipal');
-   }
-
+ 
    /* public function ajouterProduitAuPanier($NoEvenement,$Annee)// ajout produit au panier
    {
       $Produit=$this->ModeleProduit->getProduits($NoEvenement,$Annee);//Récupérer un produit spécifique par ID

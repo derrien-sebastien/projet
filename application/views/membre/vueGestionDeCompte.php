@@ -56,15 +56,7 @@ if(isset($Personne->TelPortable))
     $txtTelP['value']=$Personne->TelPortable;
 }
 
-
-
-
-
-
-
-echo form_open('visiteur/infosCompte');
-
-                
+echo form_open('visiteur/infosCompte');               
 echo "<table>";
 echo "<tr><td>";
 echo form_label("Avez-vous un enfant scolariser dans l'établissement ?","enfant");
@@ -108,7 +100,7 @@ echo "<a href='";
 echo site_url('visiteur/vueModifierMotDePasse');
 echo "'><button type='submit' name='changeMdp' class='btn btn-primary btn-xs'>Modifier le mot de passe</button></a></p>";
                 
-?>
+
         
         
         

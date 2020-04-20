@@ -33,7 +33,7 @@ foreach($elvesDeLaClasse as $unEleve)
     echo '</td></tr>';
 }
 
-echo     
+    
 
 
-echo '</table>';
+

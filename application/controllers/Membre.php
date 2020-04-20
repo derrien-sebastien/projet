@@ -16,17 +16,9 @@ class Membre extends CI_Controller
 		{	
             if($_SESSION['profil']!='membre')	
             {	
-			redirect('/visiteur/seConnecter'); // pas les droits : redirection vers connexion
+			redirect('/visiteur/seConnecter');
             }
-        }
-        /* if ($this->session->is_logged_in() === FALSE) 
-        {
-            redirect('visiteur/accueil');
-        }
-        else
-        { */
-
-           
+        }  
             $this->load->model('ModeleIdentifiantSite');
             /* $this->load->model('ModeleClasse'); */
             $this->load->model('ModeleCommande');
@@ -48,7 +40,7 @@ class Membre extends CI_Controller
 			    define('AnneeEnCour',$annee); 
 		    }
         }
-    /* } */
+    
          
 
     /*********************************************************************************************************************************************/
@@ -189,5 +181,77 @@ class Membre extends CI_Controller
             }
         }
     }
+
+    function indexPanier()
+    {
+      $this->load->view('templates/EntetePrincipal');
+      $data['data']=$this->ModeleProduit->get_all_produit();
+      $this->load->view('visiteur/vuePanier',$data);
+    }
+    
+    public function Actif()
+    {
+        $this->load->view('templates/EntetePrincipal');
+        $this->form_validation->set_rules('Etre_Correspondant AND Actif','checkbox','required'); 
+        $personne=$this->ModelePersonne->rechercheInfoPersonne($_SESSION['email']);
+        $parent=$this->ModelePersonne->getPersonneParent($personne->NoPersonne);
+        if($personne->Actif==1)
+        {       
+            var_dump($_SESSION,$personne,$parent,$_SESSION['email']);
+            if ($parent->Etre_Correspondant==1)
+            {
+                $this->load->view('membre/vueDesinscrireMail');
+                
+                if(isset($_POST['confirmer']))
+                {
+                    $donneesInsererParent=array('Etre_Correspondant'=>0,'NoPersonne'=>$personne->NoPersonne);
+                    $this->ModelePersonne->modifierPersParent($donneesInsererParent);
+                    $donneesInsererPersonne=array('Actif'=>0,'Email'=>$_SESSION['email']);
+                    $this->ModelePersonne->modifierInfoPersonne($donneesInsererPersonne);
+                    $this->load->view('membre/vueConfirmation');
+                    var_dump($_SESSION,$personne,$parent,$_SESSION['email']);
+                }
+            }
+            else 
+            {
+                $this->load->view('membre/vueConfirmation');
+            }
+        }
+        else
+            {
+                var_dump($_SESSION,$personne,$parent,$_SESSION['email']);
+                $this->load->view('membre/vueInscrireMail');
+                $this->form_validation->set_rules('Etre_Correspondant AND Actif','checkbox','required'); 
+                if(isset($_POST['confirmer']))
+                {
+                    $donneesInsererParent=array('Etre_Correspondant'=>1,'NoPersonne'=>$personne->NoPersonne);
+                    $this->ModelePersonne->modifierPersParent($donneesInsererParent);
+                    $donneesInsererPersonne=array('Actif'=>1,'Email'=>$_SESSION['email']);
+                    $this->ModelePersonne->modifierInfoPersonne($donneesInsererPersonne);
+                    $this->load->view('membre/vueConfirmation');
+                    var_dump($_SESSION,$personne,$parent,$_SESSION['email']);
+                }
+            }
+        
+   }
+   /* function actif
+{
+    $personne=$this----rechercheInfoPersonne($_SESSION['Email'])
+    $parent=$this----getPersonneParent($personne->NoPersone)
+    if($personne->actif==1)
+    if $parent->EtreCorespondant==1
+    {
+        vueEtesVousSur car correspondant
+    
+    //$donné=array('EtreCorespondant'=>0,'NoPersonne'=>$personne->NoPersone)
+    $this db modifierPersParent($donné)
+    }
+    $info=array(Actif=>0,Email=>$_SESSION['email'])
+    this db modifierInfoPersonne($info)
+    vue on vous emerdera plus
+
+}///monSite.com/Membre/actif */
+
+
 
 }

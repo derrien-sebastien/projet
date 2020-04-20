@@ -24,7 +24,7 @@ class ModeleEnfant extends CI_Model
 	/*********************************************************************************************************************************************/
 	/*********************************************************************************************************************************************/
 	/*********************************************************************************************************************************************/
-	public function bla($email) 
+	public function enfant($email) 
    	{
 		$this->db->select('ge_enfant.Nom as NomEnfant, ge_enfant.Prenom as PrenomEnfant,ge_enfant.DateNaissance, ge_classe.Nom as NomClasse, ge_enfant.NoEnfant');
 		$this->db->from('ge_personne');
@@ -38,7 +38,7 @@ class ModeleEnfant extends CI_Model
       	return $maListe->result();
 	}
 
-	public function blo($noEnfant)
+	public function personne($noEnfant)
 	{
 		$this->db->select('ge_personne.Nom as NomParent,ge_personne.Prenom as PrenomParent');
 		$this->db->from('ge_personne');
