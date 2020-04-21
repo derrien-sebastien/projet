@@ -13,6 +13,11 @@ elseif($Provenance=='commande')
     echo form_open('Administrateur/selectionCommande');
     echo "<input type='hidden' name='Provenance' value='".$Provenance."'>";  
 }
+elseif($Provenance=='ajouter')
+{
+    $donnees['Provenance']='ajouter';
+    echo form_open('Administrateur/ajouterEvenement',$donnees);
+}
 else
 {
 echo form_open('Administrateur/formulaireEvenement');
@@ -20,13 +25,11 @@ echo form_open('Administrateur/formulaireEvenement');
 echo "<table>\n";
 echo "<tr><td><label for='Evenement'>choisissez:</label></td>
 <td><select name='Evenement'>
-    <option value='//////////'>Aucun evenement selectionné</option>
-    <option value='//////////'>Nouvel Evenement</option>";    
+    <option value='/'>Aucun evenement selectionné</option>
+    <option value='/'>Nouvel Evenement</option>";    
     foreach ($lesEvenements as $unEvenement):                      
         echo "<option value='";
-        echo $unEvenement->Annee."/".$unEvenement->NoEvenement."/".$unEvenement->DateMiseEnLigne."/".$unEvenement->DateMiseHorsLigne
-            ."/".$unEvenement->TxtHTMLEntete."/".$unEvenement->TxtHTMLCorps."/";//.$unEvenement->TxtHTMLPiedDePage."/".$unEvenement->ImgEntete
-   //     ."/".$unEvenement->ImgPiedDePage."/".$unEvenement->EmailInformationHTML."/".$unEvenement->EnCours;
+        echo $unEvenement->Annee."/".$unEvenement->NoEvenement;
         echo "'>";        
         echo $unEvenement->TxtHTMLEntete;
         echo "</option>";

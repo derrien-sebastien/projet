@@ -74,7 +74,15 @@ class Administrateur extends CI_Controller
 
     public function ajouterEvenement() 
 	{
-		$this->formulaireEvenement(null,'ajouter');
+		$donnees['Provenance']='ajouter';
+		if(isset($_POST['Evenement']))
+		{
+		$AncienEvenement=explode("/",$_POST['Evenement']);
+   	 	$Annee=$AncienEvenement['0'];
+		$NoEvenement=$AncienEvenement['1'];
+		$donnees['evenement']=$this->ModeleEvenement->retournerUnEvenement($NoEvenement,$Annee);
+		}
+		$this->formulaireEvenement($donnees);
 	}
 	
 
@@ -87,18 +95,27 @@ class Administrateur extends CI_Controller
 	{
 		$this->load->view('templates/EntetePrincipal');
 		$this->load->view('templates/EnteteNavbar');
-		$DonneesInjectees['Provenance']='modifier';		
+		
+		$donneesInjectees=array(
+			'Provenance'=>'modifier'
+		);		
 		if (!isset($_POST['Evenement']))
 		{
-		$DonneesInjectees['lesEvenements']= $this->ModeleEvenement->getEvenementGeneral(AnneeEnCour);
-		$DonneesInjectees['lesEvenements']= $DonneesInjectees['lesEvenements']+$this->ModeleEvenement->getEvenementGeneral(AnneeEnCour-1);
-		$DonneesInjectees['lesEvenements']= $DonneesInjectees['lesEvenements']+$this->ModeleEvenement->getEvenementGeneral(AnneeEnCour-2);
-		$this->load->view('administrateur/vueSelectionEvenements',$DonneesInjectees);		
-		//$this->load->view('templates/PiedDePagePrincipal');
+			$donneesInjectees['lesEvenements']= $this->ModeleEvenement->getEvenementGeneral(AnneeEnCour);
+			$donneesInjectees['lesEvenements']= $donneesInjectees['lesEvenements']+$this->ModeleEvenement->getEvenementGeneral(AnneeEnCour-1);
+			$donneesInjectees['lesEvenements']= $donneesInjectees['lesEvenements']+$this->ModeleEvenement->getEvenementGeneral(AnneeEnCour-2);
+			$this->load->view('administrateur/vueSelectionEvenements',$donneesInjectees);		
+			//$this->load->view('templates/PiedDePagePrincipal');
 		}
 		else
 		{
-		$this->formulaireEvenement($_POST['Evenement'],$DonneesInjectees['Provenance']);
+			
+			$AncienEvenement=explode("/",$_POST['Evenement']);
+   	 		$Annee=$AncienEvenement['0'];
+			$NoEvenement=$AncienEvenement['1'];
+			$donneesInjectees['evenement']=$this->ModeleEvenement->retournerUnEvenement($NoEvenement,$Annee);
+				
+			$this->formulaireEvenement($donneesInjectees);
 		}		
 	}
 
@@ -173,18 +190,26 @@ class Administrateur extends CI_Controller
     **********************************************************************/
 
     
-	public function formulaireEvenement ($AncienEvenementEnLigne=null,$Provenance=null)	//formulaire evenement nom a modifier
-	{		
+	public function formulaireEvenement ($donnees=null)	//formulaire evenement nom a modifier
+	{			
+		if(isset($_POST['Evenement']))//si on vient d'ajouter avec une selection d'ancien formulaire 
+		{
+			$AncienEvenement=explode("/",$_POST['Evenement']);
+   	 		$Annee=$AncienEvenement['0'];
+			$NoEvenement=$AncienEvenement['1'];
+			$donnees['evenement']=$this->ModeleEvenement->retournerUnEvenement($NoEvenement,$Annee);
+		}	
 		if($this->input->post('submit'))//upload image entete
         {	
 			$LocalisationImage=$this->input->post('TxtImgEntete');
-			$NomImageEntete=$this->uploadImage($LocalisationImage);			
+			$NomImageEntete=$this->uploadImage($LocalisationImage);
+			var_dump($_POST['ImgEntete']);			
 		}		 
-			if($this->input->post('submit'))//upload image pied de page    
-        	{
-				$LocalisationImage=$this->input->post('TxtImgPiedDePage');
-				$NomImagePiedPage=$this->uploadImage($LocalisationImage);							
-			}			
+		if($this->input->post('submit'))//upload image pied de page    
+        {
+			$LocalisationImage=$this->input->post('TxtImgPiedDePage');
+			$NomImagePiedPage=$this->uploadImage($LocalisationImage);							
+		}			
     	$this->form_validation->set_rules('AnneeEvenement','Annee','required');//regle de validation du formulaire
 		$this->form_validation->set_rules('DateMiseEnLigne','DateMiseEnLigne');
 		$this->form_validation->set_rules('DateMiseHorsLigne','DateMiseHorsLigne');
@@ -198,14 +223,19 @@ class Administrateur extends CI_Controller
 			$DonneesInjectees['LesProduits']=$this->ModeleProduit->getProduitGeneral(AnneeEnCour);//recuperation des produit en objet
 			$DonneesInjectees['LesProduits']=$DonneesInjectees['LesProduits']+$this->ModeleProduit->getProduitGeneral(AnneeEnCour-1);
 			$DonneesInjectees['LesProduits']=$DonneesInjectees['LesProduits']+$this->ModeleProduit->getProduitGeneral(AnneeEnCour-2);
-			$DonneesInjectees['Provenance']=$Provenance;
+			$DonneesInjectees['Provenance']=$donnees['Provenance'];
+			if(isset($donnees['evenement']))
+			{
+				$DonneesInjectees['evenement']=$donnees['evenement'];
+			}
 			$this->load->view('templates/EntetePrincipal');
 			$this->load->view('templates/EnteteNavbar');//indispensable pour le script	
-			if ($Provenance=='ajouter')//si on ajoute un evenement
+			if ($donnees['Provenance']=='ajouter')//si on ajoute un evenement
 			{
-				$DonneesInjectees['LesEvenements']= $this->ModeleEvenement->getEvenementGeneral(AnneeEnCour);//recuperation les evenement en objet
-				$DonneesInjectees['LesEvenements']=$DonneesInjectees['LesEvenements']+$this->ModeleEvenement->getEvenementGeneral(AnneeEnCour-1);
-				$DonneesInjectees['LesEvenements']=$DonneesInjectees['LesEvenements']+$this->ModeleEvenement->getEvenementGeneral(AnneeEnCour-2);
+				$DonneesInjectees['lesEvenements']= $this->ModeleEvenement->getEvenementGeneral(AnneeEnCour);//recuperation les evenement en objet
+				$DonneesInjectees['lesEvenements']=$DonneesInjectees['lesEvenements']+$this->ModeleEvenement->getEvenementGeneral(AnneeEnCour-1);
+				$DonneesInjectees['lesEvenements']=$DonneesInjectees['lesEvenements']+$this->ModeleEvenement->getEvenementGeneral(AnneeEnCour-2);
+				$DonneesInjectees['Provenance']='ajouter';
 				$this->load->view('administrateur/vueSelectionEvenements',$DonneesInjectees);//charge la vue pour preremplir le formulaire
 				//$this->load->view('templates/PiedDePagePrincipal');
 			}
