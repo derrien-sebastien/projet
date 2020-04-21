@@ -52,6 +52,7 @@ class Administrateur extends CI_Controller
 	public function accueil() //page d'accueil admin
 	{
 		$this->load->view('templates/EntetePrincipal');
+		$this->load->view('templates/EnteteNavbar');
 		$this->load->view('administrateur/vueAccueilAdministrateur');
 	}
 
@@ -75,7 +76,7 @@ class Administrateur extends CI_Controller
 	{
 		$this->formulaireEvenement(null,'ajouter');
 	}
-
+	
 
 	/**********************************************************************
     **                         Modifier un évenement                     **
@@ -84,7 +85,8 @@ class Administrateur extends CI_Controller
 	
 	public function modifierEvenement() 
 	{
-		$this->load->view('templates/EnteteAdmin');
+		$this->load->view('templates/EntetePrincipal');
+		$this->load->view('templates/EnteteNavbar');
 		$DonneesInjectees['Provenance']='modifier';		
 		if (!isset($_POST['Evenement']))
 		{
@@ -119,7 +121,8 @@ class Administrateur extends CI_Controller
  
  	public function modifierProduit($NoEvenement=null,$Annee=null) 
 	{
-		$this->load->view('templates/EnteteAdmin');
+		$this->load->view('templates/EntetePrincipal');
+		$this->load->view('templates/EnteteNavbar');
 		$DonneesInjectees['Provenance']='modifier';		
 		if (!isset($_POST['Evenement']))
 		{
@@ -196,7 +199,8 @@ class Administrateur extends CI_Controller
 			$DonneesInjectees['LesProduits']=$DonneesInjectees['LesProduits']+$this->ModeleProduit->getProduitGeneral(AnneeEnCour-1);
 			$DonneesInjectees['LesProduits']=$DonneesInjectees['LesProduits']+$this->ModeleProduit->getProduitGeneral(AnneeEnCour-2);
 			$DonneesInjectees['Provenance']=$Provenance;
-			$this->load->view('templates/EnteteAdmin');//indispensable pour le script	
+			$this->load->view('templates/EntetePrincpal');
+			$this->load->view('templates/EnteteNavbar');//indispensable pour le script	
 			if ($Provenance=='ajouter')//si on ajoute un evenement
 			{
 				$DonneesInjectees['LesEvenements']= $this->ModeleEvenement->getEvenementGeneral(AnneeEnCour);//recuperation les evenement en objet
@@ -332,7 +336,8 @@ class Administrateur extends CI_Controller
 		if ($this->form_validation->run() === FALSE)
 		{	
 			$DonneesInjectees['Provenance']=$Provenance;
-			$this->load->view('templates/EnteteAdmin');
+			$this->load->view('templates/EntetePrincipal');
+			$this->load->view('templates/EnteteNavbar');
 			if($Provenance==='Ajouter')
 			{
 				$DonneesInjectees['LesProduits']=$this->ModeleProduit->getProduitGeneral(AnneeEnCour);
@@ -392,7 +397,8 @@ class Administrateur extends CI_Controller
 			{
 				$this->ModeleProduit->modifierProduit($donneesAInserer);
 			}	
-			$this->load->view('templates/EnteteAdmin');
+			$this->load->view('templates/EntetePrincipal');
+			$this->load->view('templates/EnteteNavbar');
 			$this->load->view('administrateur/vueFormulaireProduit');// a supprimer
 			//$this->load->view('templates/PiedDePagePrincipal');
 		}	;	
@@ -456,7 +462,8 @@ class Administrateur extends CI_Controller
 			{
 				$donneesMail['questionTechnique']=null;
 			}
-			$this->load->view('templates/EnteteAdmin');			
+			$this->load->view('templates/EntetePrincipal');
+			$this->load->view('templates/EnteteNavbar');			
 			$this->load->view('administrateur/vueCreationMail',$donneesMail);
 		}
 		else
@@ -670,7 +677,8 @@ class Administrateur extends CI_Controller
 			$DonneesInjectees['lesEvenements']= $this->ModeleEvenement->getEvenementGeneral(AnneeEnCour);
 			$DonneesInjectees['lesEvenements']=$DonneesInjectees['lesEvenements']+$this->ModeleEvenement->getEvenementGeneral(AnneeEnCour-1);
 			$DonneesInjectees['lesEvenements']=$DonneesInjectees['lesEvenements']+$this->ModeleEvenement->getEvenementGeneral(AnneeEnCour-2);
-			$this->load->view('templates/EnteteAdmin');
+			$this->load->view('templates/EntetePrincipal');
+			$this->load->view('templates/EnteteNavbar');
 			$this->load->view('administrateur/vueSelectionEvenements',$DonneesInjectees);		
 			//$this->load->view('templates/PiedDePagePrincipal');
 		}
@@ -713,7 +721,8 @@ class Administrateur extends CI_Controller
 			{
 				$donnees['modif']=$modif;
 			}
-			$this->load->view('templates/EnteteAdmin');		
+			$this->load->view('templates/EntetePrincipal');
+			$this->load->view('templates/EnteteNavbar');		
 			$this->load->view('administrateur/vueRecapCommande',$donnees);
 			$this->load->view('templates/PiedDePagePrincipal');
 		}
@@ -756,7 +765,8 @@ class Administrateur extends CI_Controller
 				'noEvenement'=>$noEvenement,
 				'modif'=>null		
 			);
-			$this->load->view('templates/EnteteAdmin');
+			$this->load->view('templates/EntetePrincipal');
+			$this->load->view('templates/EnteteNavbar');
 			$this->load->view('administrateur/vueRecapCommande',$donnees);
 			$this->load->view('templates/PiedDePagePrincipal');
 
@@ -767,6 +777,7 @@ class Administrateur extends CI_Controller
 		$donnees['enfantSansCorrepondant']=$this->ModeleEnfant->enfantSansCorrespondant();
 		$donnees['classesSansEnfants']=$this->ModeleClasse->nbEleveParClasse();	
 		$this->load->view('templates/EntetePrincipal');
+		$this->load->view('templates/EnteteNavbar');
 		$this->load->view('administrateur/vueProbleme',$donnees);
 		$this->load->view('templates/PiedDePagePrincipal');
 	}
