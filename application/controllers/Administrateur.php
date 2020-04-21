@@ -199,7 +199,7 @@ class Administrateur extends CI_Controller
 			$DonneesInjectees['LesProduits']=$DonneesInjectees['LesProduits']+$this->ModeleProduit->getProduitGeneral(AnneeEnCour-1);
 			$DonneesInjectees['LesProduits']=$DonneesInjectees['LesProduits']+$this->ModeleProduit->getProduitGeneral(AnneeEnCour-2);
 			$DonneesInjectees['Provenance']=$Provenance;
-			$this->load->view('templates/EntetePrincpal');
+			$this->load->view('templates/EntetePrincipal');
 			$this->load->view('templates/EnteteNavbar');//indispensable pour le script	
 			if ($Provenance=='ajouter')//si on ajoute un evenement
 			{

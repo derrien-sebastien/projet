@@ -56,6 +56,7 @@ class Membre extends CI_Controller
     public function accueil()
     {
         $this->load->view('templates/EntetePrincipal');
+        $this->load->view('templates/EnteteNavbar');
         $this->load->view('membre/vueAccueilPersonne');
         $this->load->view('templates/vueAccueilPrincipal');
     }
@@ -67,6 +68,7 @@ class Membre extends CI_Controller
     public function oublieMotDePasse()
 	{
         $this->load->view('templates/EntetePrincipal');
+        $this->load->view('templates/EnteteNavbar');
         $this->form_validation->set_rules('txtLogin','email','required');
         if($this->form_validation->run() === FALSE)
         { 
