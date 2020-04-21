@@ -56,6 +56,7 @@ class Membre extends CI_Controller
     public function accueil()
     {
         $this->load->view('templates/EntetePrincipal');
+        $this->load->view('membre/vueAccueilPersonne');
         $this->load->view('templates/vueAccueilPrincipal');
     }
 

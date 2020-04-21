@@ -120,8 +120,7 @@ class Visiteur extends CI_Controller
                'profil'=>$personne->profil,
                'actif'=>$personne->Actif
             );                    
-            $this->session->set_userdata($dataSession);                   
-            $this->session->set_userdata($dataSession);                                 
+            $this->session->set_userdata($dataSession);                                                   
             if($this->session->profil=='admin')
             {              
                redirect('Administrateur/accueil');
@@ -133,8 +132,7 @@ class Visiteur extends CI_Controller
             else
             {
                $this->catalogueEvenement();
-            }
-            
+            }           
          }
          else
          {
