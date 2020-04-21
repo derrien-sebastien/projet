@@ -51,5 +51,10 @@ $_SESSION['panier']=$produits;
 
 ========
 rester sur url d'arriver apres connection( function se connecter recup url et redirection vers celle ci )
+============
 
+on a soit 
+if visiteur{lien visiteur}if membre{lien membre}if admin{lien admin}
+ou 
+if visiteur ou membre ou admin{lien visiteur(if membre ou admin{lien membre(if admin{lien admin})})}
 
