@@ -216,7 +216,7 @@ class ModelePersonne extends CI_Model
    public function modifierInfoPersonne($pDonneesAInserer)
    {   
       
-      $this->db->where('email',  $pDonneesAInserer['Email']);      
+      $this->db->where('email',  $pDonneesAInserer['email']);      
       return $this->db->update('ge_personne', $pDonneesAInserer);
    }
 

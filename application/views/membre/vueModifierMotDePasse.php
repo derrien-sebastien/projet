@@ -21,8 +21,8 @@
             }
         </script>
             <?php
-                echo form_open('visiteur/ModificationMdp','class="form-horizontal" name="form"'); // j'ouvre mon form
-                 echo '<form onsubmit="return confirmationMotDePasse()" action="'.site_url('visiteur/ModificationMdp').'" method="post">';
+                echo form_open('membre/ModificationMdp','class="form-horizontal" name="form"'); // j'ouvre mon form
+                 echo '<form onsubmit="return confirmationMotDePasse()" action="'.site_url('membre/ModificationMdp').'" method="post">';
             ?>
             <table align='center'>
             <tr>

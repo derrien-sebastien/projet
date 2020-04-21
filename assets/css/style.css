@@ -8,7 +8,11 @@
 **                        Page d'accueil                             **
 **                                                                   **
 **********************************************************************/
-
+.dark
+{
+        height: 600px;
+        background-color: #3d3d3dc2;
+}
 div#conteneur-accueilP
 {
 	display:block;
