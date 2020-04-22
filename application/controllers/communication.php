@@ -58,3 +58,19 @@ if visiteur{lien visiteur}if membre{lien membre}if admin{lien admin}
 ou 
 if visiteur ou membre ou admin{lien visiteur(if membre ou admin{lien membre(if admin{lien admin})})}
 
+========
+salut seb donc pour reexpliquer pour le ajax pour mon pb apres reflexion je pense qu'il faudrais que se soit dans 
+un seul et meme script avec deux function sur une feuille a part 
+
+sur la vue vueSelectionEvenement il faudrais que j'appel le script qui incremente une variable avec NoEvenement et Annee
+la function devra me renvoyer un objet evenement donc passer par le modelEvenemlent
+sur la vue formulaireEvenement je recupere l'object et le traire en dynamique (modification
+des value de mes champ input texteArea) 
+pour corser un peu le tout les texte area de mon formulaire appel deja les script summernote 
+
+donc si je me trompe pas la vue1 apel le script1.1 qui apel le controleur qui apel la methode puis 
+rempli le script et la vue 2 apel le script 1.2 pour s'auto remplir les value 
+
+bref ca me parrait compliquer donc pour le moment je pense que rester comme ca c'est pas trop grave 
+par la suite pourquoi pas 
+======
