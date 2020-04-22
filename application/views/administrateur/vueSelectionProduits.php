@@ -6,7 +6,7 @@ echo "<tr><td><label for='produit'>choisissez:</label></td>
 <td><select name='Produit'>
     <option value='/////////'>Aucun produit selectionné</option>
     <option value='/////////'>Nouveau produit</option>";
-    foreach ($lesProduit as $unProduit):
+    foreach ($lesProduits as $unProduit):
         echo "<option value='";
         echo $unProduit->NoEvenement."/".$unProduit->NoProduit."/".$unProduit->LibelleHTML
         ."/".$unProduit->LibelleCourt."/".$unProduit->Prix."/".$unProduit->Img_Produit."/".$unProduit->Stock

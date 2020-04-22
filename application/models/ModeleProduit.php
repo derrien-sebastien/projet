@@ -55,7 +55,7 @@ class ModeleProduit extends CI_Model
       $this->db->where('ge_evenement.NoEvenement', $pNoEvenement);
       $this->db->where('ge_produit.Annee', $pAnnee);
       $maCommande = $this->db->get();
-      return $maCommande->result(); 
+      return $maCommande; 
    } 
    /**********************************************************************
    **           Fonction qui va retourner le numéro max                 **

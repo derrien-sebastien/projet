@@ -18,11 +18,12 @@
             <li>
               <a href="<?php echo site_url('visiteur/catalogueEvenement') ?>">Nos Evenements</a>
             </li>
+            <li>
+                <a href="<?php echo site_url('visiteur/catalogueProduits') ?>">Panier</a>
+            </li>
             <?php if ($this->session->profil=='membre') : ?>
               
-                <li>
-                  <a href="<?php echo site_url('membre/indexPanier') ?>">Panier</a>
-                </li>
+                
                 <li class="dropdown">
                   <a class="dropdown-toggle" data-toggle="dropdown" href="#">Gestion compte<!--lien activation des evenement-->
                     <span class="caret"></span>
@@ -110,6 +111,5 @@
           </ul>            
       </div>
     </nav>
-    </br>
     </br>
     </br>
