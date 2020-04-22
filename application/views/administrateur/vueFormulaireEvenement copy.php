@@ -27,53 +27,85 @@ if (isset($evenement->NoEvenement))
 }
 $anneeEvenement=array(
     'type'=>'number',
-    'name'='AnneeEvenement',
-    'value'=$evenement->Annee
+    'name'=>'AnneeEvenement',
+    'value'=>$evenement->Annee
 );
 $dateMiseEnLigne=array(
-    'type'='date',
-    'name'='DateMiseEnLigne',
-    'value'=$evenement->DateMiseEnLigne
+    'type'=>'date',
+    'name'=>'DateMiseEnLigne',
+    'value'=>$evenement->DateMiseEnLigne
 );
 $dateMiseHorsLigne=array(
-    'type'='date',
-    'name'='DateMiseHorsLigne',
-    'value'=$evenement->DateMiseHorsLigne
+    'type'=>'date',
+    'name'=>'DateMiseHorsLigne',
+    'value'=>$evenement->DateMiseHorsLigne
 );
 $texteEntete=array(
-    'id'='summernote',
-    'type'='text',
-    'name'='TexteEntete'
+    'id'=>'summernote',
+    'type'=>'text',
+    'name'=>'TexteEntete'
 );
 if (isset($evenement->TxtHTMLEntete))
 {
     $texteEntete['value']=$evenement->TxtHTMLEntete;
 }
 $texteCorps=array(
-    'id'='summernote1',
-    'type'='text',
-    'name'='TexteCorps'
+    'id'=>'summernote1',
+    'type'=>'text',
+    'name'=>'TexteCorps'
 );
 if (isset($evenement->TxtHTMLCorps))
 {
     $texteCorps['value']=$evenement->TxtHTMLCorps;
 }
 $textePied=array(
-    'id'='summernote2',
-    'type'='text',
-    'name'='TextePied'
+    'id'=>'summernote2',
+    'type'=>'text',
+    'name'=>'TextePied'
 );
 if (isset($evenement->TxtHTMLPiedDePage))
 {
     $textePied['value']=$evenement->TxtHTMLPiedDePage;
 }
 $txtImgEntete=array(
-    'type'='file',
-    'name'='txtImgEntete'
+    'type'=>'file',
+    'name'=>'txtImgEntete'
 );
 $supImageEntete=array(
-    'type'='checkbox',
-    'name'='supImgEntete'
+    'name'=>'supImgEntete',
+    'value'=>'on'
+);
+$txtImgPiedDePage=array(
+    'type'=>'file',
+    'name'=>'txtImgPiedDePage'
+);
+$supImgPiedPage=array(
+    'name'=>'supImgPiedPage',
+    'value'=>'on'
+);
+$emailInfo=array(
+    'id'=>'summernote3',
+    'type'=>'text',
+    'name'=>'EmailInfo'
+);
+$encour=array(
+    'name'=>'EnCours',
+    'value'=>'on'
+);
+$ajouterProduit=array(
+    'name'=>'AjoutProduit',
+    'value'=>'oui'
+);
+$option=array(
+    '//'=>'Aucun produit selectionné',
+    '//'=>'Nouveau produit'
+);
+foreach ($lesProduit as $unProduit):
+    $option[$unProduit->Annee.'/'.$unProduit->NoEvenement.'/'.$unProduit->NoProduit]=$unProduit->LibelleCourt;
+endforeach;
+$submit=array(
+    'name'=>'submit',
+    'value'=>'envoyer'
 );
 
 
@@ -145,51 +177,77 @@ echo "<table>";
             {
                 echo '<p><h4>Image actuellement choisie :</h4>'.$evenement->ImgEntete.'</p>';
             }
-            echo "</td>";
-            echo "<td>";
-                echo form_checkbox($supImageEntete);
+        echo "</td>";
+        echo "<td>";
+            echo form_checkbox($supImageEntete);
             echo "supprimer l'image";
-            </td></tr>";
-echo "<br>\n";
-echo "<tr><td><label for='txtImgPiedDePage'> Image de pied de page:</label></td>
-<td><input type='file' name='txtImgPiedDePage' >";
-if (isset($evenement->ImgPiedDePage)) 
-{
-    echo '<p><h4>Image actuellement choisie : </h4>'.$evenement->ImgPiedDePage.'</p>';
-}
-echo "</td><td><input type='checkbox' name='supImgPiedPage' /> supprimer l'image</td></tr>";
-echo "<br>\n";
-echo "<tr><td><label for='EmailInfo'>information a joindre dans le mail:</label></td>
-<td><textarea id='summernote3' type='text' name='EmailInfo'>";
-if (isset($evenement->TxtHTMLEntete))
-{
-    echo $evenement->EmailInformationHTML;
-}
-echo "</textarea></td></tr>";
-echo "<br>\n";
-echo "<tr><td><label for='EnCours'>en cours</label></td>
-<td><input type='checkbox' name='EnCours' value=''/></td></tr>";
-echo "<br>\n";
-echo "<tr><td><label for='AjoutProduit'>voulez vous ajouter un article</label></td>
-<td><input type='checkbox' name='AjoutProduit' value='oui'/></td></tr>";
-echo "<br>\n";
-echo "<tr><td><label for='produit'>choisissez:</label></td>
-<td><select name='Produit'>
-    <option value='/////////'>Aucun produit selectionné</option>
-    <option value='/////////'>Nouveau produit</option>";
-    foreach ($lesProduit as $unProduit):
-        echo "<option value='";
-        echo $unProduit->NoEvenement."/".$unProduit->NoProduit."/".$unProduit->LibelleHTML
-        ."/".$unProduit->LibelleCourt."/".$unProduit->Prix."/".$unProduit->Img_Produit."/".$unProduit->Stock
-        ."/".$unProduit->NumeroOrdreApparition."/".$unProduit->Etre_Ticket."/".$unProduit->ImgTicket;
-        echo "'>";
-        echo $unProduit->LibelleCourt;
-        echo "</option>";
-   endforeach; 
-echo "</select></td></tr>";
-echo "<tr><td><input type='submit' name='submit' value='envoyer'></td><td></td>\n";
-echo "</tr></table>";
-echo "</form>";
+        echo "</td>";
+    echo "</tr>";
+    echo "<br>\n";
+    echo "<tr>";
+        echo "<td>";
+            echo form_label('Image de pied de page:','txtImgPiedDePage');
+        echo"</td>";
+        echo "<td>";
+            echo form_input($txtImgPiedDePage);
+            if (isset($evenement->ImgPiedDePage)) 
+            {
+                echo '<p><h4>Image actuellement choisie : </h4>'.$evenement->ImgPiedDePage.'</p>';
+            }
+        echo "</td>";
+        echo "<td>";
+            echo form_checkbox($supImgPiedPage);
+            echo "supprimer l'image";
+        echo "</td>";
+    echo "</tr>";
+    echo "<br>\n";
+    echo "<tr>";
+        echo "<td>";
+            echo form_label('information a joindre dans le mail:','EmailInfo');
+        echo "</td>";
+        echo "<td>";
+            echo form_textarea($emailInfo);
+            if (isset($evenement->TxtHTMLEntete))
+            {
+                echo $evenement->EmailInformationHTML;
+            }
+        echo "</td>";
+    echo "</tr>";
+    echo "<br>\n";
+    echo "<tr>";
+        echo "<td>";
+            echo form_label('en cours','EnCours');
+        echo "</td>";
+        echo "<td>";
+            echo form_checkbox($encours);
+        echo "</td>";
+    echo "</tr>";
+    echo "<br>\n";
+    echo "<tr>";
+        echo "<td>";
+            echo form_label('voulez vous ajouter un article','AjoutProduit');
+        echo "</td>";
+        echo "<td>";
+         echo form_checkbox($ajouterProduit);
+        echo "</td>";
+    echo "</tr>";
+    echo "<br>\n";
+    echo "<tr>";
+        echo "<td>";
+            echo form_label('choisissez un/ou des produits :','produit');
+        echo "</td>";
+        echo "<td>";
+            echo 
+            form_dropdown('Produit', $options);
+        echo "</td>";
+    echo "</tr>";
+    echo "<tr>";
+        echo "<td>";
+            echo form_submit($submit);
+        echo "</td>\n";
+    echo "</tr>";
+echo "</table>";
+echo form_close();
 echo "<script>
 $(document).ready(function() {
     $('#summernote').summernote();
