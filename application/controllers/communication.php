@@ -74,3 +74,15 @@ rempli le script et la vue 2 apel le script 1.2 pour s'auto remplir les value
 bref ca me parrait compliquer donc pour le moment je pense que rester comme ca c'est pas trop grave 
 par la suite pourquoi pas 
 ======
+
+
+Un peu naz je vais me coucher 
+Je t'ai fais des petites modif coté admin coté membre et visiteur notamment sur tout l'aspect visuel et miracle 
+je commence à maitriser méchant mais c'est long à produire. Je poursuivrais ultérieurement.
+pour la fin de la semaine je veux maitriser mon panier :D 
+Concernant nos bootstrap j'ai retouché notre head viré tout SAUF 2 fichiers de M..... dont j'arrive 
+pas du tout à me débarasser 
+j'ai tenter plusieurs manip mais à chaque coup ton summernote plante si jamais tu decouvre d'autre probleme 
+que ce soit sur les script ou en css je m'en occupe 
+d'ailleurs je pense d'ici a ce week end finir le tri dans le dossier js dist css font et image 
+Bonne nuit a demain.

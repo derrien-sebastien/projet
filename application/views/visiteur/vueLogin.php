@@ -1,10 +1,4 @@
-<head>
-    <style>
-        body { background-color: #5f5c5c; }
-    </style>
-</head>
-<body>
-<div id="login">
+<div >
 	<h1>Saisissez votre adresse mail</h1>
 		<?php
 			$email=array(	'name'=>'txtEmail',

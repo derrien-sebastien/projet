@@ -92,7 +92,7 @@
 	});
 </script>
 <?php
-echo '<p>'.anchor('visiteur/catalogueEvenement','Retour à la liste de nos évènements').'</p>';
+echo '<div class="btn-primary"><p>'.anchor('visiteur/catalogueEvenement','Retour à la liste de nos évènements').'</p></div>';
 ?>
 </body>
 </html>

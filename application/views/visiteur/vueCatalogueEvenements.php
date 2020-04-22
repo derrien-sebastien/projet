@@ -1,24 +1,24 @@
 
 </br>
-<div>
+<div class="btn-primary">
     <h2>
         <img src="<?php echo base_url(); ?>assets/images/panier.png" height="25" width="25">&nbsp;<a href='<?php echo site_url('visiteur/catalogueProduits') ?>'>Tous nos produits</a>
     </h2>
 </div>
-<div class="containerEv">
-    <h2 class='textBlanc'>Nos Evenements Marchands </h2>
+<div class="btn-primary">
+    <h2 class="btn-primary">Nos Evenements Marchands </h2>
         <?php 
             foreach ($lesEvenementsMarchands as $unEvenementMarchand):
-                echo '<h3>'.anchor('visiteur/EvenementMarchand/'.$unEvenementMarchand->NoEvenement.'/'.$unEvenementMarchand->Annee,$unEvenementMarchand->TxtHTMLEntete).'</h3>';
+                echo '<h3 class="btn-primary">'.anchor('visiteur/EvenementMarchand/'.$unEvenementMarchand->NoEvenement.'/'.$unEvenementMarchand->Annee,$unEvenementMarchand->TxtHTMLEntete).'</h3>';
             endforeach;
         ?>
 </div>
-<div class="containerEv">
-    <h2 class='textBlanc'>Nos Evenements non Marchands </h2>
+<div class="btn-primary">
+    <h2 class="btn-primary">Nos Evenements non Marchands </h2>
         <?php
-        echo '<div>';
+        echo '<div class="btn-primary">';
             foreach ($lesEvenementsNonMarchands as $unEvenementNonMarchand):
-                echo '<h3>'.anchor('visiteur/EvenementNonMarchand/'.$unEvenementNonMarchand->NoEvenement.'/'.$unEvenementNonMarchand->Annee,$unEvenementNonMarchand->TxtHTMLEntete).'</h3>';
+                echo '<h3 class="btn-primary">'.anchor('visiteur/EvenementNonMarchand/'.$unEvenementNonMarchand->NoEvenement.'/'.$unEvenementNonMarchand->Annee,$unEvenementNonMarchand->TxtHTMLEntete).'</h3>';
             endforeach;
         echo'</div>';
         ?>
