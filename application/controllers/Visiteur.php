@@ -45,6 +45,7 @@ class Visiteur extends CI_Controller
    public function accueil()
    {
       $this->load->view('templates/EntetePrincipal');
+      $this->load->view('templates/EnteteNavbar');
       $this->load->view('templates/vueAccueilPrincipal');  
    }
 
@@ -56,6 +57,7 @@ class Visiteur extends CI_Controller
    public function inscription()
    {  
       $this->load->view('templates/EntetePrincipal');
+      $this->load->view('templates/EnteteNavbar');
       $this->form_validation->set_rules( 'txtEmail', 'Identifiant', 'required'); 
       $this->form_validation->set_rules( 'password', 'mot de passe', 'required');
       $this->form_validation->set_rules( 'password2', 'repetez mot de passe', 'required'); 
@@ -91,7 +93,8 @@ class Visiteur extends CI_Controller
 
    public function seConnecter()
    {  
-      $this->load->view('templates/EntetePrincipal');   
+      $this->load->view('templates/EntetePrincipal');
+      $this->load->view('templates/EnteteNavbar');   
       $this->form_validation->set_rules('txtEmail', 'email', 'trim|required|valid_email');
       $this->form_validation->set_rules('password','mot de passe');      
       $DonneesInjectees['TitreDeLaPage'] = 'Se Connecter';                             
@@ -171,7 +174,8 @@ class Visiteur extends CI_Controller
    public function mentionsLegales()
    {
       $DonneesInjectees['TitreDeLaPage'] = 'Informations Légales';                     
-      $this->load->view('templates/EntetePrincipal');                                  
+      $this->load->view('templates/EntetePrincipal'); 
+      $this->load->view('templates/EnteteNavbar');                                 
       $this->load->view('visiteur/vueMentionsLegales', $DonneesInjectees);            
       $this->load->view('templates/PiedDePagePrincipal');                              
    }
@@ -199,6 +203,7 @@ class Visiteur extends CI_Controller
       $DonneesInjectees['lesEvenementsMarchands'] = $this->ModeleEvenement->retournerEvenementsMarchands();
       $DonneesInjectees['lesEvenementsNonMarchands'] = $this->ModeleEvenement->retournerEvenementsNonMarchands();
       $this->load->view('templates/EntetePrincipal');
+      $this->load->view('templates/EnteteNavbar');
       $this->load->view('visiteur/vueCatalogueEvenements', $DonneesInjectees);
    } 
  
@@ -208,7 +213,8 @@ class Visiteur extends CI_Controller
 
    public function EvenementMarchand($noEvenement = NULL,$Annee =NULL)
    {
-      $DonneesInjectees['Produit'] = $this->ModeleProduit->retournerProduit($noEvenement);
+
+      $DonneesInjectees['LesProduits'] = $this->ModeleProduit->retournerProduit($noEvenement);     
       $DonneesInjectees['unEvenementMarchand'] = $this->ModeleEvenement->retournerEvenements($noEvenement);
       if (empty($DonneesInjectees['unEvenementMarchand']))
       {   
@@ -216,6 +222,7 @@ class Visiteur extends CI_Controller
       }
       $DonneesInjectees['TitreDeLaPage'] = $DonneesInjectees['unEvenementMarchand']['TxtHTMLEntete'];
       $this->load->view('templates/EntetePrincipal');
+      $this->load->view('templates/EnteteNavbar');
       $this->load->view('visiteur/vueEvenementMarchandEntete', $DonneesInjectees);
    }
    
@@ -229,21 +236,57 @@ class Visiteur extends CI_Controller
       }
       $DonneesInjectees['TitreDeLaPage'] = $DonneesInjectees['unEvenementNonMarchand']['TxtHTMLEntete'];
       $this->load->view('templates/EntetePrincipal');
+      $this->load->view('templates/EnteteNavbar');
       $this->load->view('visiteur/vueEvenementNonMarchandEntete', $DonneesInjectees);
    }
 
    /**********************************************************************
    **                               PANIER                             ***
    **********************************************************************/
-  
-   function indexPanier()
+  function catalogueProduits()
+  {
+   $this->load->view('templates/EntetePrincipal');
+   $this->load->view('templates/EnteteNavbar');
+   $data['data']=$this->ModeleProduit->get_all_produit();
+   $this->load->view('visiteur/vueCatalogueProduits',$data);
+  }
+   function indexPanier($NoEvenement = NULL,$Annee =NULL)
    {
       $this->load->view('templates/EntetePrincipal');
-      $data['data']=$this->ModeleProduit->get_all_produit();
+      $this->load->view('templates/EnteteNavbar');
+      $data['data']=$this->ModeleProduit->getProduits($NoEvenement,$Annee);
       $this->load->view('visiteur/vuePanier',$data);
+
+      /* $data = array();
+      $data['ProduitsDuPanier'] = $this->cart->contents();
+      $this->load->view('visteur/vuePanier', $data); */
+      
+      
+   }
+   public function ajouterProduitAuPanier($NoEvenement,$Annee)// ajout produit au panier
+   {
+      $Produit=$this->ModeleProduit->getProduits($NoEvenement,$Annee);//Récupérer un produit spécifique par ID
+      $i=1;
+      foreach
+      ($Produit as $UnProduit) :
+      $data=array(
+      'id'=>$UnProduit->Annee.'/'.$UnProduit->NoEvenement.'/'.$UnProduit->NoProduit,
+      'qty'=>$this->input->post($i),
+      'price'=>$UnProduit->Prix,
+      'name'=>$UnProduit->LibelleCourt
+      );
+
+      $this->cart->insert($data);
+      
+      $i++;
+      endforeach;
+      $this->cart->update($data);
+      echo $this->voirPanier(); 
+      //redirect('visiteur/Panier');
+
    }
 
-   function ajouterProduitAuPanier()
+   /* function ajouterProduitAuPanier()
    { 
       $produit = array(
                         'id' => $this->input->post('NoProduit'), 
@@ -254,7 +297,7 @@ class Visiteur extends CI_Controller
       $this->cart->insert($produit);
       $this->cart->update($produit );
       echo $this->voirPanier(); 
-   }
+   } */
 
    function voirPanier()
    { 

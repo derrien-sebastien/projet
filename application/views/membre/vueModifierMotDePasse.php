@@ -1,3 +1,4 @@
+</br>
     <div>
         <h2 align='center'>Paramètre confidentiel de votre compte</h2> <br>
         <p align='center'>Vous pouvez changer vos informations personnelle ici</p>

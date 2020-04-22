@@ -111,7 +111,8 @@ class Membre extends CI_Controller
     //OK
     public function infosCompte ()	
     {	
-        $this->load->view('templates/EntetePrincipal'); 
+        $this->load->view('templates/EntetePrincipal');
+        $this->load->view('templates/EnteteNavbar'); 
         $this->form_validation->set_rules('txtNom','Nom','required');
         $this->form_validation->set_rules('txtPrenom','Prenom');
         $this->form_validation->set_rules('txtAdresse','Adresse');
@@ -148,6 +149,7 @@ class Membre extends CI_Controller
             );           
             $this->ModelePersonne->modifierInfoPersonne($donneesInsererPersonne);
             $this->load->view('templates/EntetePrincipal');
+            $this->load->view('templates/EnteteNavbar');
             $this->load->view('membre/vueInsertionReussi');
             $this->load->view('templates/PiedDePagePrincipal');
         } 
@@ -158,6 +160,7 @@ class Membre extends CI_Controller
     public function ModificationMdp()
     {  
         $this->load->view('templates/EntetePrincipal');
+        $this->load->view('templates/EnteteNavbar');
         $this->form_validation->set_rules( 'password', 'mot de passe','required');
         $this->form_validation->set_rules( 'password2', 'repetez mot de passe','required');
         if($this->form_validation->run() === FALSE)
@@ -188,6 +191,7 @@ class Membre extends CI_Controller
     function indexPanier()
     {
       $this->load->view('templates/EntetePrincipal');
+      $this->load->view('templates/EnteteNavbar');
       $data['data']=$this->ModeleProduit->get_all_produit();
       $this->load->view('visiteur/vuePanier',$data);
     }
@@ -195,12 +199,14 @@ class Membre extends CI_Controller
     public function Actif()
     {
         $this->load->view('templates/EntetePrincipal');
+        $this->load->view('templates/EnteteNavbar');
         $this->form_validation->set_rules('Etre_Correspondant AND Actif','checkbox','required'); 
         $personne=$this->ModelePersonne->rechercheInfoPersonne($_SESSION['email']);
         $parent=$this->ModelePersonne->getPersonneParent($personne->NoPersonne);
         if($personne->Actif==1)
-        {       
-            var_dump($_SESSION,$personne,$parent,$_SESSION['email']);
+        
+        {     
+            var_dump($_SESSION,$personne,$parent,$_SESSION['email']);  
             if ($parent->Etre_Correspondant==1)
             {
                 $this->load->view('membre/vueDesinscrireMail');

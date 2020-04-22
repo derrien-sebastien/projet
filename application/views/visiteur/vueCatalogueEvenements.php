@@ -2,7 +2,7 @@
 </br>
 <div>
     <h2>
-        <img src="<?php echo base_url(); ?>assets/images/panier.png" height="25" width="25">&nbsp;<a href='<?php echo site_url('visiteur/indexPanier') ?>'>Tous nos produits</a>
+        <img src="<?php echo base_url(); ?>assets/images/panier.png" height="25" width="25">&nbsp;<a href='<?php echo site_url('visiteur/catalogueProduits') ?>'>Tous nos produits</a>
     </h2>
 </div>
 <div class="containerEv">
