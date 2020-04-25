@@ -249,14 +249,20 @@ class Visiteur extends CI_Controller
    /**********************************************************************
    **                               PANIER                             ***
    **********************************************************************/
+   /* public function indexProduits()
+   {
+      $data['data']=$this->ModeleProduit->get_all_produit();
+      $this->load->view('visiteur/vueCatalogueProduits',$data);
+   } */
+   
    public function catalogueProduits()
    {
       if (!isset($_POST['valider']))
 		{
          $this->load->view('templates/EntetePrincipal');
-         //$this->load->view('templates/EnteteNavbar');
+         $this->load->view('templates/EnteteNavbar');
          $donnees['lesProduits']=$this->ModeleProduit->get_all_produit();
-         $this->load->view('visiteur/vueCat',$donnees);
+         $this->load->view('visiteur/vueCatalogueProduits',$donnees);
       }
       else 
       {

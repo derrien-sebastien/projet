@@ -7,7 +7,7 @@
 		<div class="col-md-8">
 			<h4>Nos Produits</h4>
 			<div class="row">
-			<?php foreach ($produits->result() as $row) : ?>
+			<?php foreach ($lesProduits->result() as $row) : ?>
 				<div class="col-md-4">
 					<div class="thumbnail">
 						<img width="200" src="<?php echo base_url().'assets/images/'.$row->Img_Produit;?>">

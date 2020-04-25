@@ -3,7 +3,7 @@
         <ul>
             <li>
                 <span>
-                <a href="<?php echo site_url('templates/vueAccueilPrincipal')?>"><img src="<?php echo base_url(); ?>assets/images/maison.svg" height="25" width="25">Accueil</a>
+                <a href="<?php echo site_url('visiteur/accueil')?>"><img src="<?php echo base_url(); ?>assets/images/maison.svg" height="25" width="25">Accueil</a>
                 </span>
             </li>
             <li>

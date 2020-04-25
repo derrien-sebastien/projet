@@ -57,7 +57,6 @@ class Membre extends CI_Controller
     {
         $this->load->view('templates/EntetePrincipal');
         $this->load->view('templates/EnteteNavbar');
-        $this->load->view('templates/vueAccueilPrincipal');
         $this->load->view('membre/vueAccueilPersonne');
         
     }
