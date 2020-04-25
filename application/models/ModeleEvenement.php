@@ -161,7 +161,7 @@ class ModeleEvenement extends CI_Model
       $this->db->order_by('ge_evenement.NoEvenement','ge_evenement.Annee','asc'); 
       $maListe = $this->db->get();
       return $maListe->result();
-   }
+   }//row()
 
 
    /********************************************************************************
@@ -194,7 +194,7 @@ class ModeleEvenement extends CI_Model
       $this->db->where('ge_ev_non_marchand.NoEvenement', $NoEvenement);
       $maListe = $this->db->get();
       return $maListe->result();
-   }
+   }//row()
 
 
 

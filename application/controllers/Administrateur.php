@@ -359,13 +359,65 @@ class Administrateur extends CI_Controller
 					$this->ModeleEvenement->ajouterEvenementMarchand($donnees);
 					if ($new=1)
 					{
-						$this->formulaireProduit($donnees['NoEvenement'],$donnees['Annee'],'evenement');
+						$this->formulaireProduit($donnees['NoEvenement'],$donnees['Annee'],'ajouterEvenement');
+					}					
+				}
+				else
+				{
+					$this->ModeleEvenement->ajouterEvenementNonMarchand($donnees);//ajout a la table non marchand					
+				}
+			}
+			elseif($Provenance=='modifier')//si on modifie un evenement
+			{
+				$this->ModeleEvenement->modifierEvenement($donneesAInserer);//modification de la ligne liée a l'evenement dans la db
+				if (isset($_POST['ajoutProduit']))//si on ajoute un produit
+				{	
+					//$i prend la valeur max des produit de l'evenement 
+					$i=$this->ModeleProduit->maxProduit($donnees);
+					foreach ($_POST['produit'] as $unProduit)
+					{
+						if($unProduit!='//')
+						{
+							$AncienEvenement=explode("/",$unProduit);
+   	 						$donneesProduit['Annee']=$AncienEvenement['0'];
+							$donneesProduit['NoEvenement']=$AncienEvenement['1'];
+							$donneesProduit['NoProduit']=$AncienEvenement['2'];
+							if ($donneesProduit['NoEvenement']!=$donnees['NoEvenement']||$donneesProduit['Annee']!=$donnees['Annee'])
+							{
+								$Produit=$this->ModeleProduit->getUnProduit($donneesProduit);
+								$Produit['Annee']=$donnees['Annee'];
+								$Produit['NoEvenement']=$donnees['NoEvenement'];
+								$Produit['NoProduit']=$i;
+								$i++;
+								$this->ModeleProduit->ajouterProduit($Produit);
+							}
+						}
+						else 
+						{
+							$new=1;
+						}
+					}/*
+					verifier si l'evenement est dans la table evenement marchant si oui verifier dateRemise 
+					si different update 
+					si non verifier qu'il est present dans evenement non marchant si oui suprimer puis ajouter ev marchant 
+									
+					$donnees['DateRemiseProduit']=$_POST['dateRemiseProduit'];
+					$this->ModeleEvenement->ajouterEvenementMarchand($donnees);*/
+					if ($new=1)
+					{
+						$this->formulaireProduit($donnees['NoEvenement'],$donnees['Annee'],'modifierEvenement');
 					}
 					
 				}
 				else
 				{
-					$this->ModeleEvenement->ajouterEvenementNonMarchand($donnees);//ajout a la table non marchand					
+					if(!$this->ModeleEvenement->getEvenementMarchand($donneesAInserer['annee'],$donneesAInserer['noEvenement']))
+					{
+						if(!$this->ModeleEvenement->getEvenementNonMarchand($donneesAInserer['annee'],$donneesAInserer['NoEvenement']))
+						{							
+							$this->ModeleEvenement->ajouterEvenementNonMarchand($donnees);//ajout a la table non marchand	
+						}
+					}					
 				}
 			}
 			
