@@ -59,5 +59,25 @@
         echo '<h2>'.$unEvenementMarchand['DateMiseHorsLigne'].'</h2>';
         echo '</br>';
         echo '<p>'.anchor('visiteur/nosEvenements','Retour à la liste des evenements').'</p>';    
-               
-        
+        ?>       
+        <?php
+/* $data=array();
+for($i=0;$i<=count($LesProduits)-1;$i++)
+{
+    $data[]= anchor('visiteur/ajouterProduitAuPanier'.$LesProduits[$i]['NoProduit'], $LesProduits[$i]['LibelleCourt']);
+}
+echo ($data);
+?>
+</div>
+<div>
+    <h2>Menu</h2>
+</div>
+<?php
+echo anchor('visiteur/accueil', 'Accueil');
+echo "<br>";
+echo anchor('visiteur/catalogueProduits','lister les produits commandables');
+echo "<br>";
+echo anchor('visiteur/panier', 'consultation du panier');
+echo "<br>";
+echo anchor('visiteur/viderPanier', 'suppression du panier');
+?> */

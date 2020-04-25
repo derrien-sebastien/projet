@@ -4,15 +4,78 @@
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  */
 /*! normalize.css v3.0.3 | MIT License | github.com/necolas/normalize.css */
-html {
+/*//////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////
+/////                                                                  /////
+/////                    AJOUT CSS PAR Sébastien                       /////
+/////                                                                  /////
+////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////*/
+html 
+{
   font-family: sans-serif;
   -ms-text-size-adjust: 100%;
   -webkit-text-size-adjust: 100%;
 }
-body {
+
+body
+{
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  line-height: 1.42857143;
   padding: 0;
   margin: 0;
-  background-color: #5f5c5c;
+  background-color: rgb(134, 134, 134);
+  
+}
+
+#bodyLogin 
+{
+  margin: 0;
+  background-image: url("../images/log.jpg");
+  background-repeat: no-repeat;
+  background-size: 100% 720px;
+}
+
+.containerLogin 
+{
+  width: 500px;
+  height: 400px;
+  text-align: center;
+  background-color:rgba(134, 134, 134, 0.7) ;  
+  border-radius: 4px;
+  margin:0 auto;
+  margin-top: 150px;
+  margin-bottom: 100px; 
+}
+.containerLogin img
+{
+  width: 120px;
+  height: 120px;
+  margin-top:-60px;
+  margin-bottom: 30px;
+}
+input[type='email'],input[type='password']
+{
+  text-align: center;
+  height: 45px;
+  width: 300px;
+  font-size: 18px;
+  margin-bottom: 20px;
+  background-color: #fff;
+  padding-left: 20px;
+}
+.btnSubmit
+{
+  padding: 15px 25px;
+  color:  #fff;
+  background-color: #0000009c;
+}
+.accueilP
+{
+  width:100%;
+  height: 35px;
+  text-align: center;
 }
 
 .menuAdmin ul
@@ -21,52 +84,83 @@ body {
   margin: 0;
   padding: 0;
 }
+
 .menuAdmin ul li
 {
   padding: 15px;
   position: relative;
   width: 200px;
   vertical-align: middle;
-  background-color: #222;
+  background-color: rgb(134, 134, 134);
   cursor: pointer;
-  border-top: 1px solid #BDC3C7;
+  border-top: 1px solid rgb(255, 255, 255);
   -webkit-transition: all 0.3s;
   -o-transition: all 0.3s;
   transition: all 0.3s;
 }
+
 .menuAdmin ul li:hover
 {
-  background-color: #aaaaaa8c;
+  background-color: #7a79799c;
 }
+
 .menuAdmin > ul > li
 {
   border-right: 5px solid rgb(58, 58, 58);
 }
+
 .menuAdmin ul ul
 {
   transition: all 0.3s;
   opacity: 0;
   position: absolute;
-  border-left: 5px solid rgb(58, 58, 58);
+  border-left: 5px solid #ffffff;
   visibility: hidden;
   left: 100%;
   top: -2%;
 }
+
 .menuAdmin ul li:hover > ul
 {
   opacity: 1;
   visibility: visible;
 }
+
 .menuAdmin ul li a
 {
-  color:#555555;
+  color:#000000;
   text-decoration: none;
 }
+
 span
 {
   margin-right: 15px;
 }
+#footer 
+{
+  text-align: center;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 2.5rem;            /* Footer height */
+}
+.containerPied
+{
+  text-align: center;
+  background-color:rgba(134, 134, 134, 0.7) ;
+  
+  border-radius: 4px;
+  margin:0 auto;
+  
+}
 
+/*//////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////
+/////                                                                  /////
+/////                  FIN AJOUT CSS PAR Sébastien                     /////
+/////                                                                  /////
+////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////*/
 article,
 aside,
 details,
@@ -119,6 +213,7 @@ dfn {
   font-style: italic;
 }
 h1 {
+  text-align:center;
   font-size: 2em;
   margin: 0.67em 0;
 }
@@ -1136,13 +1231,7 @@ html {
   font-size: 10px;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
-body {
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: 14px;
-  line-height: 1.42857143;
-  color: #333333;
-  background-color: #5f5c5c ;
-}
+
 input,
 button,
 select,

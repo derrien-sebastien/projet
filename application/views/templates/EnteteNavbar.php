@@ -19,7 +19,7 @@
               <a href="<?php echo site_url('visiteur/catalogueEvenement') ?>">Nos Evenements</a>
             </li>
             <li>
-                <a href="<?php echo site_url('visiteur/catalogueProduits') ?>">Panier</a>
+                <a href="<?php echo site_url('visiteur/catalogueProduits') ?>">Nos Produits disponibles</a>
             </li>
             <?php if ($this->session->profil=='membre') : ?>
               
