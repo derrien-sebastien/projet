@@ -7,7 +7,7 @@
 		<div class="col-md-8">
 			<h4>Nos Produits</h4>
 			<div class="row">
-			<?php foreach ($data->result() as $row) : ?>
+			<?php foreach ($produits->result() as $row) : ?>
 				<div class="col-md-4">
 					<div class="thumbnail">
 						<img width="200" src="<?php echo base_url().'assets/images/'.$row->Img_Produit;?>">
@@ -92,7 +92,7 @@
 	});
 </script>
 <?php
-echo '<div class="btn-primary"><p>'.anchor('visiteur/catalogueEvenement','Retour à la liste de nos évènements').'</p></div>';
+echo '<p>'.anchor('visiteur/catalogueEvenement','Retour à la liste de nos évènements').'</p>';
 ?>
 </body>
 </html>
