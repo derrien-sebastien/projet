@@ -286,7 +286,10 @@ class ModeleEvenement extends CI_Model
 		return $this->db->insert('ge_ev_non_marchand',$pDonneesAInserer);
    }
 
-
+   public function ajouterEvenementMarchand($pDonneesAInserer)
+	{        
+		return $this->db->insert('ge_ev_marchand',$pDonneesAInserer);
+   }
 
 
 } // Fin Classe

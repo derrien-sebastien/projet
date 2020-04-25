@@ -86,3 +86,27 @@ j'ai tenter plusieurs manip mais à chaque coup ton summernote plante si jamais 
 que ce soit sur les script ou en css je m'en occupe 
 d'ailleurs je pense d'ici a ce week end finir le tri dans le dossier js dist css font et image 
 Bonne nuit a demain.
+
+
+===========
+
+
+vue modificationMdp foctionne pas en admin (visiteur et non membre)
+
+========
+dans le controleur (visiteur je crois ) a la fonction se connecter il faudrais mettre en debut de 
+fonction
+
+$urlDArriver =  $this->agent->referrer();
+
+sans oublier de charger la librairie dans le construct
+
+$this->load->library('user_agent');
+
+a la fin de la fonction il faudrai faire un redirect vers $urlDArriver comme ca on garde la page 
+precedende en memoire 
+on arrive sur se connecter quelque soit la page precedente on revien dessus des qu'on est connecter 
+vu que c'est ton controleur je me dit que tu prefere peu etre le faire mais si tu veux je peu le faire 
+=======
+verifier getProduits si elle est utiliser ou non car la fonction ne doit pas fonctionné
+pas de ->result() ou ->result_array() ou ->row()
