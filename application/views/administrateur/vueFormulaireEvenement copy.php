@@ -1,49 +1,74 @@
 </br>
 <?php
-/*if (isset($_POST['Evenement']))
-{
-    $AncienEvenement=explode("/",$_POST['Evenement']);
-    $Donnees['Annee']=$AncienEvenement['0'];
-    $Donnees['NoEvenement']=$AncienEvenement['1'];
-    $Donnees['DateMiseEnLigne']=$AncienEvenement['2'];
-    $Donnees['DateMiseHorsLigne']=$AncienEvenement['3'];
-    $Donnees['TxtHTMLEntete']=$AncienEvenement['4'];
-    $Donnees['TxtHTMLCorps']=$AncienEvenement['5'];
-    $Donnees['TxtHTMLPiedDePage']=$AncienEvenement['6'];
-    $Donnees['ImgEntete']=$AncienEvenement['7'];
-    $Donnees['ImgPiedDePage']=$AncienEvenement['8'];
-    $Donnees['EmailInformationHTML']=$AncienEvenement['9'];
-}*/
+/*données d'entrée:
+ -$evenement
+ -$lesProduit
+
+donnée de sortie:
+-provenance
+-noEvenement
+-imgEntete
+-imgPiedDePage
+-anneeEvenement
+-dateMiseEnLigne
+-dateMiseHorsLigne
+-texteEntete
+-texteCorps
+-textePied
+-txtImgEntete
+-supImgEntete 
+-txtImgPiedDePage 
+-supImgPiedPage 
+-emailInfo 
+-enCours 
+-ajoutProduit
+-produit
+-submit
+
+*/
 //echo "<h1>inserez un nouvel evenement</h1>";
 //echo validation_errors(); 
 $hidden=array(
-    'Provenance'=>$Provenance    
+    'provenance'=>$Provenance    
 );
+if ($Provenance=='modifier')
+{
+    $hidden['anneeEvenement']=$evenement->Annee;
+}
 if (isset($evenement->NoEvenement))
 {
-    $hidden['NoEvenement']=$evenement->NoEvenement;
-    $hidden['ImgEntete']=$evenement->ImgEntete;
-    $hidden['ImgPiedDePage']=$evenement->ImgPiedDePage;
+    $hidden['noEvenement']=$evenement->NoEvenement;
+    $hidden['imgEntete']=$evenement->ImgEntete;
+    $hidden['imgPiedDePage']=$evenement->ImgPiedDePage;
 }
 $anneeEvenement=array(
     'type'=>'number',
-    'name'=>'AnneeEvenement',
-    'value'=>$evenement->Annee
+    'name'=>'anneeEvenement'    
 );
+if(isset($evenement->Annee))
+{
+    $anneeEvenement['value']=$evenement->Annee;
+}
 $dateMiseEnLigne=array(
     'type'=>'date',
-    'name'=>'DateMiseEnLigne',
-    'value'=>$evenement->DateMiseEnLigne
+    'name'=>'dateMiseEnLigne'
 );
+if(isset($evenement->DateMiseEnLigne))
+{
+    $dateMiseEnLigne['value']=$evenement->DateMiseEnLigne;
+}
 $dateMiseHorsLigne=array(
     'type'=>'date',
-    'name'=>'DateMiseHorsLigne',
-    'value'=>$evenement->DateMiseHorsLigne
+    'name'=>'dateMiseHorsLigne'
 );
+if(isset($evenement->DateMiseHorsLigne))
+{
+    $dateMiseHorsLigne['value']=$evenement->DateMiseHorsLigne;
+}
 $texteEntete=array(
     'id'=>'summernote',
     'type'=>'text',
-    'name'=>'TexteEntete'
+    'name'=>'texteEntete'
 );
 if (isset($evenement->TxtHTMLEntete))
 {
@@ -52,7 +77,7 @@ if (isset($evenement->TxtHTMLEntete))
 $texteCorps=array(
     'id'=>'summernote1',
     'type'=>'text',
-    'name'=>'TexteCorps'
+    'name'=>'texteCorps'
 );
 if (isset($evenement->TxtHTMLCorps))
 {
@@ -61,7 +86,7 @@ if (isset($evenement->TxtHTMLCorps))
 $textePied=array(
     'id'=>'summernote2',
     'type'=>'text',
-    'name'=>'TextePied'
+    'name'=>'textePied'
 );
 if (isset($evenement->TxtHTMLPiedDePage))
 {
@@ -69,7 +94,8 @@ if (isset($evenement->TxtHTMLPiedDePage))
 }
 $txtImgEntete=array(
     'type'=>'file',
-    'name'=>'txtImgEntete'
+    'name'=>'txtImgEntete',
+    'id'=>'txtImgEntete'
 );
 $supImageEntete=array(
     'name'=>'supImgEntete',
@@ -77,7 +103,8 @@ $supImageEntete=array(
 );
 $txtImgPiedDePage=array(
     'type'=>'file',
-    'name'=>'txtImgPiedDePage'
+    'name'=>'txtImgPiedDePage',
+    'id'=>'txtImgPiedDePage'
 );
 $supImgPiedPage=array(
     'name'=>'supImgPiedPage',
@@ -86,23 +113,31 @@ $supImgPiedPage=array(
 $emailInfo=array(
     'id'=>'summernote3',
     'type'=>'text',
-    'name'=>'EmailInfo'
+    'name'=>'emailInfo'
 );
-$encour=array(
-    'name'=>'EnCours',
-    'value'=>'on'
+$encours=array(
+    'name'=>'enCours',
+    'value'=>'1'
 );
 $ajouterProduit=array(
-    'name'=>'AjoutProduit',
+    'name'=>'ajoutProduit',
     'value'=>'oui'
 );
-$option=array(
+$DateRemiseProduit=array(
+    'type'=>'date',
+    'name'=>'DateRemiseProduit'
+);
+$options=array(
     '//'=>'Aucun produit selectionné',
     '//'=>'Nouveau produit'
 );
-foreach ($lesProduit as $unProduit):
-    $option[$unProduit->Annee.'/'.$unProduit->NoEvenement.'/'.$unProduit->NoProduit]=$unProduit->LibelleCourt;
+
+foreach ($lesProduits as $unProduit):
+    $produit=$unProduit->Annee.'/'.$unProduit->NoEvenement.'/'.$unProduit->NoProduit;
+    var_dump($produit);
+    $options[$produit]=$unProduit->LibelleCourt;
 endforeach;
+var_dump($options);
 $submit=array(
     'name'=>'submit',
     'value'=>'envoyer'
@@ -113,6 +148,8 @@ echo form_open_multipart('Administrateur/formulaireEvenement');
 echo form_hidden($hidden);
 
 echo "<table>";
+if ($Provenance=='ajouter')
+{
     echo"<tr>";
         echo "<td>";
             echo form_label('année:','AnneeEvenement' );            
@@ -122,6 +159,7 @@ echo "<table>";
         echo"</td>";
     echo"</tr>";
     echo "<br>";
+}
     echo "<tr>";
         echo "<td>";
             echo form_label('date de mise en ligne:','DateMiseEnLigne');
@@ -172,10 +210,13 @@ echo "<table>";
             echo form_label("Image d'entete:",'ImgEntete');
         echo "</td>";
         echo "<td>";
-            echo form_input($txtImgEntete);
+            echo form_input($txtImgEntete); 
             if (isset($evenement->ImgEntete))
-            {
-                echo '<p><h4>Image actuellement choisie :</h4>'.$evenement->ImgEntete.'</p>';
+            {           
+                if ($evenement->ImgEntete!='')
+                {
+                    echo '<p><h4>Image actuellement choisie :</h4>'.$evenement->ImgEntete.'</p>';
+                }
             }
         echo "</td>";
         echo "<td>";
@@ -190,9 +231,12 @@ echo "<table>";
         echo"</td>";
         echo "<td>";
             echo form_input($txtImgPiedDePage);
-            if (isset($evenement->ImgPiedDePage)) 
+            if(isset($evenement->ImgPiedDePage))
             {
-                echo '<p><h4>Image actuellement choisie : </h4>'.$evenement->ImgPiedDePage.'</p>';
+                if ($evenement->ImgPiedDePage!='') 
+                {
+                    echo '<p><h4>Image actuellement choisie : </h4>'.$evenement->ImgPiedDePage.'</p>';
+                }
             }
         echo "</td>";
         echo "<td>";
@@ -234,11 +278,20 @@ echo "<table>";
     echo "<br>\n";
     echo "<tr>";
         echo "<td>";
+            echo form_label('date de remise des produit : ');
+        echo "</td>";
+        echo "<td>";
+            echo form_input($DateRemiseProduit);
+        echo "</td>";
+    echo "</tr>";
+    echo "</br>";
+    echo "<tr>";
+        echo "<td>";
             echo form_label('choisissez un/ou des produits :','produit');
         echo "</td>";
         echo "<td>";
             echo 
-            form_dropdown('Produit', $options);
+            form_multiselect('produit[]', $options);
         echo "</td>";
     echo "</tr>";
     echo "<tr>";

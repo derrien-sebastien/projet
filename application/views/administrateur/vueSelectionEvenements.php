@@ -1,5 +1,8 @@
 </br>
 <?php
+/*
+
+*/
 
 if($Provenance==='modifier')
 {
@@ -24,7 +27,7 @@ echo form_open('Administrateur/formulaireEvenement');
 }
 echo "<table>\n";
 echo "<tr><td><label for='Evenement'>choisissez:</label></td>
-<td><select name='Evenement'>
+<td><select name='evenement'>
     <option value='/'>Aucun evenement selectionné</option>
     <option value='/'>Nouvel Evenement</option>";    
     foreach ($lesEvenements as $unEvenement):                      

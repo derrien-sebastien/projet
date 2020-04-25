@@ -81,6 +81,18 @@ class ModeleProduit extends CI_Model
       $maCommande = $this->db->get();
       return $maCommande; 
    } 
+
+
+   public function getUnProduit($donneesProduit)
+   {
+      $this->db->select('*');
+      $this->db->from('ge_produit');
+      $this->db->where('ge_produit.NoEvenement', $donneesProduit['NoEvenement']);
+      $this->db->where('ge_produit.Annee', $donneesProduit['Annee']);
+      $this->db->where('ge_produit.NoProduit', $donneesProduit['NoProduit']);
+      $maCommande = $this->db->get();
+      return $maCommande->row_array(); 
+   } 
    /**********************************************************************
    **           Fonction qui va retourner le numéro max                 **
    **********************************************************************/
