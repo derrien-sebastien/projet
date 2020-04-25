@@ -110,3 +110,12 @@ vu que c'est ton controleur je me dit que tu prefere peu etre le faire mais si t
 =======
 verifier getProduits si elle est utiliser ou non car la fonction ne doit pas fonctionné
 pas de ->result() ou ->result_array() ou ->row()
+=====
+punaise je suis face a un dilem 
+on a un produit sapin cle ev:10 annee:2019 produit:1 
+on a un deuxieme produit sapin ev:10 annee:2020 produit:2
+l'admin modifie l'evenement 10 de 2020 il selectionne des produit il sont deja dedant mais bon il a pas compris 
+il met sapin il en choisi 1 des 2 manque de pot il prend le mauvais 
+et pouf il a deux sapin dans son evenement et j'ai aucun d'eviter ca !!! grrrr 
+la seul chose que je peu lui faire c'est lui preselectionné ceux qu'il a mais il clic sans 
+appuyer sur ctrl et pouf il se deselectionne tous 
