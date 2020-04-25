@@ -356,7 +356,7 @@ class Administrateur extends CI_Controller
 					}
 					//ajout evenement marchant
 					$donnees['DateRemiseProduit']=$_POST['dateRemiseProduit'];
-					$this->ModeleEvenement->ajouterEvenementMarchand($donnees)
+					$this->ModeleEvenement->ajouterEvenementMarchand($donnees);
 					if ($new=1)
 					{
 						$this->formulaireProduit($donnees['NoEvenement'],$donnees['Annee'],'evenement');
