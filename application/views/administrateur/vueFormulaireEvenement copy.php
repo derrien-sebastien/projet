@@ -295,7 +295,7 @@ if ($Provenance=='ajouter')
                 echo "les produits present sont :";
             echo "</td>";
         echo "</tr>";
-        foreach ($produitDeLevenement as $produitEvenement)
+        foreach ($produitDeLEvenement as $produitEvenement)
         {
             echo "<tr>";
                 echo "<td>";
