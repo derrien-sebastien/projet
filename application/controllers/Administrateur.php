@@ -204,7 +204,7 @@ class Administrateur extends CI_Controller
 		-evenement /de la vue selection evenement
 		-
 		*/
-		var_dump($_POST);
+		
 		$this->form_validation->set_rules('anneeEvenement','Annee','required');//regle de validation du formulaire
 		$this->form_validation->set_rules('noEvenement',"numero d'evenement");
 		$this->form_validation->set_rules('imgEntete',"image entete");
@@ -396,13 +396,31 @@ class Administrateur extends CI_Controller
 						{
 							$new=1;
 						}
-					}/*
-					verifier si l'evenement est dans la table evenement marchant si oui verifier dateRemise 
-					si different update 
-					si non verifier qu'il est present dans evenement non marchant si oui suprimer puis ajouter ev marchant 
-									
-					$donnees['DateRemiseProduit']=$_POST['dateRemiseProduit'];
-					$this->ModeleEvenement->ajouterEvenementMarchand($donnees);*/
+					}
+					//presence evenement marchant
+					if($this->ModeleEvenement->presenceEvenementMarchand($donnees['Annee'],$donnees['NoEvenement']))
+					{
+						//sortie evenement marchant
+						$evenementMarchant=$this->ModeleEvenement->getEvenementMarchand($donnees['Annee'],$donnees['NoEvenement']);
+						//y a t'il eu modification de la date remise produit
+						if($evenementMarchant->DateRemiseProduit!=$donnees['DateRemiseProduit'])
+						{
+							//update evenement marchant
+							$this->ModeleEvenement->modifierEvenementMarchant($donnees);
+						}
+					}
+					else 
+					{	
+						//l'evenement etait il precedement non marchand
+						if($this->ModeleEvenement->presenceEvenementNonMarchand($donnees['Annee'],$donnees['NoEvenement']))
+						{
+							//suppression de l'evenement non marchand
+							$this->ModeleEvenement->deleteEvenementNonMarchand($donnees); 
+						}
+						//creation de l'evenement marchand 
+						$donnees['DateRemiseProduit']=$_POST['dateRemiseProduit'];
+						$this->ModeleEvenement->ajouterEvenementMarchand($donnees);
+					}					
 					if ($new=1)
 					{
 						$this->formulaireProduit($donnees['NoEvenement'],$donnees['Annee'],'modifierEvenement');
@@ -411,12 +429,18 @@ class Administrateur extends CI_Controller
 				}
 				else
 				{
-					if(!$this->ModeleEvenement->getEvenementMarchand($donneesAInserer['annee'],$donneesAInserer['noEvenement']))
+					if(!$this->ModeleEvenement->presenceEvenementMarchand($donneesAInserer['annee'],$donneesAInserer['noEvenement']))
 					{
-						if(!$this->ModeleEvenement->getEvenementNonMarchand($donneesAInserer['annee'],$donneesAInserer['NoEvenement']))
+						if(!$this->ModeleEvenement->presenceEvenementNonMarchand($donneesAInserer['annee'],$donneesAInserer['NoEvenement']))
 						{							
 							$this->ModeleEvenement->ajouterEvenementNonMarchand($donnees);//ajout a la table non marchand	
 						}
+					}
+					else 
+					{
+						// vue modification impossible voir avec l'administrateur de la base de registre 
+						// la suppression de l'evenement marchant influe sur tout les produit de l'evenement 
+						// toutes les requettes son chambouller (voir avec damien )
 					}					
 				}
 			}
@@ -961,8 +985,7 @@ class Administrateur extends CI_Controller
 		{
 			
 			foreach($_POST['supprime'] as $supprime)
-			{
-				var_dump($_POST);
+			{				
 				if($_POST[$supprime]!='')
 				{
 					$donnees=array(

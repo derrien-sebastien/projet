@@ -3,6 +3,8 @@
 /*données d'entrée:
  -$evenement
  -$lesProduit
+ -$produitDeL'evenement
+ -$Provenance 
 
 donnée de sortie:
 -provenance
@@ -286,6 +288,22 @@ if ($Provenance=='ajouter')
         echo "</td>";
     echo "</tr>";
     echo "</br>";
+    if ($Provenance=='modifier')
+    {
+        echo "<tr>";
+            echo "<td>";
+                echo "les produits present sont :";
+            echo "</td>";
+        echo "</tr>";
+        foreach ($produitDeLevenement as $produitEvenement)
+        {
+            echo "<tr>";
+                echo "<td>";
+                    echo $produitEvenement->LibelleCourt;
+                echo "</td>";
+            echo "</tr>";
+        } 
+    }   
     echo "<tr>";
         echo "<td>";
             echo form_label('choisissez un/ou des produits :','produit');
