@@ -249,19 +249,92 @@ class Visiteur extends CI_Controller
    /**********************************************************************
    **                               PANIER                             ***
    **********************************************************************/
-   /* public function indexProduits()
-   {
-      $data['data']=$this->ModeleProduit->get_all_produit();
-      $this->load->view('visiteur/vueCatalogueProduits',$data);
-   } */
    
-   public function catalogueProduits()
+   public function indexProduits()
+   {
+      $this->load->view('templates/EntetePrincipal');
+      $this->load->view('templates/EnteteNavbar');
+      $data['produits']=$this->ModeleProduit->get_all_produit();
+      $this->load->view('visiteur/vueCatalogueProduits',$data);
+   }
+
+   public function add()
+   {  
+      /* 
+      Données entrantes  :
+      NoProduit
+      LibelleCourt
+      quantity
+      Prix
+
+   ////////////////////////////////
+
+      Données Sortantes  :
+      $data
+      */
+      $data = array(
+            "id"  => $_Post["NoProduit"],
+            "name"  => $_Post["LibelleCourt"],
+            "qty"  => $_Post["quantity"],
+            "price"  => $_Post["Prix"]
+      );
+      $this->cart->insert($data);
+   }
+
+   public function view()
+   {
+      $outpout = '';
+      $outpout .= '
+      <h3> Votre panier </h3>
+      <div class="table-responsive">
+         <div align="right">
+            <button type="button" id="clear_cart" class="btn btn-warning">Clear Cart</button>
+         </div>
+         <br/>
+         <table class="table table-bordered">
+            <tr>
+               <th width="40%">Name</th>
+               <th width="15%">Quantity</th>
+               <th width="15%">Prix</th>
+               <th width="15%">Total</th>
+               <th width="15%">Action</th>
+            </tr>
+         </table>
+      </div>
+
+      ';
+      $count = 0
+      foreach($this->cart->contents() as $items)
+      {
+         $count++;
+         $outpout.= '
+         <tr>
+            <td>'.items["name"].'</td>
+            <td>'.items["qty"].'</td>
+            <td>'.items["name"].'</td>
+            <td>'.items["name"].'</td>
+         </tr>
+         ';
+      }
+   }
+
+
+
+
+
+
+
+
+
+
+   
+   /* public function catalogueProduits()
    {
       if (!isset($_POST['valider']))
 		{
          $this->load->view('templates/EntetePrincipal');
          $this->load->view('templates/EnteteNavbar');
-         $donnees['lesProduits']=$this->ModeleProduit->get_all_produit();
+         $donnees['produits']=$this->ModeleProduit->get_all_produit();
          $this->load->view('visiteur/vueCatalogueProduits',$donnees);
       }
       else 
@@ -287,9 +360,9 @@ class Visiteur extends CI_Controller
          $i++;
          $this->cart->update($data);
       }
-   }
+   } */
 
-   public function ajouterProduitAuPanier($NoEvenement,$Annee)// ajout produit au panier
+   /* public function ajouterProduitAuPanier($NoEvenement,$Annee)// ajout produit au panier
    {
       $produit=$this->ModeleProduit->getProduits($NoEvenement,$Annee);//Récupérer un produit spécifique par ID
       $i=1;
@@ -307,11 +380,11 @@ class Visiteur extends CI_Controller
       $i++;
       endforeach;
       $this->cart->update($data);
-      /* echo $this->voirPanier();  */
+     
       redirect('visiteur/panier');
 
-   } 
-   public function panier()
+   }  */
+   /* public function panier()
    {
       $info['titre']='contenu du panier';
       $this->load->view('visiteur/vueAfficherPanier', $info);
@@ -323,18 +396,88 @@ class Visiteur extends CI_Controller
                         'qty'    => 0, 
                      );
       $this->cart->update($data);
-      /* echo $this->voirPanier(); */
       redirect('visiteur/panier');
-   } 
-   public function viderPanier()
+   }  */
+   /* public function viderPanier()
    {
       $this->cart->destroy();
       redirect('visiteur/panier');
+   } */
+
+
+   public function commande()
+   {
+      $this->load->view('templates/EntetePrincipal');
+      /* $this->load->view('templates/EnteteNavbar'); */
+      /* $donnees['info']=$info; */
+      
+      if(!isset($_post['submit']))
+      {
+         $this->load->view('visiteur/vueQuestionnaire');
+      }
+      if(!isset($_post['submit2']))
+      {
+         $this->form_validation->set_rules('submit','submit','required');
+         $this->form_validation->set_rules('checkbox','checkbox','required');
+         if($this->form_validation->run()===TRUE)
+         {
+            $this->load->view('visiteur/vueSaisiMailAchat');
+         }  
+      }
+      /* elseif(!isset($_post['submit2']))
+      {
+         $this->form_validation->set_rules('checkbox','checkbox','required');
+			$donnees['submit']=$post['submit'];
+         if('checkbox'==1)
+         {
+            $this->load->view('visiteur/vueSaisiMailAchat',($donnees +$donnees['submit']));
+         }
+         if('checkbox'==2) 
+         {
+            $this->load->view('visiteur/vueInscriptionAchat');
+         }
+      }
+      elseif(!isset($_post['submit3']))
+      {
+         $this->load->view('visiteur/vueInformation',($donnees +$donnees['submit']),$donnees['submit2']);
+      } */
+      else
+      { 
+         /* $DonneesInjectees['Personne']=$this->ModelePersonne->rechercheInfoPersonne($this->session->email);                                                                                                
+         $this->load->view('membre/vueGestionDeCompte',$DonneesInjectees); */
+	      echo "vue votre commande est passer + envoye mail" ;
+      }
+      /* vu email ($hidden['submit']=$submit)
+      vue questionnaire de validation($hidden['submit']=$submit +$hidden['submit2']=$submit2) */
+      
    }
+   public function bla() 
+   {
+      var_dump($_POST);
+   }
+      /*  
+      $this->load->view('visiteur/vueSaisiMailAchat');
 
+      $this->load->view('visiteur/vueInformation');
 
-
-
+      $this->load->view('visiteur/vueInscriptionAchat');
+      
+      $this->form_validation->set_rules('connu','deja acheter');
+      $this->form_validation->set_rules('nonConnu','jamais acheter');
+      if($this->form_validation->run() === FALSE) */
+      
+         /* $donneesInjectees['personne']= $this->modelePersonne->rechercherEmailPresent($email); */
+         /* $this->load->view('visiteur/vueInformation' ,$donneesInjectees); */
+         /* if(!$this->ModelePersonne->rechercherEmailPresent($email)) */
+         /* {
+            $this->load->view('visiteur/inscriptionAchat');
+         } */
+         /* else 
+         {
+            echo "inconnu dans db";
+         } */
+      
+   
 
 
 
