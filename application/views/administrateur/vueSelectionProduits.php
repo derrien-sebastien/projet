@@ -1,16 +1,23 @@
 
 <?php
+var_dump($_POST);
+var_dump($provenance);
+$hidden=array(
+    'provenance'=>$provenance
+);
 echo form_open('Administrateur/formulaireProduit');
+echo form_hidden($hidden);
+echo "<br>";
+echo "<br>";
+echo "<br>";
 echo "<table>\n";
 echo "<tr><td><label for='produit'>choisissez:</label></td>
-<td><select name='Produit'>
+<td><select name='produit'>
     <option value='/////////'>Aucun produit selectionné</option>
     <option value='/////////'>Nouveau produit</option>";
     foreach ($lesProduits as $unProduit):
         echo "<option value='";
-        echo $unProduit->NoEvenement."/".$unProduit->NoProduit."/".$unProduit->LibelleHTML
-        ."/".$unProduit->LibelleCourt."/".$unProduit->Prix."/".$unProduit->Img_Produit."/".$unProduit->Stock
-        ."/".$unProduit->NumeroOrdreApparition."/".$unProduit->Etre_Ticket."/".$unProduit->ImgTicket;
+        echo $unProduit->Annee."/".$unProduit->NoEvenement."/".$unProduit->NoProduit;
         echo "'>";
         echo $unProduit->LibelleCourt;
         echo "</option>";

@@ -119,3 +119,4 @@ il met sapin il en choisi 1 des 2 manque de pot il prend le mauvais
 et pouf il a deux sapin dans son evenement et j'ai aucun d'eviter ca !!! grrrr 
 la seul chose que je peu lui faire c'est lui preselectionné ceux qu'il a mais il clic sans 
 appuyer sur ctrl et pouf il se deselectionne tous 
+distinct?

@@ -98,7 +98,8 @@ class Administrateur extends CI_Controller
 		
 		$donneesInjectees=array(
 			'Provenance'=>'modifier'
-		);		
+		);	
+			
 		if (!isset($_POST['evenement']))
 		{
 			$donneesInjectees['lesEvenements']= $this->ModeleEvenement->getEvenementGeneral(AnneeEnCour);
@@ -136,23 +137,50 @@ class Administrateur extends CI_Controller
     **********************************************************************/
   
  
- 	public function modifierProduit($NoEvenement=null,$Annee=null) 
+ 	public function modifierProduit($donnees=null) 
 	{
+		/*
+		donnée d'entré:
+		donnees:
+			-'provenance'
+			-'evenement' objet d'un evenement
+		sortie 
+			-provenance 
+			-lesProduits
+
+
+
+		*/
 		$this->load->view('templates/EntetePrincipal');
 		$this->load->view('templates/EnteteNavbar');
-		$DonneesInjectees['Provenance']='modifier';		
-		if (!isset($_POST['Evenement']))
+		if(isset($donnees['provenance']))
 		{
-		$DonneesInjectees['LesProduits']=$this->ModeleProduit->getProduitGeneral(AnneeEnCour);
-		$DonneesInjectees['LesProduits']=$DonneesInjectees['LesProduits']+$this->ModeleProduit->getProduitGeneral(AnneeEnCour-1);
-		$DonneesInjectees['LesProduits']=$DonneesInjectees['LesProduits']+$this->ModeleProduit->getProduitGeneral(AnneeEnCour-2);
-		$this->load->view('administrateur/vueSelectionProduits',$DonneesInjectees);
-		//$this->load->view('templates/PiedDePagePrincipal');
+			$DonneesInjectees['provenance']=$donnees['provenance'];
 		}
 		else
 		{
-		$this->formulaireProduit($_POST['Produit'],$DonneesInjectees['Provenance']);
-		}		
+		$DonneesInjectees['provenance']='modifier';
+		}
+		if(isset($donnees['evenement']))
+		{
+			$evenement=$donnees['evenement'];
+		}
+		if (!isset($evenement))
+		{
+			//sortie de tous les produit des 3ans et ouverture de la vue selection des evenement
+			$DonneesInjectees['lesProduits']=$this->ModeleProduit->getProduitGeneral(AnneeEnCour);
+			$DonneesInjectees['lesProduits']=$DonneesInjectees['lesProduits']+$this->ModeleProduit->getProduitGeneral(AnneeEnCour-1);
+			$DonneesInjectees['lesProduits']=$DonneesInjectees['lesProduits']+$this->ModeleProduit->getProduitGeneral(AnneeEnCour-2);
+			$this->load->view('administrateur/vueSelectionProduits',$DonneesInjectees);
+		}
+		else
+		{
+			// sortie des evement de l'evenement et ouverture de la vue selection des evenement			
+			$DonneesInjectees['lesProduits']=$this->ModeleProduit->getProduits($evenement->NoEvenement, $evenement->Annee);
+			$this->load->view('administrateur/vueSelectionProduits',$DonneesInjectees);
+			
+		}	
+		$this->load->view('templates/PiedDePagePrincipal');	
 	} 
 
 
@@ -460,9 +488,9 @@ class Administrateur extends CI_Controller
     **********************************************************************/
 	
 
-	public function formulaireProduit($noEvenement=null,$annee=null,$provenance=null,$noProduit=null)
+	public function formulaireProduit($donnees=null)
 	{
-		/*arrivé :
+		/*arrivé :$noEvenement=null,$annee=null,
 		-ajouter produit
 		-modifier produit
 		-formulaire evenement (ajout modif)
@@ -472,18 +500,63 @@ class Administrateur extends CI_Controller
 
 		sortie :
 		*/	
-		$donnees=array(
-			'NoEvenement'=>$noEvenement,
-			'Annee'=>$annee,
-			'provenance'=>$provenance,
-			'NoProduit'=>$noProduit
-		);
+		/*données d'entrée:
+	-$NoEvenement
+	-$Annee
+	-$produit
+	-$provenance 
+
+donnée de sortie:
+	-'provenance'
+	-'NoEvenenment'
+	-'annee'
+	-'NoProduit'
+	-'libelleHTML'
+	-'libelleCourt'
+	-'prix'
+	-'txtImg_Produit'
+	-'supImgProduit'
+	-'stock'
+	-'numeroOrdreApparition'
+	-'etreTicket'
+	-'txtImgTicket'
+	-'supImgTicket'
+	-'autreProduit'
+	-'submit'
+*/
+		// modifier l'arriver en tableau
+		//arriver de la vue selection produit 
+		
+		var_dump($_POST);
+		if(isset($_POST['provenance']))
+		{
+			$donnees['provenance']=$_POST['provenance'];
+		}var_dump($donnees);
+		if($donnees['provenance']=='modifier')
+		{
+			if(isset($_POST['produit']))
+			{
+				$AncienEvenement=explode("/",$unProduit);
+   	 			$donnees['Annee']=$AncienEvenement['0'];
+				$donnees['NoEvenement']=$AncienEvenement['1'];
+				$donnees['NoProduit']=$AncienEvenement['2'];
+			}
+		}
+		var_dump($donnees);
+		$this->form_validation->set_rules('NoEvenenment','NoEvenenment','required');
+		$this->form_validation->set_rules('annee','annee','required');
+		$this->form_validation->set_rules('NoProduit','NoProduit');		
 		$this->form_validation->set_rules('libelleHTML','libelleHTML','required');
 		$this->form_validation->set_rules('libelleCourt','libelleCourt','required');
 		$this->form_validation->set_rules('prix','prix','required');
+		$this->form_validation->set_rules('txtImg_Produit','img_Produit');
+		$this->form_validation->set_rules('supImgProduit','supImgProduit');
 		$this->form_validation->set_rules('stock','stock');
 		$this->form_validation->set_rules('numeroOrdreApparition','numeroOrdreApparition','required');
 		$this->form_validation->set_rules('etreTicket','etreTicket');
+		$this->form_validation->set_rules('txtImgTicket','ImgTicket');
+		$this->form_validation->set_rules('supImgTicket','supImgTicket');
+		$this->form_validation->set_rules('autreProduit','autreProduit');
 		if ($this->form_validation->run() === FALSE)
 		{
 			$donneesInjectees['provenance']=$donnees['provenance'];
@@ -494,22 +567,78 @@ class Administrateur extends CI_Controller
 				$donneesInjectees['lesProduits']=$this->ModeleProduit->getProduitGeneral(AnneeEnCour);
         		$donneesInjectees['lesProduits']=$donneesInjectees['lesProduits']+$this->ModeleProduit->getProduitGeneral(AnneeEnCour-1);
         		$donneesInjectees['lesProduits']=$donneesInjectees['lesProduits']+$this->ModeleProduit->getProduitGeneral(AnneeEnCour-2);
-        		$this->load->view('administrateur/vueSelectionProduits',$donneesInjectees);
+				$this->load->view('administrateur/vueSelectionProduits',$donneesInjectees);
 			}
 			if($donnees['provenance']=='modifier')
 			{
 			$donneesInjectees['produit']=$this->ModeleProduit->getUnProduit($donnees);
+			$donneesInjectees['evenement']=$this->ModeleEvenement->getEvenementGeneral(AnneeEnCour);
 			}
 			if($donnees['provenance']=='modifierEvenement'||$donnees['provenance']=='ajouterEvenement')
 			{
 				$donneesInjectees['NoEvenement']=$donnees['NoEvenement'];
 				$donneesInjectees['Annee']=$donnees['Annee'];
 			}
-			$this->load->view('administrateur/vueFormulaireProduit',$donneesInjectees);
+			$this->load->view('administrateur/vueFormulaireProduit copy',$donneesInjectees);
 		}
 		else 
 		{
+			//traitement des images produit puis ticket
+			if(isset($_POST['supImgProduit']))//si on a coché supprimer l'image 
+			{
+				$NomImageProduit=null;//l'image est mise a nul
+			}
+			else 
+			{				
+				if($this->input->post('submit'))//upload image entete
+				{	
+					$LocalisationImage='txtImg_Produit';
+					$nomImageProduit=$this->uploadImage($LocalisationImage);						
+				}
+				if ($nomImageProduit===0)// si l'image n'est pas upload
+				{				
+					$nomImageProduit=$this->input->post('img_Produit');//utilisation de l'ancien nom 
+				}
+			}
+			if(isset($_POST['supImgProduit']))//si on a coché supprimer l'image 
+			{
+				$NomImageTicket=null;//l'image est mise a nul
+			}
+			else
+			{
+				if($this->input->post('submit'))//upload image entete
+				{	
+					$LocalisationImage='txtImgTicket';
+					$nomImageTicket=$this->uploadImage($LocalisationImage);						
+				}
+				if ($nomImageTicket===0)// si l'image n'est pas upload
+				{				
+					$nomImageTicket=$this->input->post('imgTicket');//utilisation de l'ancien nom 
+				}
+			}
+			//creation de la variable renseignant les champs de la table produit
+			$donneesProduit=array(
+				'NoEvenement'=>$_POST['noEvenement'],
+				'Annee'=>$_POST['annee'],
+				
+				'LibelleHTML'=>$_POST['libelleHTML'],
+				'LibelleCourt'=>$_POST['libelleCourt'],
+				'Prix'=>$_POST['prix'],
+				'Img_Produit'=>$nomImageProduit,
+				'Stock'=>$_POST['stock'],
+				'NumeroOrdreApparition'=>$_POST['numeroOrdreApparition'],
+				'Etre_Ticket'=>$_POST['etre_ticket'],
+				'ImgTicket'=>$nomImageTicket
+			);
+			//si modifier
 			
+			//$donneesProduit['NoProduit']=$_POST['noProduit'];
+			//$donneesProduit['NoProduit']=max produit de l'evenement+1
+			//verification evenement existe 
+			//ajout ou modification en fonction de la provenance 
+			//si ajouter || ajouter d'un evenement || ou modifier d'un evenement insert
+			//si modifier update 
+			//si autre produit recharger la page sinon afficher le produit 
 		}
 	} 
 

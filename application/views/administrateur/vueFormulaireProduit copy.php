@@ -4,10 +4,24 @@
 	-$Annee
 	-$produit
 	-$provenance 
-
+	-$evenement (liste evenement de l'annee)
 donnée de sortie:
-
-
+	-'provenance'
+	-'noEvenenment'
+	-'annee'
+	-'noProduit'
+	-'libelleHTML'
+	-'libelleCourt'
+	-'prix'
+	-'img_Produit'
+	-'supImgProduit'
+	-'stock'
+	-'numeroOrdreApparition'
+	-'etreTicket'
+	-'ImgTicket'
+	-'supImgTicket'
+	-'autreProduit'
+	-'submit'
 */
 
 $hidden=array(
@@ -15,15 +29,31 @@ $hidden=array(
 );
 if ($provenance=='modifier')
 {	
-	$hidden['NoEvenenment']=$produit->NoEvenement;
+	$hidden['noEvenenment']=$produit->NoEvenement;
 	$hidden['annee']=$produit->Annee;
-	$hidden['NoProduit']=$produit->NoProduit;    
+	$hidden['noProduit']=$produit->NoProduit;
+	$hidden['img_Produit']=$produit->Img_Produit;
+	$hidden['imgTicket']=$produit->ImgTicket;
 }
 elseif($provenance=='modifierEvenement'||$provenance=='ajouterEvenement')
 {
-	$hidden['NoEvenenment']=$NoEvenement;
+	$hidden['noEvenenment']=$NoEvenement;
 	$hidden['annee']=$Annee;
 }
+$annee=array(
+	'name'=>'annee',
+	'type'=>'date'
+);
+$noEvenement=array(
+	'1'=>'evenement non defini'
+);
+if(isset($evenement))
+{
+	foreach ($evenement as $unEvenement)
+	{
+		$noEvenement[$unEvenement->NoEvenement]=$unEvenement->LibelleCourt;
+	}
+}		
 $libelleHtml=array(
 	'id'=>'summernote',
 	'name'=>'libelleHTML'
@@ -52,7 +82,7 @@ if (isset($produit->Prix))
 }
 $img_Produit=array(
 	'type'=>'file',
-	'name'=>'img_Produit'
+	'name'=>'txtImg_Produit'
 );
 $supImgProduit=array(
 	'type'=>'checkbox',
@@ -87,11 +117,14 @@ $etreTicket=array(
 );
 $imgTicket=array(
 	'type'=>'file',
-	'name'=>'ImgTicket'
+	'name'=>'txtImgTicket'
 );
 $supImgTicket=array(
 	'type'=>'checkbox',
 	'name'=>'supImgTicket'
+);
+$autre=array(
+	'name'=>'autreProduit'
 );
 $submit=array(
 	'name'=>'submit',
@@ -104,6 +137,25 @@ echo "<h1>inserez un nouveau Produit</h1>";
 echo form_open_multipart('Administrateur/formulaireProduit');
 echo form_hidden($hidden);
 echo "<table>";
+if ($provenance=='ajouter')
+{
+	echo "<tr>";
+		echo "<td>";
+			echo form_label("année de l'evenement", 'annee');
+		echo "</td>";
+		echo "<td>";
+			echo form_input($annee);
+		echo "</td>";
+	echo "</tr>";
+	echo "<tr>";
+		echo "<td>";
+			echo form_label('selectionnez un evenement ', 'noEvenment');
+		echo "</td>";
+		echo "<td>";
+			echo form_dropdown('noEvenement',$noEvenement);
+		echo "</td>";
+	echo "</tr>";	
+}
 	echo "<tr>";
 		echo "<td>";
 			echo form_label('description du produit: ', 'libelleHTML');
@@ -206,8 +258,16 @@ echo "<table>";
 	echo "<br>\n";
 	echo "<tr>";
 		echo"<td>";
-			echo 
-			form_submit($submit);			
+			echo form_label('souhaitez vous inserer un autre produit ?','autre');
+		echo "</td>";
+		echo "<td>";
+			echo form_checkbox($autre);
+		echo "</td>";
+	echo "</tr>";
+	echo "<br>\n";
+	echo "<tr>";
+		echo"<td>";
+			echo form_submit($submit);			
 		echo "</td>";
 	echo "</tr>";
 echo "</table>";
