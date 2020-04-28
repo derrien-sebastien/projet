@@ -1,3 +1,4 @@
+<h2 align="center">Afin de poursuivre votre(vos) achat(s) merci de remplir ce formulaire</h2>
 <?php
 $txtNom=array(
     'type'=>'text',
@@ -43,10 +44,6 @@ $txtTelF=array(
     'type'=>'text',
     'name'=>'txtTelF'
 );
-if(isset($Personne->TelFixe))
-{
-    $txtTelF['value']=$Personne->TelFixe;
-}
 $txtTelP=array(
     'type'=>'text',
     'name'=>'txtTelP'
@@ -115,18 +112,7 @@ echo form_open('membre/infosCompte','class="form-horizontal" name="form"');
         echo "<br>";
         echo "<tr>";
             echo "<td>";
-                echo form_label('Téléphone fixe :','txtTelF');
-            echo "</td>";
-            echo "<td>";
-                echo "<span class='marge'>";
-                    echo form_input($txtTelF);                
-                echo "</span>";
-            echo "</td>";
-        echo "</tr>";
-        echo "<br>";
-        echo "<tr>";
-            echo "<td>";
-                echo form_label('Téléphone portable ?','txtTelP');
+                echo form_label('Téléphone portable (optionnel) :','txtTelP');
             echo "</td>";
             echo "<td>";
                 echo "<span class='marge'>";
@@ -138,7 +124,7 @@ echo form_open('membre/infosCompte','class="form-horizontal" name="form"');
             echo "<td>";
             echo "</td>";
             echo "<td align=center>";
-                echo form_submit('submit', 'Ajouter','class="btn btn-primary"');              
+                echo form_submit('submit', 'Soumettre','class="btn btn-primary"');              
             echo "</td>";
         echo "</tr>";
     echo "</table>";

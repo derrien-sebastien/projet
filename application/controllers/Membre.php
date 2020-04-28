@@ -57,7 +57,6 @@ class Membre extends CI_Controller
     {
         $this->load->view('templates/EntetePrincipal');
         $this->load->view('templates/EnteteNavbar');
-        $this->load->view('templates/vueAccueilPrincipal');
         $this->load->view('membre/vueAccueilPersonne');
         
     }
@@ -206,8 +205,7 @@ class Membre extends CI_Controller
         $parent=$this->ModelePersonne->getPersonneParent($personne->NoPersonne);
         if($personne->Actif==1)
         
-        {     
-            var_dump($_SESSION,$personne,$parent,$_SESSION['email']);  
+        {      
             if ($parent->Etre_Correspondant==1)
             {
                 $this->load->view('membre/vueDesinscrireMail');
@@ -219,7 +217,6 @@ class Membre extends CI_Controller
                     $donneesInsererPersonne=array('Actif'=>0,'Email'=>$_SESSION['email']);
                     $this->ModelePersonne->modifierInfoPersonne($donneesInsererPersonne);
                     $this->load->view('membre/vueConfirmation');
-                    var_dump($_SESSION,$personne,$parent,$_SESSION['email']);
                 }
             }
             else 
@@ -229,7 +226,6 @@ class Membre extends CI_Controller
         }
         else
             {
-                var_dump($_SESSION,$personne,$parent,$_SESSION['email']);
                 $this->load->view('membre/vueInscrireMail');
                 $this->form_validation->set_rules('Etre_Correspondant AND Actif','checkbox','required'); 
                 if(isset($_POST['confirmer']))
@@ -239,7 +235,6 @@ class Membre extends CI_Controller
                     $donneesInsererPersonne=array('Actif'=>1,'Email'=>$_SESSION['email']);
                     $this->ModelePersonne->modifierInfoPersonne($donneesInsererPersonne);
                     $this->load->view('membre/vueConfirmation');
-                    var_dump($_SESSION,$personne,$parent,$_SESSION['email']);
                 }
             }
         

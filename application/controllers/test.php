@@ -96,3 +96,149 @@ else
     //$this->load->view('templates/PiedDePagePrincipal');
 }
 
+	Controlleur 
+		function indexP()
+		{
+			$data['produits'] = $this->ModeleProduit->get_all_produit()
+			$this->load->view('produits',$data);
+		}
+
+		function ajout()
+		{
+			$produit = $this->ModeleProduit->get($this->input->post('NoProduit'));
+			$insert = array(
+							'NoProduit' => $this->input->post('NoProduit'),
+							'qty' => 1,
+							'price' => $produit->Prix,
+							'name' => $produit->LibelleCourt
+							);
+			if($produit->option_name)
+			{
+				$insert['options'] = array(
+				$produit->option_name => $produit->option_values[$this->input->post($produit->option_name)]
+				);
+			}
+			$this->cart->insert($insert);
+			redirect('shop');
+		}
+
+		function maj($rowid)
+		{
+			$data = array(
+		 					'rowid'=> $rowid,
+		 					'qty'=>3
+						);
+			$this->cart->update($data);
+    	}
+
+		function enlever($rowid)
+		{
+			$data = array(
+		     				'rowid'=> $rowid,
+		     				'qty'=>0
+		 				);
+			$this->cart->update($data);
+			redirect('shop');
+		}   
+
+   		function destroy()
+   		{
+       		$this->cart->destroy();
+   		}
+
+	Model
+
+	function getall()
+	{
+		$results = $this->db->get('ge_produit')->result();
+		foreach ($results as &$result) 
+		{
+			if ($result->option_values) 
+			{
+				$result->option_values = explode(',', $result->option_values);
+			}
+		}
+		return $results;
+	}
+	function get($id)
+	{
+        $results = $this->db->get_where('ge_produit',array('NoProduit'=>$id))->result();
+        $results = $results[0];  
+		if($results->option_value)
+		{
+                $results->option_value = explode(',',$results->option_value);
+        }
+		return $results;
+    }
+
+	Vue
+
+	<style type="text/css">
+			.products
+		{
+			float: left;
+		}
+		.cart 
+		{
+			float: left;
+		}
+	</style>
+	<div class="produits">
+	<ul>
+		<?php foreach($produits as $produit) : ?>
+		<li>
+			<?php echo form_open('visiteur/ajout'); ?>
+			<div class="name"><?php echo $produit->LibelleCourt; ?></div>
+			<div class="thumb"><?php echo img(array('src' => 'images/'.$produit->Img_Produit)) ?></div>
+			<div class="price"><?php echo $produit->Prix ?></div>
+			<div class="option">
+			<?php if($produit->option_name) : ?>
+				<?php echo form_label($produit->option_name, 'option_'.$produit->id); ?>
+				<?php echo form_dropdown($produit->option_name, $produit->option_values,NULL,'id="option_'.$produit->id.'"'); ?>
+			<?php endif; ?>
+			</div>
+			<?php echo form_hidden('NoProduit', $produit->NoProduit); ?>
+			<?php echo form_submit('action', 'Ajouter au panier'); ?>
+			<?php echo form_close(); ?>
+		</li>
+	<?php endforeach; ?>
+	</ul>
+</div>
+
+<?php if($cart = $this->cart->contents()) : ?>
+<div class="cart">
+	<table>
+		<caption>Cart Items</caption>
+		<thead>
+			<tr>
+				<th>Item Name</th>
+				<th>Option</th>
+				<th>Price</th>
+				<th></th>
+			</tr>
+		</thead>
+	<?php foreach($cart as $item): ?>
+		<tr>
+			<td><?php echo $item['name']; ?></td>
+			<td>
+				<?php 
+                    if($this->cart->has_options($item['rowid']))
+                    {
+                        foreach($this->cart->product_options($item['rowid']) as $option => $value)
+                        {
+                            echo $option . ": <em>". $value . "</em>";
+                        }
+                    }
+                ?>
+			</td>
+			<td>$<?php echo $item['subtotal']; ?></td>
+			<td><?php echo anchor('visiteur/enlever/'.$item['rowid'],'X'); ?></td>
+		</tr>
+	<?php endforeach; ?>
+		<tr>
+			<td colspan="2"><strong>Total</strong></td>
+			<td>$<?php echo $this-> cart->total(); ?></td>
+		</tr>
+	</table>
+</div>
+<?php endif; ?>

@@ -1,3 +1,22 @@
+<h2 align="center">Vos informations en notre possession</h2>
+<script type="text/javascript"> function GereChkbox() 
+{ 
+    if(document.getElementById($connu).checked) 
+    {   
+        document.getElementById($nonConnu).disabled = "disabled"; 
+        document.getElementById($connu).disabled = ""; 
+    } 
+    else if(document.getElementById($nonConnu).checked) 
+    { 
+        document.getElementById($connu).disabled = "disabled"; 
+        document.getElementById($nonConnu).disabled = ""; 
+    } 
+    else 
+    { 
+        document.getElementById($connu).disabled = ""; 
+        document.getElementById($nonConnu).disabled = ""; 
+    } 
+} </script>
 <?php
 $txtNom=array(
     'type'=>'text',
@@ -43,10 +62,6 @@ $txtTelF=array(
     'type'=>'text',
     'name'=>'txtTelF'
 );
-if(isset($Personne->TelFixe))
-{
-    $txtTelF['value']=$Personne->TelFixe;
-}
 $txtTelP=array(
     'type'=>'text',
     'name'=>'txtTelP'
@@ -55,6 +70,13 @@ if(isset($Personne->TelPortable))
 {
     $txtTelP['value']=$Personne->TelPortable;
 }
+$submit=array(
+    'name'=>'submit',
+    'value'=>'Soumettre',
+    'class'=>'btn btn-primary'
+);
+
+$js=['onClick' => 'GereChkbox();'];
 
 echo form_open('membre/infosCompte','class="form-horizontal" name="form"');               
     echo "<table class='table-bordered td' align=center>"; 
@@ -115,18 +137,7 @@ echo form_open('membre/infosCompte','class="form-horizontal" name="form"');
         echo "<br>";
         echo "<tr>";
             echo "<td>";
-                echo form_label('Téléphone fixe :','txtTelF');
-            echo "</td>";
-            echo "<td>";
-                echo "<span class='marge'>";
-                    echo form_input($txtTelF);                
-                echo "</span>";
-            echo "</td>";
-        echo "</tr>";
-        echo "<br>";
-        echo "<tr>";
-            echo "<td>";
-                echo form_label('Téléphone portable ?','txtTelP');
+                echo form_label('Téléphone portable (optionnel) :','txtTelP');
             echo "</td>";
             echo "<td>";
                 echo "<span class='marge'>";
@@ -134,12 +145,26 @@ echo form_open('membre/infosCompte','class="form-horizontal" name="form"');
                 echo "</span>";
             echo "</td>";
         echo "</tr>";
-        echo "<tr>";
+        echo"<tr>";
             echo "<td>";
+                echo "Confirmer vous ces informations ?";
             echo "</td>";
-            echo "<td align=center>";
-                echo form_submit('submit', 'Ajouter','class="btn btn-primary"');              
+            echo "<td align='center'>";
+                echo form_checkbox('connu','1',FALSE,$js);
+                echo "oui";
+                echo form_checkbox('nonConnu','2',FALSE,$js);
+                echo "non";
             echo "</td>";
         echo "</tr>";
+        echo "<tr>";
+            echo "<td align='center'>";
+                echo "";
+            echo "</td>\n";
+            echo "<td align='center'>";
+                echo form_submit($submit);
+            echo "</td>\n";
+        echo "</tr>";
     echo "</table>";
-echo "</form>";
+echo form_close(); 
+        
+        

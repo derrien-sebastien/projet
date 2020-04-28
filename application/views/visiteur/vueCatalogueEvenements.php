@@ -1,8 +1,9 @@
+</br>
 <div class="menuAdmin">
         <ul>
             <li>
                 <span>
-                    <img src="<?php echo base_url(); ?>assets/images/maison.svg" height="25" width="25">Super Admin
+                <a href="<?php echo site_url('visiteur/')?>"><img src="<?php echo base_url(); ?>assets/images/maison.svg" height="25" width="25">Accueil
                 </span>
             </li>
             <li>
@@ -21,27 +22,21 @@
             </li>
         </ul>
 </br>
-<div class="btn-primary">
-    <h2>
-        <img src="<?php echo base_url(); ?>assets/images/panier.png" height="25" width="25">&nbsp;<a href='<?php echo site_url('visiteur/catalogueProduits') ?>'>Tous nos produits</a>
-    </h2>
-</div>
-<div class="btn-primary">
-    <h2 class="btn-primary">Nos Evenements Marchands </h2>
+
+<div align=center>
+    <h2>Nos Evenements Marchands </h2>
         <?php 
             foreach ($lesEvenementsMarchands as $unEvenementMarchand):
-                echo '<h3 class="btn-primary">'.anchor('visiteur/evenementMarchand/'.$unEvenementMarchand->NoEvenement.'/'.$unEvenementMarchand->Annee,$unEvenementMarchand->TxtHTMLEntete).'</h3>';
+                echo '<h3>'.anchor('visiteur/evenementMarchand/'.$unEvenementMarchand->NoEvenement.'/'.$unEvenementMarchand->Annee,$unEvenementMarchand->TxtHTMLEntete,array('class'=>'btn-primary')).'</h3>';
             endforeach;
         ?>
 </div>
-<div class="btn-primary">
-    <h2 class="btn-primary">Nos Evenements non Marchands </h2>
+<div align=center>
+    <h2 >Nos Evenements non Marchands </h2>
         <?php
-        echo '<div class="btn-primary">';
             foreach ($lesEvenementsNonMarchands as $unEvenementNonMarchand):
-                echo '<h3 class="btn-primary">'.anchor('visiteur/EvenementNonMarchand/'.$unEvenementNonMarchand->NoEvenement.'/'.$unEvenementNonMarchand->Annee,$unEvenementNonMarchand->TxtHTMLEntete).'</h3>';
+                echo '<h3>'.anchor('visiteur/EvenementNonMarchand/'.$unEvenementNonMarchand->NoEvenement.'/'.$unEvenementNonMarchand->Annee,$unEvenementNonMarchand->TxtHTMLEntete,array('class'=>'btn-primary')).'</h3>';
             endforeach;
-        echo'</div>';
         ?>
 </div>
 <p align='center'>Afin d'afficher plus de détails sur nos évènements, cliquer sur son titre</p>
