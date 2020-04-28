@@ -91,7 +91,7 @@ class ModeleProduit extends CI_Model
       $this->db->where('ge_produit.Annee', $donneesProduit['Annee']);
       $this->db->where('ge_produit.NoProduit', $donneesProduit['NoProduit']);
       $maCommande = $this->db->get();
-      return $maCommande->row_array(); 
+      return $maCommande->row(); 
    } 
    /**********************************************************************
    **           Fonction qui va retourner le numéro max                 **

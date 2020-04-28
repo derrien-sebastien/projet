@@ -1,7 +1,5 @@
 
 <?php
-var_dump($_POST);
-var_dump($provenance);
 $hidden=array(
     'provenance'=>$provenance
 );

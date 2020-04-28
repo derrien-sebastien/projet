@@ -27,9 +27,10 @@ donnée de sortie:
 $hidden=array(
 	'provenance'=>$provenance
 );
+
 if ($provenance=='modifier')
 {	
-	$hidden['noEvenenment']=$produit->NoEvenement;
+	$hidden['noEvenement']=$produit->NoEvenement;
 	$hidden['annee']=$produit->Annee;
 	$hidden['noProduit']=$produit->NoProduit;
 	$hidden['img_Produit']=$produit->Img_Produit;
@@ -37,21 +38,20 @@ if ($provenance=='modifier')
 }
 elseif($provenance=='modifierEvenement'||$provenance=='ajouterEvenement')
 {
-	$hidden['noEvenenment']=$NoEvenement;
+	$hidden['noEvenement']=$NoEvenement;
 	$hidden['annee']=$Annee;
 }
 $annee=array(
 	'name'=>'annee',
 	'type'=>'date'
 );
-$noEvenement=array(
-	'1'=>'evenement non defini'
-);
+
 if(isset($evenement))
 {
+	
 	foreach ($evenement as $unEvenement)
 	{
-		$noEvenement[$unEvenement->NoEvenement]=$unEvenement->LibelleCourt;
+		$noEvenement[$unEvenement->NoEvenement]=$unEvenement->TxtHTMLEntete;
 	}
 }		
 $libelleHtml=array(

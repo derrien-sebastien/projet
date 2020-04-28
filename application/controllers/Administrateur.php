@@ -32,16 +32,31 @@ class Administrateur extends CI_Controller
 		
 		
 		//cretaion constante AnneeEnCour
-			 if(date('m')<8)
-			 {
-				 $annee=date('Y');
-				 define('AnneeEnCour',$annee);				 
-			 }
-			 else
-			 {
-				$annee=date('Y')+1;
-				define('AnneeEnCour',$annee); 
-			 }
+		if(date('m')<8)
+		{
+			$annee=date('Y');
+			define('AnneeEnCour',$annee);				 
+		}
+		else
+		{
+			$annee=date('Y')+1;
+			define('AnneeEnCour',$annee); 
+		}
+		$evenement0=array(
+			'NoEvenement'=>0,
+			'Annee'=>AnneeEnCour
+		);
+		if(!$this->ModeleEvenement->presenceEvenement($evenement0))
+		{
+			$donneesEvenement0=array(
+				'NoEvenement'=>0,
+				'Annee'=>AnneeEnCour,
+				'TxtHTMLEntete'=>'Evenement non definie',
+				'TxtHTMLCorps'=>'Evenement non definie',
+				'EnCours'=>0
+			);
+			$this->ModeleEvenement->ajouterEvenement($donneesEvenement0);
+		}
 
 	}
 
@@ -527,25 +542,24 @@ donnée de sortie:
 		// modifier l'arriver en tableau
 		//arriver de la vue selection produit 
 		
-		var_dump($_POST);
+		
 		if(isset($_POST['provenance']))
 		{
 			$donnees['provenance']=$_POST['provenance'];
-		}var_dump($donnees);
+		}
 		if($donnees['provenance']=='modifier')
 		{
 			if(isset($_POST['produit']))
 			{
-				$AncienEvenement=explode("/",$unProduit);
+				$AncienEvenement=explode("/",$_POST['produit']);
    	 			$donnees['Annee']=$AncienEvenement['0'];
 				$donnees['NoEvenement']=$AncienEvenement['1'];
 				$donnees['NoProduit']=$AncienEvenement['2'];
 			}
 		}
-		var_dump($donnees);
-		$this->form_validation->set_rules('NoEvenenment','NoEvenenment','required');
+		$this->form_validation->set_rules('noEvenement','noEvenement','required');
 		$this->form_validation->set_rules('annee','annee','required');
-		$this->form_validation->set_rules('NoProduit','NoProduit');		
+		$this->form_validation->set_rules('noProduit','noProduit');		
 		$this->form_validation->set_rules('libelleHTML','libelleHTML','required');
 		$this->form_validation->set_rules('libelleCourt','libelleCourt','required');
 		$this->form_validation->set_rules('prix','prix','required');
@@ -559,20 +573,22 @@ donnée de sortie:
 		$this->form_validation->set_rules('autreProduit','autreProduit');
 		if ($this->form_validation->run() === FALSE)
 		{
+			
 			$donneesInjectees['provenance']=$donnees['provenance'];
     		$this->load->view('templates/EntetePrincipal');
 			$this->load->view('templates/EnteteNavbar');
-			if($donnees['provenance']=='Ajouter')
+			if($donnees['provenance']=='ajouter')
     		{
 				$donneesInjectees['lesProduits']=$this->ModeleProduit->getProduitGeneral(AnneeEnCour);
         		$donneesInjectees['lesProduits']=$donneesInjectees['lesProduits']+$this->ModeleProduit->getProduitGeneral(AnneeEnCour-1);
-        		$donneesInjectees['lesProduits']=$donneesInjectees['lesProduits']+$this->ModeleProduit->getProduitGeneral(AnneeEnCour-2);
+				$donneesInjectees['lesProduits']=$donneesInjectees['lesProduits']+$this->ModeleProduit->getProduitGeneral(AnneeEnCour-2);
+				$donneesInjectees['evenement']=$this->ModeleEvenement->getEvenementGeneral(AnneeEnCour);
 				$this->load->view('administrateur/vueSelectionProduits',$donneesInjectees);
 			}
 			if($donnees['provenance']=='modifier')
 			{
 			$donneesInjectees['produit']=$this->ModeleProduit->getUnProduit($donnees);
-			$donneesInjectees['evenement']=$this->ModeleEvenement->getEvenementGeneral(AnneeEnCour);
+			//$donneesInjectees['evenement']=$this->ModeleEvenement->getEvenementGeneral(AnneeEnCour);
 			}
 			if($donnees['provenance']=='modifierEvenement'||$donnees['provenance']=='ajouterEvenement')
 			{
@@ -589,7 +605,8 @@ donnée de sortie:
 				$NomImageProduit=null;//l'image est mise a nul
 			}
 			else 
-			{				
+			{	
+				$provenance=$_POST['provenance'];			
 				if($this->input->post('submit'))//upload image entete
 				{	
 					$LocalisationImage='txtImg_Produit';
@@ -627,18 +644,60 @@ donnée de sortie:
 				'Img_Produit'=>$nomImageProduit,
 				'Stock'=>$_POST['stock'],
 				'NumeroOrdreApparition'=>$_POST['numeroOrdreApparition'],
-				'Etre_Ticket'=>$_POST['etre_ticket'],
+				'Etre_Ticket'=>$_POST['etreTicket'],
 				'ImgTicket'=>$nomImageTicket
 			);
-			//si modifier
-			
-			//$donneesProduit['NoProduit']=$_POST['noProduit'];
-			//$donneesProduit['NoProduit']=max produit de l'evenement+1
+			// création de Noproduit soit recuperation si on modifie sinon numero max+1
+			if ($provenance=='modifier')
+			{
+				$donneesProduit['NoProduit']=$_POST['noProduit'];
+			}
+			else
+			{
+				$donneesProduit['NoProduit']=$this->ModeleProduit->maxProduit($donneesProduit)+1;
+			}
 			//verification evenement existe 
-			//ajout ou modification en fonction de la provenance 
-			//si ajouter || ajouter d'un evenement || ou modifier d'un evenement insert
-			//si modifier update 
+			if($this->ModeleEvenement->presenceEvenement($donneesProduit))
+			{
+				//modification ou ajout du produit
+				if($provenance=='modifier')
+				{
+					$this->ModeleProduit->modifierProduit($donneesProduit);
+				}
+				else
+				{
+					$this->ModeleProduit->ajouterProduit($donneesProduit);
+				}
+			}
+			else
+			{
+				//utilisation de l'evenement 0
+				//ajout du produit
+				$donneesProduit['NoEvenement']=0;
+				$donneesProduit['Annee']=AnneeEnCour;
+				$donneesProduit['NoProduit']=$this->ModeleProduit->maxProduit($donneesProduit)+1;
+				$this->ModeleProduit->ajouterProduit($donneesProduit);
+			}
 			//si autre produit recharger la page sinon afficher le produit 
+			if(isset($_POST['autreProduit']))
+			{
+				//recuperation des donnees evenement et annee
+				$noEvenement=$donneesProduit['NoEvenement'];
+				$annee=$donneesProduit['Annee'];
+				// raz $donnees
+				$donnees=array(
+					'provenance'=>'ajouter',
+					'NoEvenement'=>$noEvenement,
+					'Annee'=>$annee
+				);
+				$_POST=null;
+				$this->formulaireProduit($donnees);
+			}
+			else
+			{
+				//affichage produit
+			}
+			
 		}
 	} 
 
