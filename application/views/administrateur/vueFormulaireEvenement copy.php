@@ -3,6 +3,8 @@
 /*données d'entrée:
  -$evenement
  -$lesProduit
+ -$produitDeL'evenement
+ -$Provenance 
 
 donnée de sortie:
 -provenance
@@ -22,6 +24,7 @@ donnée de sortie:
 -emailInfo 
 -enCours 
 -ajoutProduit
+-dateRemiseProduit
 -produit
 -submit
 
@@ -115,6 +118,10 @@ $emailInfo=array(
     'type'=>'text',
     'name'=>'emailInfo'
 );
+if (isset($evenement->EmailInformationHTML))
+{
+    $emailInfo['value']=$evenement->EmailInformationHTML;
+}
 $encours=array(
     'name'=>'enCours',
     'value'=>'1'
@@ -250,11 +257,7 @@ if ($Provenance=='ajouter')
             echo form_label('information a joindre dans le mail:','EmailInfo');
         echo "</td>";
         echo "<td>";
-            echo form_textarea($emailInfo);
-            if (isset($evenement->TxtHTMLEntete))
-            {
-                echo $evenement->EmailInformationHTML;
-            }
+            echo form_textarea($emailInfo);            
         echo "</td>";
     echo "</tr>";
     echo "<br>\n";
@@ -269,7 +272,7 @@ if ($Provenance=='ajouter')
     echo "<br>\n";
     echo "<tr>";
         echo "<td>";
-            echo form_label('voulez vous ajouter un article','AjoutProduit');
+            echo form_label('cet evenement comptient il des produit : ','AjoutProduit');
         echo "</td>";
         echo "<td>";
          echo form_checkbox($ajouterProduit);
@@ -285,6 +288,22 @@ if ($Provenance=='ajouter')
         echo "</td>";
     echo "</tr>";
     echo "</br>";
+    if ($Provenance=='modifier')
+    {
+        echo "<tr>";
+            echo "<td>";
+                echo "les produits present sont :";
+            echo "</td>";
+        echo "</tr>";
+        foreach ($produitDeLEvenement as $produitEvenement)
+        {
+            echo "<tr>";
+                echo "<td>";
+                    echo $produitEvenement->LibelleCourt;
+                echo "</td>";
+            echo "</tr>";
+        } 
+    }   
     echo "<tr>";
         echo "<td>";
             echo form_label('choisissez un/ou des produits :','produit');

@@ -98,10 +98,13 @@ class ModeleProduit extends CI_Model
    **********************************************************************/
 
 
-   public function maxProduit()
+   public function maxProduit($donneesProduit)
    {
       $this->db->select_max('NoProduit');
-      $query=$this->db->get('ge_produit');
+      $this->db->from('ge_produit');
+      $this->db->where('ge_produit.NoEvenement', $donneesProduit['NoEvenement']);
+      $this->db->where('ge_produit.Annee', $donneesProduit['Annee']);
+      $query=$this->db->get();
       $ligne = $query->row();	    
       $noMax= $ligne->NoProduit;	
       return $noMax;

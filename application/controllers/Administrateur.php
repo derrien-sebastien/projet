@@ -204,7 +204,7 @@ class Administrateur extends CI_Controller
 		-evenement /de la vue selection evenement
 		-
 		*/
-		var_dump($_POST);
+		
 		$this->form_validation->set_rules('anneeEvenement','Annee','required');//regle de validation du formulaire
 		$this->form_validation->set_rules('noEvenement',"numero d'evenement");
 		$this->form_validation->set_rules('imgEntete',"image entete");
@@ -247,6 +247,11 @@ class Administrateur extends CI_Controller
 				//chargement de la vue selection evenement 
 				$this->load->view('administrateur/vueSelectionEvenements',$donneesInjectees);//charge la vue pour preremplir le formulaire
 				
+			}
+			if ($donnees['Provenance']=='modifier')//si on modifie un evenement
+			{
+				$evenement=$donnees['evenement'];
+				$donneesInjectees['produitDeLEvenement']=$this->ModeleProduit->getProduits($evenement->NoEvenement, $evenement->Annee);
 			}
 			//chargement de la vue formulaire evenement et du pied de page
 			$this->load->view('administrateur/vueFormulaireEvenement copy',$donneesInjectees);
@@ -359,13 +364,89 @@ class Administrateur extends CI_Controller
 					$this->ModeleEvenement->ajouterEvenementMarchand($donnees);
 					if ($new=1)
 					{
-						$this->formulaireProduit($donnees['NoEvenement'],$donnees['Annee'],'evenement');
+						$this->formulaireProduit($donnees['NoEvenement'],$donnees['Annee'],'ajouterEvenement');
+					}					
+				}
+				else
+				{
+					$this->ModeleEvenement->ajouterEvenementNonMarchand($donnees);//ajout a la table non marchand					
+				}
+			}
+			elseif($Provenance=='modifier')//si on modifie un evenement
+			{
+				$this->ModeleEvenement->modifierEvenement($donneesAInserer);//modification de la ligne liée a l'evenement dans la db
+				if (isset($_POST['ajoutProduit']))//si on ajoute un produit
+				{	
+					//$i prend la valeur max des produit de l'evenement 
+					$i=$this->ModeleProduit->maxProduit($donnees);
+					foreach ($_POST['produit'] as $unProduit)
+					{
+						if($unProduit!='//')
+						{
+							$AncienEvenement=explode("/",$unProduit);
+   	 						$donneesProduit['Annee']=$AncienEvenement['0'];
+							$donneesProduit['NoEvenement']=$AncienEvenement['1'];
+							$donneesProduit['NoProduit']=$AncienEvenement['2'];
+							if ($donneesProduit['NoEvenement']!=$donnees['NoEvenement']||$donneesProduit['Annee']!=$donnees['Annee'])
+							{
+								$Produit=$this->ModeleProduit->getUnProduit($donneesProduit);
+								$Produit['Annee']=$donnees['Annee'];
+								$Produit['NoEvenement']=$donnees['NoEvenement'];
+								$Produit['NoProduit']=$i;
+								$i++;
+								$this->ModeleProduit->ajouterProduit($Produit);
+							}
+						}
+						else 
+						{
+							$new=1;
+						}
+					}
+					//presence evenement marchant
+					if($this->ModeleEvenement->presenceEvenementMarchand($donnees['Annee'],$donnees['NoEvenement']))
+					{
+						//sortie evenement marchant
+						$evenementMarchant=$this->ModeleEvenement->getEvenementMarchand($donnees['Annee'],$donnees['NoEvenement']);
+						//y a t'il eu modification de la date remise produit
+						if($evenementMarchant->DateRemiseProduit!=$donnees['DateRemiseProduit'])
+						{
+							//update evenement marchant
+							$this->ModeleEvenement->modifierEvenementMarchant($donnees);
+						}
+					}
+					else 
+					{	
+						//l'evenement etait il precedement non marchand
+						if($this->ModeleEvenement->presenceEvenementNonMarchand($donnees['Annee'],$donnees['NoEvenement']))
+						{
+							//suppression de l'evenement non marchand
+							$this->ModeleEvenement->deleteEvenementNonMarchand($donnees); 
+						}
+						//creation de l'evenement marchand 
+						$donnees['DateRemiseProduit']=$_POST['dateRemiseProduit'];
+						$this->ModeleEvenement->ajouterEvenementMarchand($donnees);
+					}					
+					if ($new=1)
+					{
+						$this->formulaireProduit($donnees['NoEvenement'],$donnees['Annee'],'modifierEvenement');
 					}
 					
 				}
 				else
 				{
-					$this->ModeleEvenement->ajouterEvenementNonMarchand($donnees);//ajout a la table non marchand					
+					if(!$this->ModeleEvenement->presenceEvenementMarchand($donneesAInserer['annee'],$donneesAInserer['noEvenement']))
+					{
+						if(!$this->ModeleEvenement->presenceEvenementNonMarchand($donneesAInserer['annee'],$donneesAInserer['NoEvenement']))
+						{							
+							$this->ModeleEvenement->ajouterEvenementNonMarchand($donnees);//ajout a la table non marchand	
+						}
+					}
+					else 
+					{
+						// vue modification impossible voir avec l'administrateur de la base de registre 
+						// la suppression de l'evenement marchant influe sur tout les produit de l'evenement 
+						// toutes les requettes son chambouller (voir avec damien )
+					}					
 				}
 			}
 			
@@ -379,26 +460,24 @@ class Administrateur extends CI_Controller
     **********************************************************************/
 	
 
-	public function formulaireProduit($NoEvenement=null,$Annee=null,$Provenance=null)
+	public function formulaireProduit($noEvenement=null,$annee=null,$provenance=null,$noProduit=null)
 	{
-		if($NoEvenement==null)
-		{
-			$NoEvenement=0;
-		}
-		if($Annee==null)
-		{
-			$Annee=0;
-		}
-		if($this->input->post('submit'))//upload image
-       	{
-			$LocalisationImage=$this->input->post('ImgProduit');
-			$NomImageProduit=$this->uploadImage($LocalisationImage);			
-		}
-		if($this->input->post('submit'))//upload image
-       	{
-			$LocalisationImage=$this->input->post('ImgTicket');
-			$NomImageTicket=$this->uploadImage($LocalisationImage);
-		}	
+		/*arrivé :
+		-ajouter produit
+		-modifier produit
+		-formulaire evenement (ajout modif)
+
+		donnees d'entrée:
+		$donnees ['provenance','noEvenement','Annee','NoProduit]
+
+		sortie :
+		*/	
+		$donnees=array(
+			'NoEvenement'=>$noEvenement,
+			'Annee'=>$annee,
+			'provenance'=>$provenance,
+			'NoProduit'=>$noProduit
+		);
 		$this->form_validation->set_rules('libelleHTML','libelleHTML','required');
 		$this->form_validation->set_rules('libelleCourt','libelleCourt','required');
 		$this->form_validation->set_rules('prix','prix','required');
@@ -406,74 +485,32 @@ class Administrateur extends CI_Controller
 		$this->form_validation->set_rules('numeroOrdreApparition','numeroOrdreApparition','required');
 		$this->form_validation->set_rules('etreTicket','etreTicket');
 		if ($this->form_validation->run() === FALSE)
-		{	
-			$DonneesInjectees['Provenance']=$Provenance;
-			$this->load->view('templates/EntetePrincipal');
-			$this->load->view('templates/EnteteNavbar');
-			if($Provenance==='Ajouter')
-			{
-				$DonneesInjectees['LesProduits']=$this->ModeleProduit->getProduitGeneral(AnneeEnCour);
-				$DonneesInjectees['LesProduits']=$DonneesInjectees['LesProduits']+$this->ModeleProduit->getProduitGeneral(AnneeEnCour-1);
-				$DonneesInjectees['LesProduits']=$DonneesInjectees['LesProduits']+$this->ModeleProduit->getProduitGeneral(AnneeEnCour-2);
-				$this->load->view('administrateur/vueSelectionProduits',$DonneesInjectees);
-				//$this->load->view('templates/PiedDePagePrincipal');
-			}
-			$this->load->view('administrateur/vueFormulaireProduit',$DonneesInjectees);	
-			//$this->load->view('templates/PiedDePagePrincipal');		
-		}
-		else
 		{
-			if ($NomImageProduit===0)
-			{				
-				$NomImageProduit=$this->input->post('ImgProduit');
-			}
-			if ($NomImageTicket===0)
-			{
-				$NomImageTicket=$this->input->post('ImgTicket');
-			}
-			if(isset($_POST['SupImgProduit']))//si on a coché supprimer l'image 
-			{
-				$NomImageProduit=null;//l'image est mise a nul
-			}
-			if(isset($_POST['SupImgTicket']))//si on a coché supprimer l'image 
-			{
-				$NomImageTicket=null;//l'image est mise a nul
-			}
-			if($Provenance==='Ajouter')
-			{
-			$noMax = $this->ModeleProduit-> maxProduit();
-			$NoProduit=$noMax+1;
-			}
-			elseif($Provenance=='Modifier')
-			{
-				//$NoProduit=$this->
-			}
-			$donneesAInserer = array(
-			'NoEvenement'=>$NoEvenement,
-			'Annee'=>$Annee,			
-			'NoProduit'=>$NoProduit,
-			'libelleHTML'=>$this->input->post('libelleHTML'),
-			'libelleCourt'=>$this->input->post('libelleCourt'),
-			'prix'=>$this->input->post('prix'),
-			'ImgProduit'=>$NomImageProduit,
-			'stock'=>$this->input->post('stock'),
-			'numeroOrdreApparition'=>$this->input->post('numeroOrdreApparition'),
-			'etre_Ticket'=>$this->input->post('etreTicket'),
-			'ImgTicket'=>$NomImageTicket
-			 );	
-			 if($Provenance==='Ajouter')
-			{		 
-				$this->ModeleProduit->ajouterProduit($donneesAInserer);
-			}
-			elseif($Provenance=='Modifier')
-			{
-				$this->ModeleProduit->modifierProduit($donneesAInserer);
-			}	
-			$this->load->view('templates/EntetePrincipal');
+			$donneesInjectees['provenance']=$donnees['provenance'];
+    		$this->load->view('templates/EntetePrincipal');
 			$this->load->view('templates/EnteteNavbar');
-			$this->load->view('administrateur/vueFormulaireProduit');// a supprimer
-			//$this->load->view('templates/PiedDePagePrincipal');
-		}	;	
+			if($donnees['provenance']=='Ajouter')
+    		{
+				$donneesInjectees['lesProduits']=$this->ModeleProduit->getProduitGeneral(AnneeEnCour);
+        		$donneesInjectees['lesProduits']=$donneesInjectees['lesProduits']+$this->ModeleProduit->getProduitGeneral(AnneeEnCour-1);
+        		$donneesInjectees['lesProduits']=$donneesInjectees['lesProduits']+$this->ModeleProduit->getProduitGeneral(AnneeEnCour-2);
+        		$this->load->view('administrateur/vueSelectionProduits',$donneesInjectees);
+			}
+			if($donnees['provenance']=='modifier')
+			{
+			$donneesInjectees['produit']=$this->ModeleProduit->getUnProduit($donnees);
+			}
+			if($donnees['provenance']=='modifierEvenement'||$donnees['provenance']=='ajouterEvenement')
+			{
+				$donneesInjectees['NoEvenement']=$donnees['NoEvenement'];
+				$donneesInjectees['Annee']=$donnees['Annee'];
+			}
+			$this->load->view('administrateur/vueFormulaireProduit',$donneesInjectees);
+		}
+		else 
+		{
+			
+		}
 	} 
 
 
@@ -909,8 +946,7 @@ class Administrateur extends CI_Controller
 		{
 			
 			foreach($_POST['supprime'] as $supprime)
-			{
-				var_dump($_POST);
+			{				
 				if($_POST[$supprime]!='')
 				{
 					$donnees=array(
