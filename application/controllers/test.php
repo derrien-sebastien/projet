@@ -96,10 +96,10 @@ else
     //$this->load->view('templates/PiedDePagePrincipal');
 }
 
-	Controlleur 
+	//Controlleur 
 		function indexP()
 		{
-			$data['produits'] = $this->ModeleProduit->get_all_produit()
+			$data['produits'] = $this->ModeleProduit->get_all_produit();
 			$this->load->view('produits',$data);
 		}
 
@@ -146,7 +146,7 @@ else
        		$this->cart->destroy();
    		}
 
-	Model
+	//Model
 
 	function getall()
 	{
@@ -171,8 +171,8 @@ else
 		return $results;
     }
 
-	Vue
-
+	//Vue
+?>
 	<style type="text/css">
 			.products
 		{
