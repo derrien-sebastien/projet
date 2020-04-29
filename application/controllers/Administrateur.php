@@ -46,7 +46,8 @@ class Administrateur extends CI_Controller
 			'NoEvenement'=>0,
 			'Annee'=>AnneeEnCour
 		);
-		if(!$this->ModeleEvenement->presenceEvenement($evenement0))
+		
+		if(!($this->ModeleEvenement->presenceEvenement($evenement0)))
 		{
 			$donneesEvenement0=array(
 				'NoEvenement'=>0,
@@ -57,7 +58,6 @@ class Administrateur extends CI_Controller
 			);
 			$this->ModeleEvenement->ajouterEvenement($donneesEvenement0);
 		}
-
 	}
 
 	/**********************************************************************
@@ -183,10 +183,11 @@ class Administrateur extends CI_Controller
 		if (!isset($evenement))
 		{
 			//sortie de tous les produit des 3ans et ouverture de la vue selection des evenement
-			$DonneesInjectees['lesProduits']=$this->ModeleProduit->getProduitGeneral(AnneeEnCour);
-			$DonneesInjectees['lesProduits']=$DonneesInjectees['lesProduits']+$this->ModeleProduit->getProduitGeneral(AnneeEnCour-1);
-			$DonneesInjectees['lesProduits']=$DonneesInjectees['lesProduits']+$this->ModeleProduit->getProduitGeneral(AnneeEnCour-2);
-			$this->load->view('administrateur/vueSelectionProduits',$DonneesInjectees);
+			
+			$donneesInjectees['lesProduits']=$this->ModeleProduit->getProduitGeneral(AnneeEnCour);
+			$donneesInjectees['lesProduits']=$donneesInjectees['lesProduits']+$this->ModeleProduit->getProduitGeneral(AnneeEnCour-1);
+			$donneesInjectees['lesProduits']=$donneesInjectees['lesProduits']+$this->ModeleProduit->getProduitGeneral(AnneeEnCour-2);
+			$this->load->view('administrateur/vueSelectionProduits',$donneesInjectees);
 		}
 		else
 		{

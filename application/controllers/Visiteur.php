@@ -303,7 +303,7 @@ class Visiteur extends CI_Controller
       </div>
 
       ';
-      $count = 0
+      $count = 0;
       foreach($this->cart->contents() as $items)
       {
          $count++;

@@ -1,27 +1,52 @@
 
 <?php
+/* donnée entrée
+    -provenance
+    -lesProduits
+
+   donnée sortie
+    -provenance
+    -produit
+*/
 $hidden=array(
     'provenance'=>$provenance
 );
+
+$produit=array(
+    '0/0/0'=>'Nouveau produit'
+);
+
+foreach ($lesProduits as $unProduit)
+{
+    $valeur=$unProduit->Annee."/".$unProduit->NoEvenement."/".$unProduit->NoProduit;
+    $produit[$valeur]=$unProduit->Annee."   ".$unProduit->LibelleCourt;
+}
+$submit=array(
+    'name'=>'existant',
+    'value'=>'charger un formulaire existant'
+);
+
 echo form_open('Administrateur/formulaireProduit');
 echo form_hidden($hidden);
 echo "<br>";
 echo "<br>";
 echo "<br>";
 echo "<table>\n";
-echo "<tr><td><label for='produit'>choisissez:</label></td>
-<td><select name='produit'>
-    <option value='/////////'>Aucun produit selectionné</option>
-    <option value='/////////'>Nouveau produit</option>";
-    foreach ($lesProduits as $unProduit):
-        echo "<option value='";
-        echo $unProduit->Annee."/".$unProduit->NoEvenement."/".$unProduit->NoProduit;
-        echo "'>";
-        echo $unProduit->LibelleCourt;
-        echo "</option>";
-   endforeach;
-echo "</select></td></tr>";
-echo "<tr><td></td><td><input type='submit' name='existant' value='charger un formulaire existant'></td><td></td>\n";
-echo "</tr></table>";
-echo "</form>";
+    echo "<tr>";
+        echo "<td>";
+            echo form_label('choisissez:','produit');
+        echo"</td>";
+        echo "<td>";
+            echo form_dropdown('produit',$produit);
+        echo "</td>";
+    echo"</tr>";
+    echo "<tr>";
+        echo "<td>";
+        echo "</td>";
+        echo "<td>";
+            echo form_submit($submit);
+        echo "</td>";
+    echo "</tr>";
+echo "</table>";
+echo form_close();
 ?>

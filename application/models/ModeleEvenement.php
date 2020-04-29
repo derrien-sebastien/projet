@@ -167,9 +167,9 @@ class ModeleEvenement extends CI_Model
    public function presenceEvenement($donnees)
    {
       $this->db->select('*');
-      $this->db->from('ge_ev_marchand');      
-      $this->db->where('ge_ev_marchand.Annee', $donnees['Annee']);
-      $this->db->where('ge_ev_marchand.NoEvenement', $donnees['NoEvenement']);    
+      $this->db->from('ge_evenement');      
+      $this->db->where('ge_evenement.Annee', $donnees['Annee']);
+      $this->db->where('ge_evenement.NoEvenement', $donnees['NoEvenement']);    
       $maListe = $this->db->get();
       if ($maListe->num_rows() > 0)
       {
