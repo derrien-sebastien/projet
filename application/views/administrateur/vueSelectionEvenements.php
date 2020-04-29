@@ -3,6 +3,22 @@
 /*
 
 */
+$evenement=array(
+    '0/0'=>'Nouvel Evenement'
+);
+foreach ($lesEvenements as $unEvenement)
+{
+    $valeur=$unEvenement->Annee."/".$unEvenement->NoEvenement;
+    $evenement[$valeur]=$unEvenement->Annee.'   '.$unEvenement->TxtHTMLEntete;
+}
+$commande=array(
+    'name'=>'modif',
+    'value'=>'modif'
+);
+$submit=array(
+    'name'=>'existant',
+    'value'=>'envoyer'
+);
 
 if($Provenance==='modifier')
 {
@@ -26,32 +42,34 @@ else
 echo form_open('Administrateur/formulaireEvenement');
 }
 echo "<table>\n";
-echo "<tr><td><label for='Evenement'>choisissez:</label></td>
-<td><select name='evenement'>
-    <option value='/'>Aucun evenement selectionné</option>
-    <option value='/'>Nouvel Evenement</option>";    
-    foreach ($lesEvenements as $unEvenement):                      
-        echo "<option value='";
-        echo $unEvenement->Annee."/".$unEvenement->NoEvenement;
-        echo "'>";        
-        echo $unEvenement->TxtHTMLEntete;
-        echo "</option>";
-   endforeach; 
-echo "</select></td></tr>";
-if($Provenance=='commande')
-{
-    $commande=array(
-        'name'=>'modif',
-        'value'=>'modif'
-    );
-    echo '<tr><td></br>';
-    echo form_label('selectionnez pour modifier la commande &nbsp&nbsp ');
-    echo '</td><td></br>';    
-    echo form_checkbox($commande);
-    echo '</td></tr>';
-    
-}
-echo "<tr><td></td><td><input type='submit' name='existant' value='envoyer'></td><td></td>\n";
-echo "</tr></table>";
-echo "</form>";
+    echo "<tr>";
+        echo "<td>";
+            echo form_label('choisissez:','evenement');
+        echo "</td>";
+        echo "<td>";
+            echo form_dropdown('evenement',$evenement);
+        echo "</td>";
+    echo "</tr>";
+    if($Provenance=='commande')
+    {    
+        echo "<tr>";
+            echo "<td>";
+                echo"</br>";
+                echo form_label('selectionnez pour modifier la commande &nbsp&nbsp ');
+            echo "</td>";
+            echo "<td>";
+                echo "</br>";    
+                echo form_checkbox($commande);
+            echo "</td>";
+        echo "</tr>";
+    }
+    echo "<tr>";
+        echo "<td>";
+        echo "</td>";
+        echo "<td>";
+            echo form_submit($submit);    
+        echo "</td>\n";
+    echo "</tr>";
+echo "</table>";
+echo form_close();
 ?>

@@ -117,9 +117,13 @@ class Administrateur extends CI_Controller
 			
 		if (!isset($_POST['evenement']))
 		{
-			$donneesInjectees['lesEvenements']= $this->ModeleEvenement->getEvenementGeneral(AnneeEnCour);
-			$donneesInjectees['lesEvenements']= $donneesInjectees['lesEvenements']+$this->ModeleEvenement->getEvenementGeneral(AnneeEnCour-1);
-			$donneesInjectees['lesEvenements']= $donneesInjectees['lesEvenements']+$this->ModeleEvenement->getEvenementGeneral(AnneeEnCour-2);
+			
+			$t1= $this->ModeleEvenement->getEvenementGeneral(AnneeEnCour);			
+			$t2=$this->ModeleEvenement->getEvenementGeneral(AnneeEnCour-1);			
+			$t3=$this->ModeleEvenement->getEvenementGeneral(AnneeEnCour-2);			
+			$donneesInjectees['lesEvenements']= array_merge($t1,$t2,$t3);
+			
+			
 			$this->load->view('administrateur/vueSelectionEvenements',$donneesInjectees);		
 			//$this->load->view('templates/PiedDePagePrincipal');
 		}
@@ -184,7 +188,7 @@ class Administrateur extends CI_Controller
 		{
 			//sortie de tous les produit des 3ans et ouverture de la vue selection des evenement
 			
-			$donneesInjectees['lesProduits']=$this->ModeleProduit->getProduitGeneral(AnneeEnCour);
+			$donneesInjectees['lesProduits']=$this->ModeleProduit->getProduitGeneral(AnneeEnCour);			
 			$donneesInjectees['lesProduits']=$donneesInjectees['lesProduits']+$this->ModeleProduit->getProduitGeneral(AnneeEnCour-1);
 			$donneesInjectees['lesProduits']=$donneesInjectees['lesProduits']+$this->ModeleProduit->getProduitGeneral(AnneeEnCour-2);
 			$this->load->view('administrateur/vueSelectionProduits',$donneesInjectees);
@@ -295,6 +299,7 @@ class Administrateur extends CI_Controller
 			if ($donnees['Provenance']=='modifier')//si on modifie un evenement
 			{
 				$evenement=$donnees['evenement'];
+				var_dump($evenement);
 				$donneesInjectees['produitDeLEvenement']=$this->ModeleProduit->getProduits($evenement->NoEvenement, $evenement->Annee);
 			}
 			//chargement de la vue formulaire evenement et du pied de page

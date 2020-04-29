@@ -74,12 +74,11 @@ class ModeleProduit extends CI_Model
    public function getProduits($pNoEvenement, $pAnnee)
    {
       $this->db->select('*');
-      $this->db->from('ge_evenement');
-      $this->db->join('ge_produit', 'ge_evenement.NoEvenement=ge_produit.NoEvenement AND ge_evenement.Annee=ge_produit.Annee');
-      $this->db->where('ge_evenement.NoEvenement', $pNoEvenement);
+      $this->db->from('ge_produit');
+      $this->db->where('ge_produit.NoEvenement', $pNoEvenement);
       $this->db->where('ge_produit.Annee', $pAnnee);
       $maCommande = $this->db->get();
-      return $maCommande; 
+      return $maCommande->result(); 
    } 
 
 
