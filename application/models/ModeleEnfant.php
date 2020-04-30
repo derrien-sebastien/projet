@@ -85,7 +85,6 @@ class ModeleEnfant extends CI_Model
 		$this->db->where('Etre_Correspondant', 1);
 		$maListe = $this->db->get(); 
 		$enfantsAvecCorrespondant=$maListe->result();
-		var_dump($enfantsAvecCorrespondant);
 		$i=0;
 		foreach($enfantsAvecCorrespondant as $enfantAc)
 		{

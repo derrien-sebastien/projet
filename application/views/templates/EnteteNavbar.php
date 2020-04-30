@@ -89,6 +89,9 @@
                   <li>
                     <a href="<?php echo site_url('Administrateur/formulaireMail') ?>">Envoyer un mail</a>
                   </li>
+                  <li>
+                    <a href="<?php echo site_url('Administrateur/afficherProbleme') ?>">Gestion des problemes d'administration</a>
+                  </li>
                   <!-- accuser de reception a faire -->
                   <!-- relance mail-->                  
                 </ul>

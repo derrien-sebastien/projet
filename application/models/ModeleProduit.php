@@ -160,7 +160,18 @@ class ModeleProduit extends CI_Model
       }
       return !empty($result)?$result:false;
    }
+
+
    
+   public function getProduitsActif()
+   {
+      $this->db->select('*');
+      $this->db->from('ge_produit');
+      $this->db->join('ge_evenement','ge_evenement.NoEvenement=ge_produit.NoEvenement AND ge_evenement.Annee=ge_produit.Annee');
+      $this->db->where('ge_evenement.EnCours', 1);      
+      $maCommande = $this->db->get();
+      return $maCommande->result(); 
+   } 
 
    
 
