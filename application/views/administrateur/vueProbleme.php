@@ -167,7 +167,7 @@ if(isset($stockLimite))
 }
 if(isset($evenementNormalementEnCours))
 {
-    $submit3=array(
+    $submit4=array(
         'name'=>'submit',
         'value'=>'submit'
     );

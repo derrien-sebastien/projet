@@ -1,5 +1,5 @@
 <?php
-
+ 
 class ModeleProduit extends CI_Model 
 
 {
@@ -162,7 +162,7 @@ class ModeleProduit extends CI_Model
    }
 
 
-   
+
    public function getProduitsActif()
    {
       $this->db->select('*');

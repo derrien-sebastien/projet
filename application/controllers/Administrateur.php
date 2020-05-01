@@ -63,6 +63,8 @@ class Administrateur extends CI_Controller
 			$donneesEvenement0=array(
 				'NoEvenement'=>0,
 				'Annee'=>AnneeEnCour,
+				'DateMiseEnLigne'=>AnneeEnCour.'-12-01',
+				'DateMiseHorsLigne'=>AnneeEnCour.'-12-02',
 				'TxtHTMLEntete'=>'Evenement non definie',
 				'TxtHTMLCorps'=>'Evenement non definie',
 				'EnCours'=>0
@@ -1157,7 +1159,7 @@ donnée de sortie:
 
 			// les evenement qui devrait etre en cour mais ne sont pas actif 
 		$evenements=$this->ModeleEvenement->getEvenementGeneral(AnneeEnCour);
-		$date=date;
+		$date=date();
 		$i=0;
 		foreach ($evenements as $unEvenement)
 		{
