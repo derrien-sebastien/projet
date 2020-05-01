@@ -1,4 +1,5 @@
 <?php
+defined('BASEPATH') OR exit('No direct script access allowed');
 //require_once(APPPATH."controllers/Administrateur.php");
 class Visiteur extends CI_Controller 
 {
@@ -11,13 +12,10 @@ class Visiteur extends CI_Controller
    {	
       parent::__construct();   
       $this->load->model('ModeleIdentifiantSite');
-      /* $this->load->model('ModeleClasse'); */
       $this->load->model('ModeleCommande');
-      /* $this->load->model('ModeleEnfant'); */
-      $this->load->model('ModeleEvenement');
-      /* $this->load->model('ModeleIdentifiantSite'); */    	
+      $this->load->model('ModeleEvenement');    	
       $this->load->model('ModelePersonne');
-      $this->load->model('ModeleProduit');
+      $this->load->model('ModeleProduit','mProd');
       
       if(date('m')<8)
 		{
@@ -42,6 +40,12 @@ class Visiteur extends CI_Controller
    /*********************************************************************************************************************************************/
    /*********************************************************************************************************************************************/
 
+   public function index()
+   {
+      $this->load->view('templates/EntetePrincipal');
+      $this->load->view('templates/EnteteNavbar');
+      $this->load->view('templates/PiedDePagePrincipal');
+   }
    public function accueil()
    {
       $this->load->view('templates/EntetePrincipal');
@@ -217,7 +221,7 @@ class Visiteur extends CI_Controller
    public function EvenementMarchand($noEvenement = NULL)
    {
 
-      $DonneesInjectees['LesProduits'] = $this->ModeleProduit->retournerProduit($noEvenement);     
+      $DonneesInjectees['LesProduits'] = $this->mProd->retournerProduit($noEvenement);     
       $DonneesInjectees['unEvenementMarchand'] = $this->ModeleEvenement->retournerEvenements($noEvenement);
       if (empty($DonneesInjectees['unEvenementMarchand']))
       {   
@@ -229,6 +233,7 @@ class Visiteur extends CI_Controller
          $this->load->view('templates/EntetePrincipal');
          $this->load->view('templates/EnteteNavbar');
          $this->load->view('visiteur/vueEvenementMarchandEntete', $DonneesInjectees);
+         
       }
    }
    
@@ -250,570 +255,151 @@ class Visiteur extends CI_Controller
    **                               PANIER                             ***
    **********************************************************************/
    
-   public function indexProduits()
+   public function catalogueProduits()
    {
       $this->load->view('templates/EntetePrincipal');
       $this->load->view('templates/EnteteNavbar');
-      $data['produits']=$this->ModeleProduit->get_all_produit();
-      $this->load->view('visiteur/vueCatalogueProduits',$data);
+      $data['product']=$this->mProd->get_all_produit();
+      $this->load->view('visiteur/vueCatalogueProduits copy',$data); 
    }
 
    public function add()
-   {  
-      /* 
-      Données entrantes  :
-      NoProduit
-      LibelleCourt
-      quantity
-      Prix
-
-   ////////////////////////////////
-
-      Données Sortantes  :
-      $data
-      */
+   {
       $data = array(
-            "id"  => $_Post["NoProduit"],
-            "name"  => $_Post["LibelleCourt"],
-            "qty"  => $_Post["quantity"],
-            "price"  => $_Post["Prix"]
+         "id"     => $_GET["product_id"],
+         "name"   => $_POST["product_name"],
+         "qty"    => $_POST["quantity"],
+         "price"  => $_POST["product_price"]
       );
       $this->cart->insert($data);
    }
-
-   public function view()
+   public function ajouterProduitAuPanier($NoEvenement,$Annee)// ajout produit au panier
    {
-      $outpout = '';
-      $outpout .= '
-      <h3> Votre panier </h3>
-      <div class="table-responsive">
-         <div align="right">
-            <button type="button" id="clear_cart" class="btn btn-warning">Clear Cart</button>
-         </div>
-         <br/>
-         <table class="table table-bordered">
-            <tr>
-               <th width="40%">Name</th>
-               <th width="15%">Quantity</th>
-               <th width="15%">Prix</th>
-               <th width="15%">Total</th>
-               <th width="15%">Action</th>
-            </tr>
-         </table>
-      </div>
-
-      ';
-      $count = 0
-      foreach($this->cart->contents() as $items)
       {
-         $count++;
-         $outpout.= '
-         <tr>
-            <td>'.items["name"].'</td>
-            <td>'.items["qty"].'</td>
-            <td>'.items["name"].'</td>
-            <td>'.items["name"].'</td>
-         </tr>
-         ';
-      }
-   }
-
-
-
-
-
-
-
-
-
-
-   
-   /* public function catalogueProduits()
-   {
-      if (!isset($_POST['valider']))
-		{
-         $this->load->view('templates/EntetePrincipal');
-         $this->load->view('templates/EnteteNavbar');
-         $donnees['produits']=$this->ModeleProduit->get_all_produit();
-         $this->load->view('visiteur/vueCatalogueProduits',$donnees);
-      }
-      else 
-      {
-         $LesProduits=$this->ModeleProduit->GetProduit();
-			//var_dump($LesProduits);
-			//die();
-			
-			$i=0;
-			
-			$DonneesPanier= array();
-			foreach ($LesProduits as $unProduit) 
-			{
-						$DonneesPanier[] = array(
-							'id'        =>$UnProduit->Annee.'/'.$UnProduit->NoEvenement.'/'.$UnProduit->NoProduit,
-							'qty'       =>$this->input->post($i),
-							'price'     =>$UnProduit->Prix,
-                     'name'      =>$UnProduit->LibelleCourt                
-						);
-			}
-			$this->card->insert($DonneesPanier);
-         $this->load->view('visiteur/vuePanier',$DonneesPanier);
-         $i++;
-         $this->cart->update($data);
-      }
-   } */
-
-   /* public function ajouterProduitAuPanier($NoEvenement,$Annee)// ajout produit au panier
-   {
-      $produit=$this->ModeleProduit->getProduits($NoEvenement,$Annee);//Récupérer un produit spécifique par ID
-      $i=1;
-      foreach
-      ($Produit as $UnProduit) :
-      $data=array(
-      'id'=>$UnProduit->Annee.'/'.$UnProduit->NoEvenement.'/'.$UnProduit->NoProduit,
-      'qty'=>$this->input->post($i),
-      'price'=>$UnProduit->Prix,
-      'name'=>$UnProduit->LibelleCourt
-      );
-
-      $this->cart->insert($data);
-      
-      $i++;
-      endforeach;
-      $this->cart->update($data);
-     
-      redirect('visiteur/panier');
-
-   }  */
-   /* public function panier()
-   {
-      $info['titre']='contenu du panier';
-      $this->load->view('visiteur/vueAfficherPanier', $info);
-   }
-   public function suppressionDuPanier()
-   { 
-      $data = array(
-                        'rowid'  => $this->input->post('row_id'), 
-                        'qty'    => 0, 
+         if (!isset($_POST['valider']))
+         {
+            $this->load->view('templates/EntetePrincipal');
+            $this->load->view('templates/EnteteNavbar');
+            $donnees['produits']=$this->mProd->get_all_produit();
+            $this->load->view('visiteur/vueCatalogueProduits copy',$donnees);
+         }
+         else 
+         {
+            $LesProduits=$this->mProd->GetProduits();
+            //var_dump($LesProduits);
+            //die();
+            
+            $i=0;
+            
+            $DonneesPanier= array();
+            foreach ($LesProduits as $unProduit) 
+            {
+                     $DonneesPanier[] = array(
+                        'id'        =>$UnProduit->Annee.'/'.$UnProduit->NoEvenement.'/'.$UnProduit->NoProduit,
+                        'qty'       =>$this->input->post($i),
+                        'price'     =>$UnProduit->Prix,
+                        'name'      =>$UnProduit->LibelleCourt,              
                      );
-      $this->cart->update($data);
-      redirect('visiteur/panier');
-   }  */
-   /* public function viderPanier()
+            }
+            $this->card->insert($DonneesPanier);
+            $this->load->view('visiteur/vuePanier',$DonneesPanier);
+            $i++;
+            $this->cart->update($data);
+         }
+      }
+   }
+
+   public function viderPanier()
    {
       $this->cart->destroy();
-      redirect('visiteur/panier');
-   } */
+      echo $this->view();
+   }
 
-
+   /**********************************************************************
+   **                           COMMANDE                               ***
+   **********************************************************************/
    public function commande()
    {
-      $this->load->view('templates/EntetePrincipal');
-      /* $this->load->view('templates/EnteteNavbar'); */
-      /* $donnees['info']=$info; */
-      
-      if(!isset($_post['submit']))
+      if($this->cart->total_items() <= 0)// Si panier est vide on redirige 
       {
-         $this->load->view('visiteur/vueQuestionnaire');
+         redirect('visiteur/EvenementMarchand');
       }
-      if(!isset($_post['submit2']))
-      {
-         $this->form_validation->set_rules('submit','submit','required');
-         $this->form_validation->set_rules('checkbox','checkbox','required');
-         if($this->form_validation->run()===TRUE)
-         {
-            $this->load->view('visiteur/vueSaisiMailAchat');
-         }  
-      }
-      /* elseif(!isset($_post['submit2']))
-      {
-         $this->form_validation->set_rules('checkbox','checkbox','required');
-			$donnees['submit']=$post['submit'];
-         if('checkbox'==1)
-         {
-            $this->load->view('visiteur/vueSaisiMailAchat',($donnees +$donnees['submit']));
-         }
-         if('checkbox'==2) 
-         {
-            $this->load->view('visiteur/vueInscriptionAchat');
-         }
-      }
-      elseif(!isset($_post['submit3']))
-      {
-         $this->load->view('visiteur/vueInformation',($donnees +$donnees['submit']),$donnees['submit2']);
-      } */
-      else
-      { 
-         /* $DonneesInjectees['Personne']=$this->ModelePersonne->rechercheInfoPersonne($this->session->email);                                                                                                
-         $this->load->view('membre/vueGestionDeCompte',$DonneesInjectees); */
-	      echo "vue votre commande est passer + envoye mail" ;
-      }
-      /* vu email ($hidden['submit']=$submit)
-      vue questionnaire de validation($hidden['submit']=$submit +$hidden['submit2']=$submit2) */
-      
-   }
-   public function bla() 
-   {
-      var_dump($_POST);
-   }
-      /*  
-      $this->load->view('visiteur/vueSaisiMailAchat');
-
-      $this->load->view('visiteur/vueInformation');
-
-      $this->load->view('visiteur/vueInscriptionAchat');
-      
-      $this->form_validation->set_rules('connu','deja acheter');
-      $this->form_validation->set_rules('nonConnu','jamais acheter');
-      if($this->form_validation->run() === FALSE) */
-      
-         /* $donneesInjectees['personne']= $this->modelePersonne->rechercherEmailPresent($email); */
-         /* $this->load->view('visiteur/vueInformation' ,$donneesInjectees); */
-         /* if(!$this->ModelePersonne->rechercherEmailPresent($email)) */
-         /* {
-            $this->load->view('visiteur/inscriptionAchat');
-         } */
-         /* else 
-         {
-            echo "inconnu dans db";
-         } */
-      
-   
-
-
-
-
-
-
-
-  
- /*   function indexPanier($NoEvenement = NULL,$Annee =NULL)
-   {
-      $this->load->view('templates/EntetePrincipal');
-      $this->load->view('templates/EnteteNavbar');
-      $data['data']=$this->ModeleProduit->getProduits($NoEvenement,$Annee);
-      $this->load->view('visiteur/vuePanier',$data); */
-
-      /* $data = array();
-      $data['ProduitsDuPanier'] = $this->cart->contents();
-      $this->load->view('visteur/vuePanier', $data); */
-      
-      
-   
-   /* public function ajouterProduitAuPanier($NoEvenement,$Annee)// ajout produit au panier
-   {
-      $Produit=$this->ModeleProduit->getProduits($NoEvenement,$Annee);//Récupérer un produit spécifique par ID
-      $i=1;
-      foreach
-      ($Produit as $UnProduit) :
-      $data=array(
-      'id'=>$UnProduit->Annee.'/'.$UnProduit->NoEvenement.'/'.$UnProduit->NoProduit,
-      'qty'=>$this->input->post($i),
-      'price'=>$UnProduit->Prix,
-      'name'=>$UnProduit->LibelleCourt
-      );
-
-      $this->cart->insert($data);
-      
-      $i++;
-      endforeach;
-      $this->cart->update($data);
-      echo $this->voirPanier(); 
-      //redirect('visiteur/Panier');
-
-   } */
-
-   /* function ajouterProduitAuPanier()
-   { 
-      $produit = array(
-                        'id' => $this->input->post('NoProduit'), 
-                        'name' => $this->input->post('LibelleCourt'), 
-                        'price' => $this->input->post('Prix'), 
-                        'qty' => $this->input->post('Stock'), 
-                     );
-      $this->cart->insert($produit);
-      $this->cart->update($produit );
-      echo $this->voirPanier(); 
-   } */
-
-   /* function voirPanier()
-   { 
-      $output = '';
-      $no = 0;
-      foreach ($this->cart->contents() as $items) 
-      {
-         $no++;
-         $output .='
-         <tr>
-            <td>'.$items['name'].'</td>
-            <td>'.number_format($items['price']).'</td>
-            <td>'.$items['qty'].'</td>
-            <td>'.number_format($items['subtotal']).'</td>
-            <td><button type="button" id="'.$items['rowid'].'" class="remove_cart btn btn-danger btn-sm">Cancel</button></td>
-         </tr>
-         ';
-      }
-      $output .= '
-      <tr>
-         <th colspan="3">Total</th>
-         <th colspan="2">'.'TotalHT '.number_format($this->cart->total()).'</th>
-      </tr>
-      ';
-      return $output;
-   }
-
-   function chargerPanier()
-   { 
-      echo $this->voirPanier();
-   }
-
-   function suppressionPanier()
-   { 
-      $data = array(
-                        'rowid' => $this->input->post('row_id'), 
-                        'qty' => 0, 
-                     );
-      $this->cart->update($data);
-      echo $this->voirPanier();
-   } */
-
-    /*********************************************************************************************************************************************/
-   /*********************************************************************************************************************************************/
-   /*********************************************************************************************************************************************/
-   /**************************                                                                              *************************************/
-   /**************************                                    A REVOIR                                  *************************************/
-   /**************************                                                                              *************************************/
-   /*********************************************************************************************************************************************/
-   /*********************************************************************************************************************************************/
-   /*********************************************************************************************************************************************/
-
-
-   /**********************************************************************
-   **                         Passer commande                          ***
-   **********************************************************************/
-   // garder les infos dans le panier /.....??????
-   // après click on commande envoyer vue "avez vous déjà acheter sur le site oui non en checkbox"
-   // si oui superposition de la vue se connecter 
-   // sinon saisissez votre adresse mail nom prénom adresse et on insert dans la db 
-   // une fois inserer voulez vous payer par carte bancaire 
-   //                                    par cheque 
-   //                                    en liquide
-   // si carte bancaire paiement en ligne 
-   // sinon génération mail date a venir chercher 
-
-/*   Afficher tous les évènements en catalogue en deux parties Ev_Marchand et Ev_Non_Marchand cliquable//ok  
-   /*   Afficher un seul évènement avec tous ses produits en stock + vue si stock vide //a finir 
-   /*   Afficher le panier avec un lien passer commande (DANS LE RESUMER DU PANIER) + box pour connaitre info 
-   /*   Si email pas dans la bdd affichage d'une vue nom, prenom, adresse puis valider pour Achat
-   /*   ajouter élément cours sur paiement en ligne
-
-
-
-   
-
-	
-   /*********************************************************************************************************************************************/
-   /*********************************************************************************************************************************************/ 
-   /*********************************************************************************************************************************************/
-   /**************************                                                                              *************************************/
-   /**************************                           PASSER UNE COMMANDE                                *************************************/
-   /**************************                                                                              *************************************/
-   /*********************************************************************************************************************************************/
-   /*********************************************************************************************************************************************/
-   /*********************************************************************************************************************************************/
-
-   /**********************************************************************
-   **                                    ***
-   **********************************************************************/
-
- 
-   /* public function ajouterProduitAuPanier($NoEvenement,$Annee)// ajout produit au panier
-   {
-      $Produit=$this->ModeleProduit->getProduits($NoEvenement,$Annee);//Récupérer un produit spécifique par ID
-      $i=1;
-      foreach
-      ($Produit as $UnProduit) :
-      $data=array(
-      'id'=>$UnProduit->Annee.'/'.$UnProduit->NoEvenement.'/'.$UnProduit->NoProduit,
-      'qty'=>$this->input->post($i),
-      'price'=>$UnProduit->Prix,
-      'name'=>$UnProduit->LibelleCourt
-      );
-
-      $this->cart->insert($data);
-      
-      $i++;
-      endforeach;
-      $this->load->view('templates/EntetePrincipal');
-      $this->load->view('visiteur/vueCommande', $data);
-      $this->load->view('templates/PiedDePagePrincipal');
-      //redirect('visiteur/Panier');
-
-   } */
-
-
-   
-
-   /* function indexPanier()
-   {
-      $data = array();
-      $data['ProduitsDuPanier'] = $this->cart->contents();
-      $this->load->view('visteur/vuePanier', $data);
-   }
-
-
-   function majQuantiteProduit()
-   {
-      $update = 0;
-      $rowid = $this->input->get('rowid');// Obtenir des informations sur le panier
-      $qty = $this->input->get('qty');
-      
-      // MAJ du poroduit dans le panier
-      if(!empty($rowid) && !empty($qty))
-         {
-            $data = array(
-            'rowid' => $rowid,
-            'qty'   => $qty
-            );
-            $update = $this->cart->update($data);
-         }
-      
-      // Retourne la réponse
-      echo $update?'ok':'err';
-   } */
-  
-   /* function removeItem($rowid)
-   {
-      // Retire les produits du panier
-      $remove = $this->cart->remove($rowid);
-      //redirect('visiteur/Panier');
-   } */
-  
-   /**********************************************************************
-   **                    fonction pour paiement                        ***
-   **********************************************************************/
-
-
-  /* function indexCommande()
-  {
-      if($this->cart->total_items() <= 0)// Si panier vide redirige vers lesProduitsEvenement
-         {
-            redirect('visiteur/lesProduitsEvenement');
-         }
-         $custData = $data = array();
-         $submit = $this->input->post('placeOrder');
-      if(isset($submit))// Si la demande de commande est soumise
+         $donneesUtilisateur = $data = array();
+         $submit = $this->input->post('placerCommande');
+         if(isset($submit))// Si la demande de commande est soumise
          {
             $this->form_validation->set_rules('email', 'Email', 'required|valid_email');
-            $custData = array(
-            'email'     => strip_tags($this->input->post('email')),// Préparer les données clients
+            $donneesUtilisateur = array(
+               'email'     => strip_tags($this->input->post('email')),// Préparer les données clients
             );
-         if($this->form_validation->run() == true)// Si les règles de validation sont conformes
+            if($this->form_validation->run() == true)// Si les règles de validation sont bonne
             {
-               $insert = $this->product->insertCustomer($custData);// on ajoute les données clients
-            if($insert)// Vérifier le statut de l'insertion des données client
+               $insert = $this->mProd->insererDonneesClient($donneesUtilisateur);// on ajoute les données clients
+               if($insert)// on érifier le statut de l'insertion des données client
                {
-                  $order = $this->placeOrder($insert);// Inserer la commande
-               if($order)//Si la soumission de la commande est réussie
+                  $commande = $this->placerCommande($insert);// si ok on insert la commande
+                  if($commande)//Si la soumission de la commande est réussie
                   {
-                     $this->session->set_userdata('success_msg', 'Order placed successfully.');
-                     redirect($this->controller.'/orderSuccess/'.$order);
+                     $this->session->set_userdata('success_msg', 'Article au panier');
+                     redirect(''.$commande);///\/\/\/\/\/\/\/\ PAIEMENT EN LIGNE  /\/\/\/\/\/\/\/\\/\/\/\/\/\/\/\
                   }
                   else
-                     {
-                        $data['error_msg'] = 'La soumission de la commande a échoué, veuillez réessayer.';
-                     }
+                  {
+                     $data['error_msg'] = 'La soumission de la commande a échoué, veuillez réessayer.';
+                  }
                }
                else
-                  {
-                     $data['error_msg'] = 'Des problèmes sont survenus, veuillez réessayer.';
-                  }
+               {
+                  $data['error_msg'] = 'Des problèmes sont survenus, veuillez réessayer.';
+               }
             }
          }
-         $data['custData'] = $custData;// Données clients
-         $data['cartItems'] = $this->cart->contents();// Récupérer les données du panier de la session
-         $this->load->view($this->controller.'/index', $data);// Transférer les données des produits à la vue
-   } */
+      $data['donneesUtilisateur'] = $donneesUtilisateur;// Données personne
+      $data['cartItems'] = $this->cart->contents();// Récupérer les données du panier 
+      $this->load->view('Visiteur/catalogueProduits', $data);// Transférer les données à la vue
+      
+   }
 
-   /* function placeOrder($custID)// Insérer les données de la commande
+   public function placerCommande($personne)// Insérer les données de la commande via la variable personne
    {
-      $ordData = array(
-      'customer_id' => $custID,
-      'grand_total' => $this->cart->total()
+      $commande = array(
+         'noPersonne' => $personne,
+         'grand_total' => $this->cart->total()
       );
-      $insertOrder = $this->product->insertOrder($ordData);
-      if($insertOrder)
+      $insertComande = $this->mProd->insererCommande($commande);
+      if($insertCommande)
+      {
+         $cartItems = $this->cart->contents();// Récupérer les données du panier
+         $commandeItemData = array();
+         $i=0;
+         foreach($cartItems as $item)
          {
-            $cartItems = $this->cart->contents();// Récupérer les données du panier de la session
-            $ordItemData = array();
-            $i=0;
-            foreach($cartItems as $item)
+            $commandeItemData[$i]['noCommande']     = $insertCommande;
+            $commandeItemData[$i]['noProduit']     = $item['id'];
+            $commandeItemData[$i]['quantity']     = $item['qty'];
+            $commandeItemData[$i]['sub_total']     = $item["subtotal"];
+            $i++;
+         }
+         if(!empty($commandeItemData))
+         {
+            $insertCommandeItems = $this->mProd->insererArticleCommande($commandeItemData);//Insérer la Commande de produits
+            if($insertCommandeItems)
             {
-               $ordItemData[$i]['order_id']     = $insertOrder;
-               $ordItemData[$i]['product_id']     = $item['id'];
-               $ordItemData[$i]['quantity']     = $item['qty'];
-               $ordItemData[$i]['sub_total']     = $item["subtotal"];
-               $i++;
+               $this->cart->destroy();// Supprimer les produits du panier
+               return $insertCommande;// retourne noCommande
             }
-            if(!empty($ordItemData))
-               {
-                  $insertOrderItems = $this->product->insertOrderItems($ordItemData);//Insérer la Commande de produits
-               if($insertOrderItems)
-                  {
-                     $this->cart->destroy();// Supprimer les produits du panier
-                     return $insertOrder;// retourne id commande
-                  }
-               }  
-         }
-      return false;
-   } */
+         }  
+      }
+   return false;
+   }
 
 
-/* function orderSuccess($ordID)
-{
-   $data['order'] = $this->product->obtenirCommande($ordID);//Récupérer les données de commande dans la base de données
-   $this->load->view($this->controller.'/order-success', $data); // Affiche les détails de la commande 
-} */
-
-
-
-
-
-
-   /**********************************************************************
-   **              IDEE          Mise à jour EnCours                   ***
-   **********************************************************************/
-
-
-     /* public function maj()
-    {
-      $Evenement=$this->ModeleEvenement->getEvenement();
-      $date=$this->ModeleEvenement->date();
-      foreach ($Evenement as $unEvenement):
-      if($unEvenement->EnCours=='0') 
-         {
-            if ($unEvenement->DateMiseEnLigne<=$DateActuelle)
-               {
-                  if ($unEvenement->DateMiseHorsLigne>=$DateActuelle)
-                     {
-                        $this->ModeleEvenement->setEnCours($unEvenement->NoEvenement, $unEvenement->Annee,1);
-                     }  
-               }
-         }
-         else
-         {
-            if ($unEvenement->DateMiseEnLigne>=$DateActuelle)
-               {
-                  if ($unEvenement->DateMiseHorsLigne<=$DateActuelle)
-                     {
-                        $this->ModeleEvenement->setEnCours($unEvenement->NoEvenement, $unEvenement->Annee,0);
-                     }  
-               }
-         }
-      endforeach;
-    } */ 
-
-
-
+   public function commandeValide($noCommande)
+   {
+      $data['commande'] = $this->mProd->obtenirCommande($noCommande);//Récupérer les données de commande dans la base de données
+      $this->load->view('', $data); // Affiche les détails de la commande // a finir
+   } 
+   
    
 }
 

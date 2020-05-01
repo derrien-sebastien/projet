@@ -26,30 +26,65 @@ class ModeleProduit extends CI_Model
    public function get_all_produit()
    {
 		$result=$this->db->get('ge_produit');
-		return $result;
-	}
+		return $result->result();
+   }
+   public function get_cart($id = "")
+   {
+      $data = array();
+      if(!empty($id))
+      {
+         $this->db->where('NoProduit',$id);
+      }
+      $query = $this->db->get('ge_produit');
+      $res = $query->result();
+      return $res;
+   }
+
+   public function getLesProduitsDuTableau($desIdProduit) 
+   {
+      $nbProduits = count($desIdProduit);
+      $ip = 0;
+      if ($nbProduits != 0) 
+      {
+         foreach ($desIdProduit as $unIdProduit) 
+         {
+            $req = "select * from ge_produit where NoProduit ='$unIdProduit'";
+            $query = $this->db->get_where('ge_produit', array('NoProduit' => $unIdProduit));
+            $result = $query->result();
+            $lesProduits[$ip] = $result[0];
+            $ip++;
+         }
+      }
+      return $lesProduits;
+   } 
 
    /************************************************************************************
    **   Tous les produits en cours de vente et en stock de notre table ge_produit     **
    *************************************************************************************/
-  public function retournerProduit($pNoEvenement = FALSE)
+   public function retournerProduit($pNoEvenement = FALSE)
    {
-     if ($pNoEvenement === FALSE)
-        {
-           $this->db->select('*');
-           $this->db->from('ge_evenement');
-           $this->db->join('ge_produit', 'ge_evenement.NoEvenement=ge_produit.NoEvenement AND ge_evenement.Annee=ge_produit.Annee');   
-           $this->db->join('ge_contenir', 'ge_evenement.NoEvenement=ge_produit.NoEvenement AND ge_evenement.Annee=ge_produit.Annee AND ge_produit.NoProduit=ge_contenir.NoProduit');
-           $this->db->where(`ge_produit.stock`>0 );
-           $this->db->where('ge_evenement.EnCours', 1);
-           $maListe = $this->db->get();
-           return $maListe->result_array();
-        }
-        $maListe = $this->db->get_where('ge_produit', array('NoEvenement' => $pNoEvenement));
-        return $maListe->row_array();
+      if ($pNoEvenement === FALSE)
+      {
+         $this->db->select('*');
+         $this->db->from('ge_evenement');
+         $this->db->join('ge_produit', 'ge_evenement.NoEvenement=ge_produit.NoEvenement AND ge_evenement.Annee=ge_produit.Annee');   
+         $this->db->join('ge_contenir', 'ge_evenement.NoEvenement=ge_produit.NoEvenement AND ge_evenement.Annee=ge_produit.Annee AND ge_produit.NoProduit=ge_contenir.NoProduit');
+         $this->db->where(`ge_produit.stock`>0 );
+         $this->db->where('ge_evenement.EnCours', 1);
+         $this->db->order_by('NoProduit', 'asc');
+         $maListe = $this->db->get();
+         return $maListe->result_array();
+      }
+      else
+      {
+         $this->db->where('NoEvenement', $pNoEvenement);
+         $maListe = $this->db->get_where('ge_produit', array('NoEvenement' => $pNoEvenement));
+         return $maListe->row_array();
+      }
+         return !empty($maListe)?$maListe:false;
         
    }
-  /*  public function retournerProduit($pNoEvenement,$pAnnee,$pNoProduit)
+   /*  public function retournerProduit($pNoEvenement,$pAnnee,$pNoProduit)
    {
       if ($pNoEvenement === FALSE)
       {
@@ -65,11 +100,11 @@ class ModeleProduit extends CI_Model
         $maListe = $this->db->get_where('ge_produit', array('NoEvenement' => $pNoEvenement,'Annee'=>$pAnnee,'NoProduit'=>$pNoProduit));
         return $maListe->row_array();
    } */
-   public function rechercherProduit($id)
+   /* public function rechercherProduit($id)
    {
       $recherche = $this->db->get_where('ge_produit',array('NoProduit' => $id));
       return $recherche->row_array();
-   }
+   } */
 
    public function getProduits($pNoEvenement, $pAnnee)
    {
@@ -98,7 +133,7 @@ class ModeleProduit extends CI_Model
    **********************************************************************/
 
 
-   public function maxProduit($donneesProduit)
+   /* public function maxProduit($donneesProduit)
    {
       $this->db->select_max('NoProduit');
       $this->db->from('ge_produit');
@@ -108,20 +143,20 @@ class ModeleProduit extends CI_Model
       $ligne = $query->row();	    
       $noMax= $ligne->NoProduit;	
       return $noMax;
-   }
+   } */
     
    /**********************************************************************
    **                      Tous les produits                            **
    **********************************************************************/
 
-   public function getProduitGeneral($pAnnee)
+  /*  public function getProduitGeneral($pAnnee)
    {
       $this->db->select('*');
       $this->db->from('ge_produit');   
       $this->db->where('ge_produit.Annee', $pAnnee);
       $maListe = $this->db->get();
       return $maListe->result();    
-   } 
+   }  */
 
    /* SELECT DISTINCT * 
    FROM `ge_produit` 
@@ -145,7 +180,7 @@ class ModeleProduit extends CI_Model
   
   //Récupérer les données des produits dans la base de données
   //id renvoie un seul enregistrement s'il est spécifié, sinon tous les enregistrements
-   public function obtenirInfosProduits($id = 'NoProduit')
+  /*  public function obtenirInfosProduits($id = 'NoProduit')
    {
       $this->db->select('*');
       $this->db->from($this->proTable);
@@ -160,7 +195,7 @@ class ModeleProduit extends CI_Model
           $result = $query->result_array();
       }
       return !empty($result)?$result:false;
-   }
+   } */
    
 
    
