@@ -27,7 +27,7 @@
     <h2>Nos Evenements Marchands </h2>
         <?php 
             foreach ($lesEvenementsMarchands as $unEvenementMarchand):
-                echo '<h3>'.anchor('visiteur/evenementMarchand/'.$unEvenementMarchand->NoEvenement.'/'.$unEvenementMarchand->Annee,$unEvenementMarchand->TxtHTMLEntete,array('class'=>'btn-primary')).'</h3>';
+                echo '<h3>'.anchor('visiteur/EvenementMarchand/'.$unEvenementMarchand->NoEvenement.'/'.$unEvenementMarchand->Annee,$unEvenementMarchand->TxtHTMLEntete,array('class'=>'btn-primary')).'</h3>';
             endforeach;
         ?>
 </div>
