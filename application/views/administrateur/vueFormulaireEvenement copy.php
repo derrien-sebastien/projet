@@ -139,12 +139,12 @@ $options=array(
     '//'=>'Nouveau produit'
 );
 
-foreach ($lesProduits as $unProduit):
+foreach ($lesProduits as $unProduit)
+{
     $produit=$unProduit->Annee.'/'.$unProduit->NoEvenement.'/'.$unProduit->NoProduit;
-    var_dump($produit);
     $options[$produit]=$unProduit->LibelleCourt;
-endforeach;
-var_dump($options);
+}
+
 $submit=array(
     'name'=>'submit',
     'value'=>'envoyer'
@@ -290,19 +290,23 @@ if ($Provenance=='ajouter')
     echo "</br>";
     if ($Provenance=='modifier')
     {
-        echo "<tr>";
-            echo "<td>";
-                echo "les produits present sont :";
-            echo "</td>";
-        echo "</tr>";
-        foreach ($produitDeLEvenement as $produitEvenement)
+        if(isset($produitDeLEvenement[0]))
         {
+            var_dump($produitDeLEvenement);
             echo "<tr>";
                 echo "<td>";
-                    echo $produitEvenement->LibelleCourt;
+                    echo "les produits present sont :";
                 echo "</td>";
             echo "</tr>";
-        } 
+            foreach ($produitDeLEvenement as $produitEvenement)
+            {
+                echo "<tr>";
+                    echo "<td>";
+                        echo $produitEvenement->LibelleCourt;
+                    echo "</td>";
+                echo "</tr>";
+            } 
+        }
     }   
     echo "<tr>";
         echo "<td>";

@@ -262,7 +262,6 @@ class Visiteur extends CI_Controller
 
    public function voirPanier() 
    {
-      $n = $this->mPanier->nbProduitsDuPanier();
       $this->load->view('templates/EntetePrincipal');
       $this->load->view('templates/EnteteNavbar');
       if ($n > 0) 
@@ -370,45 +369,8 @@ class Visiteur extends CI_Controller
 
    public function commande()
    {
-      {
-         if($this->cart->total_items() <= 0)// Si panier vide redirige vers lesProduitsEvenement
-            {
-               redirect('visiteur/EvenementMarchand');
-            }
-            $custData = $data = array();
-            $submit = $this->input->post('placeOrder');
-         if(isset($submit))// Si la demande de commande est soumise
-            {
-               $this->form_validation->set_rules('email', 'Email', 'required|valid_email');
-               $custData = array(
-               'email'     => strip_tags($this->input->post('email')),// Préparer les données clients
-               );
-            if($this->form_validation->run() == true)// Si les règles de validation sont conformes
-               {
-                  $insert = $this->product->insertCustomer($custData);// on ajoute les données clients
-               if($insert)// Vérifier le statut de l'insertion des données client
-                  {
-                     $order = $this->placeOrder($insert);// Inserer la commande
-                  if($order)//Si la soumission de la commande est réussie
-                     {
-                        $this->session->set_userdata('success_msg', 'Article au panier');
-                        redirect($this->controller.'/orderSuccess/'.$order);
-                     }
-                     else
-                        {
-                           $data['error_msg'] = 'La soumission de la commande a échoué, veuillez réessayer.';
-                        }
-                  }
-                  else
-                     {
-                        $data['error_msg'] = 'Des problèmes sont survenus, veuillez réessayer.';
-                     }
-               }
-            }
-            $data['custData'] = $custData;// Données clients
-            $data['cartItems'] = $this->cart->contents();// Récupérer les données du panier de la session
-            $this->load->view($this->controller.'/index', $data);// Transférer les données des produits à la vue
-      }
+      $this->load->view('templates/EntetePrincipal');
+      /* $this->load->view('templates/EnteteNavbar'); */
       /* $donnees['info']=$info; */
       
       if(!isset($_post['submit']))
@@ -621,16 +583,170 @@ class Visiteur extends CI_Controller
    /*********************************************************************************************************************************************/
    /*********************************************************************************************************************************************/
 
+   /**********************************************************************
+   **                                    ***
+   **********************************************************************/
+
+ 
+   /* public function ajouterProduitAuPanier($NoEvenement,$Annee)// ajout produit au panier
+   {
+      $Produit=$this->ModeleProduit->getProduits($NoEvenement,$Annee);//Récupérer un produit spécifique par ID
+      $i=1;
+      foreach
+      ($Produit as $UnProduit) :
+      $data=array(
+      'id'=>$UnProduit->Annee.'/'.$UnProduit->NoEvenement.'/'.$UnProduit->NoProduit,
+      'qty'=>$this->input->post($i),
+      'price'=>$UnProduit->Prix,
+      'name'=>$UnProduit->LibelleCourt
+      );
+
+      $this->cart->insert($data);
+      
+      $i++;
+      endforeach;
+      $this->load->view('templates/EntetePrincipal');
+      $this->load->view('visiteur/vueCommande', $data);
+      $this->load->view('templates/PiedDePagePrincipal');
+      //redirect('visiteur/Panier');
+
+   } */
+
+
    
+
+   /* function indexPanier()
+   {
+      $data = array();
+      $data['ProduitsDuPanier'] = $this->cart->contents();
+      $this->load->view('visteur/vuePanier', $data);
+   }
+
+
+   function majQuantiteProduit()
+   {
+      $update = 0;
+      $rowid = $this->input->get('rowid');// Obtenir des informations sur le panier
+      $qty = $this->input->get('qty');
+      
+      // MAJ du poroduit dans le panier
+      if(!empty($rowid) && !empty($qty))
+         {
+            $data = array(
+            'rowid' => $rowid,
+            'qty'   => $qty
+            );
+            $update = $this->cart->update($data);
+         }
+      
+      // Retourne la réponse
+      echo $update?'ok':'err';
+   } */
+  
+   /* function removeItem($rowid)
+   {
+      // Retire les produits du panier
+      $remove = $this->cart->remove($rowid);
+      //redirect('visiteur/Panier');
+   } */
+  
+   /**********************************************************************
+   **                    fonction pour paiement                        ***
+   **********************************************************************/
+
+
+  /* function indexCommande()
+  {
+      if($this->cart->total_items() <= 0)// Si panier vide redirige vers lesProduitsEvenement
+         {
+            redirect('visiteur/lesProduitsEvenement');
+         }
+         $custData = $data = array();
+         $submit = $this->input->post('placeOrder');
+      if(isset($submit))// Si la demande de commande est soumise
+         {
+            $this->form_validation->set_rules('email', 'Email', 'required|valid_email');
+            $custData = array(
+            'email'     => strip_tags($this->input->post('email')),// Préparer les données clients
+            );
+         if($this->form_validation->run() == true)// Si les règles de validation sont conformes
+            {
+               $insert = $this->product->insertCustomer($custData);// on ajoute les données clients
+            if($insert)// Vérifier le statut de l'insertion des données client
+               {
+                  $order = $this->placeOrder($insert);// Inserer la commande
+               if($order)//Si la soumission de la commande est réussie
+                  {
+                     $this->session->set_userdata('success_msg', 'Order placed successfully.');
+                     redirect($this->controller.'/orderSuccess/'.$order);
+                  }
+                  else
+                     {
+                        $data['error_msg'] = 'La soumission de la commande a échoué, veuillez réessayer.';
+                     }
+               }
+               else
+                  {
+                     $data['error_msg'] = 'Des problèmes sont survenus, veuillez réessayer.';
+                  }
+            }
+         }
+         $data['custData'] = $custData;// Données clients
+         $data['cartItems'] = $this->cart->contents();// Récupérer les données du panier de la session
+         $this->load->view($this->controller.'/index', $data);// Transférer les données des produits à la vue
+   } */
+
+   /* function placeOrder($custID)// Insérer les données de la commande
+   {
+      $ordData = array(
+      'customer_id' => $custID,
+      'grand_total' => $this->cart->total()
+      );
+      $insertOrder = $this->product->insertOrder($ordData);
+      if($insertOrder)
+         {
+            $cartItems = $this->cart->contents();// Récupérer les données du panier de la session
+            $ordItemData = array();
+            $i=0;
+            foreach($cartItems as $item)
+            {
+               $ordItemData[$i]['order_id']     = $insertOrder;
+               $ordItemData[$i]['product_id']     = $item['id'];
+               $ordItemData[$i]['quantity']     = $item['qty'];
+               $ordItemData[$i]['sub_total']     = $item["subtotal"];
+               $i++;
+            }
+            if(!empty($ordItemData))
+               {
+                  $insertOrderItems = $this->product->insertOrderItems($ordItemData);//Insérer la Commande de produits
+               if($insertOrderItems)
+                  {
+                     $this->cart->destroy();// Supprimer les produits du panier
+                     return $insertOrder;// retourne id commande
+                  }
+               }  
+         }
+      return false;
+   } */
+
+
+/* function orderSuccess($ordID)
+{
+   $data['order'] = $this->product->obtenirCommande($ordID);//Récupérer les données de commande dans la base de données
+   $this->load->view($this->controller.'/order-success', $data); // Affiche les détails de la commande 
+} */
+
+
+
+
 
 
    /**********************************************************************
    **              IDEE          Mise à jour EnCours                   ***
    **********************************************************************/
 
-/*
-   
-   public function maj()
+
+     /* public function maj()
     {
       $Evenement=$this->ModeleEvenement->getEvenement();
       $date=$this->ModeleEvenement->date();

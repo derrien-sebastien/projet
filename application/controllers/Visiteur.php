@@ -263,16 +263,63 @@ class Visiteur extends CI_Controller
       $this->load->view('visiteur/vueCatalogueProduits copy',$data); 
    }
 
-   public function add()
+    public function add()
    {
       $data = array(
          "id"     => $_GET["product_id"],
          "name"   => $_POST["product_name"],
          "qty"    => $_POST["quantity"],
-         "price"  => $_POST["product_price"]
+         "price"  => $_POST["product_price"]);
+         $this->cart->insert($data);
+   }
+    /* public function catalogueProduits()
+   {
+      if (!isset($_POST['valider']))
+		{
+         $this->load->view('templates/EntetePrincipal');
+         $this->load->view('templates/EnteteNavbar');
+         $donnees['produits']=$this->ModeleProduit->get_all_produit();
+         $this->load->view('visiteur/vueCatalogueProduits copy',$donnees);
+      }
+      else 
+      {
+         $LesProduits=$this->ModeleProduit->GetProduit();
+			//var_dump($LesProduits);
+			//die();
+			
+			$i=0;
+			
+			$DonneesPanier= array();
+			foreach ($LesProduits as $unProduit) 
+			{
+						$DonneesPanier[] = array(
+							'id'        =>$UnProduit->Annee.'/'.$UnProduit->NoEvenement.'/'.$UnProduit->NoProduit,
+							'qty'       =>$this->input->post($i),
+							'price'     =>$UnProduit->Prix,
+                     'name'      =>$UnProduit->LibelleCourt                
+						);
+			}
+			$this->card->insert($DonneesPanier);
+         $this->load->view('visiteur/vuePanier',$DonneesPanier);
+         $i++;
+         $this->cart->update($data);
+      }
+   } */ 
+
+  /*  public function ajouterProduitAuPanier($NoEvenement,$Annee)// ajout produit au panier
+   {
+      $produit=$this->ModeleProduit->getProduits($NoEvenement,$Annee);//Récupérer un produit spécifique par ID
+      $i=1;
+      foreach
+      ($Produit as $UnProduit) :
+      $data=array(
+      'id'=>$UnProduit->Annee.'/'.$UnProduit->NoEvenement.'/'.$UnProduit->NoProduit,
+      'qty'=>$this->input->post($i),
+      'price'=>$UnProduit->Prix,
+      'name'=>$UnProduit->LibelleCourt
       );
       $this->cart->insert($data);
-   }
+   } */
    public function ajouterProduitAuPanier($NoEvenement,$Annee)// ajout produit au panier
    {
       {

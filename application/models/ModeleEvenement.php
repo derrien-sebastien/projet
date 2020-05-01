@@ -37,7 +37,7 @@ class ModeleEvenement extends CI_Model
       $this->db->where('ge_evenement.EnCours','1'); 
       $this->db->order_by('ge_evenement.NoEvenement','ge_evenement.Annee','asc');
       $maListe = $this->db->get();
-      var_dump($maListe);
+      
       return $maListe->result(); 
    } */ 
 
@@ -164,7 +164,22 @@ class ModeleEvenement extends CI_Model
       return $maListe->row();
    }//row()
 
-
+   public function presenceEvenement($donnees)
+   {
+      $this->db->select('*');
+      $this->db->from('ge_evenement');      
+      $this->db->where('ge_evenement.Annee', $donnees['Annee']);
+      $this->db->where('ge_evenement.NoEvenement', $donnees['NoEvenement']);    
+      $maListe = $this->db->get();
+      if ($maListe->num_rows() > 0)
+      {
+         return true;
+      }
+      else  
+      {
+         return false;
+      }
+   }
    public function presenceEvenementMarchand($Annee,$NoEvenement)
    {
       $this->db->select('*');

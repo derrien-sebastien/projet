@@ -19,18 +19,19 @@
 							data-price="'.$row->Prix.'" data-productid="'.$row->NoProduit.'" />Ajouter</button>
 						</div>';
 				}
+				
 				?>
 			</div><!-- /div  3 -->
 		</div><!-- /div  2 -->
 		<div class="col-lg-6 col-md-6"><!-- div  2 bis -->
 			<div id="cart_cetails"><!-- div  3 bis -->
 				
-			<?php echo form_open('visiteur/ajouterProduitAuPanier'); ?>
+				<h3>Cart is Empty</h3>
+				<?php echo form_open('path/to/controller/update/method'); ?>
 
 <table cellpadding="6" cellspacing="1" style="width:100%" border="0">
 
 <tr>
-		<th></th>
         <th>QTY</th>
         <th>Item Description</th>
         <th style="text-align:right">Item Price</th>
@@ -77,11 +78,9 @@
 
 </table>
 
-<p><?php echo form_submit('add_cart','Update your Cart'); ?></p>
-				
+<p><?php echo form_submit('', 'Update your Cart'); ?></p>
 				<?php  echo $this->cart->format_number($this->cart->total_items());?>
 			</div><!-- /div  3 bis -->
-			
 		</div><!-- /div  2 bis -->
 	</div><!-- /div  1 -->
 </body>
