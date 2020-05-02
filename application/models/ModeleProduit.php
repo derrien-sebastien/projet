@@ -1,5 +1,5 @@
 <?php
-
+ 
 class ModeleProduit extends CI_Model 
 
 {
@@ -42,6 +42,7 @@ class ModeleProduit extends CI_Model
          $query=$this->db->get();
          $result=$query->row_array();
       }
+<<<<<<< HEAD
       else
       {
          $this->db->order_by('LibelleCourt','asc');
@@ -49,6 +50,21 @@ class ModeleProduit extends CI_Model
          $result=$query->result_array();
       }
       return !empty($result)?$result:false;
+=======
+      return !empty($result)?$result:false;
+   }
+
+
+
+   public function getProduitsActif()
+   {
+      $this->db->select('*');
+      $this->db->from('ge_produit');
+      $this->db->join('ge_evenement','ge_evenement.NoEvenement=ge_produit.NoEvenement AND ge_evenement.Annee=ge_produit.Annee');
+      $this->db->where('ge_evenement.EnCours', 1);      
+      $maCommande = $this->db->get();
+      return $maCommande->result(); 
+>>>>>>> e899c1b8d568d0fc9f63fcdf3341a27d98162461
    } 
 
   /************************************************************************************
@@ -178,7 +194,7 @@ class ModeleProduit extends CI_Model
 
 
   
-  public function getProduitsActif()
+ /* public function getProduitsActif()
   {
      $this->db->select('*');
      $this->db->from('ge_produit');
@@ -186,5 +202,5 @@ class ModeleProduit extends CI_Model
      $this->db->where('ge_evenement.EnCours', 1);      
      $maCommande = $this->db->get();
      return $maCommande->result(); 
-  } 
+  } */
 } // CLASSE

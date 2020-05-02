@@ -37,6 +37,10 @@ elseif($Provenance=='ajouter')
     $donnees['Provenance']='ajouter';
     echo form_open('Administrateur/ajouterEvenement',$donnees);
 }
+elseif($Provenance=='activer')
+{
+    echo form_open('Administrateur/changerLEtatDunEvenement');
+}
 else
 {
 echo form_open('Administrateur/formulaireEvenement');

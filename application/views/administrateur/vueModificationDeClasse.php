@@ -31,30 +31,53 @@ echo '</h1></br>';
 echo form_open_multipart('Administrateur/modifierClasse');
 echo form_hidden($hidden);
 echo '<table>';
-echo '<tr><td>Nom</td><td>prenom</td><td>date de naissance</td><td>supprimer de la classe</td><td>date de sortie de la classe</td></tr>';
-foreach($elevesDeLaClasse as $unEleve)
-{
-    $supprime=array(
-        'name'=>'supprime[]',
-        'value'=>$unEleve->NoEnfant
-    );
-    $dateFin=array(
-        'name'=>$unEleve->NoEnfant,
-        'type'=>'date'
-    );
-    echo '<tr><td>';
-    echo $unEleve->Nom;
-    echo '</td><td>';
-    echo $unEleve->Prenom;
-    echo '</td><td>';
-    echo $unEleve->DateNaissance;
-    echo '</td><td>';
-    echo form_checkbox($supprime);
-    echo '</td><td>';
-    echo form_input($dateFin);
-    echo '</td></tr>';
-}
+    echo '<tr>';
+        echo '<td>';
+            echo 'Nom';
+        echo '&emsp;</td>';
+        echo '<td>';
+            echo 'prenom';
+        echo '&emsp;</td>';
+        echo '<td>';
+            echo 'date de naissance';
+        echo '&emsp;</td>';
+        echo '<td>';
+            echo 'supprimer de la classe';
+        echo '&emsp;</td>';
+        echo '<td>';
+            echo 'date de sortie de la classe';
+        echo '</td>';
+    echo '</tr>';
+    foreach($elevesDeLaClasse as $unEleve)
+    {
+        $supprime=array(
+            'name'=>'supprime[]',
+            'value'=>$unEleve->NoEnfant
+        );
+        $dateFin=array(
+            'name'=>$unEleve->NoEnfant,
+            'type'=>'date'
+        );
+        echo '<tr>';
+            echo '<td>';
+                echo $unEleve->Nom;
+            echo '</td>';
+            echo '<td>';
+                echo $unEleve->Prenom;
+            echo '</td>';
+            echo '<td>';
+                echo $unEleve->DateNaissance;
+            echo '</td>';
+            echo '<td>';
+                echo form_checkbox($supprime);
+            echo '</td>';
+            echo '<td>';
+                echo form_input($dateFin);
+            echo '</td>';
+        echo '</tr>';
+    }
 echo '</table>';
+echo '</br>';
 echo '<h1>ajouter des élèves</h1>';
 echo '<table>';
     echo '<tr>';

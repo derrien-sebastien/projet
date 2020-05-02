@@ -22,7 +22,8 @@
         </span>
         <ul>
           <li><a href="<?php echo site_url('administrateur/ajouterEvenement')?>">Ajouter un Evenement</a></li>
-           <li><a href="<?php echo site_url('administrateur/modifierEvenement')?>">Modifier un Evenement</a></li>
+          <li><a href="<?php echo site_url('administrateur/modifierEvenement')?>">Modifier un Evenement</a></li>
+          <li><a href="<?php echo site_url('Administrateur/changerLEtatDunEvenement') ?>">activer desactiver un evenement</a></li>
         </ul>
       </li>
       <li>
@@ -32,6 +33,7 @@
         <ul>  
           <li><a href="<?php echo site_url('administrateur/ajouterProduit')?>">Ajouter un Produit</a></li>
           <li><a href="<?php echo site_url('administrateur/modifierProduit')?>">Modifier un Produit</a></li>
+
         </ul>
       </li>
       <li>
@@ -54,6 +56,9 @@
       </li>
     </ul>
   </div>
-
+<?php /*
+a ajouter gestion probleme eventuelement sens interdit probleme 
+<li><a href="<?php echo site_url('Administrateur/afficherProbleme') ?>">Gestion des problemes d'administration</a></li>
+*/?>
 
 
