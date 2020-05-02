@@ -177,7 +177,7 @@ class Membre extends CI_Controller
                 'MotDePasse'=>$_POST['password']
                 );
                 $this->ModelePersonne->modifierInfoPersonne($donnees);
-                $this->seDeConnecter();
+                redirect('visiteur/seDeConnecter');
             }
             else
             {

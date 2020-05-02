@@ -1,27 +1,35 @@
+<!-- 
+	Données entrantes :
 
+	- $product
+
+	Données sortantes
+
+	
+-->
 	<div class="container"><br /><!-- div  1 -->
 		<div class="col-lg-6 col-md-6"><!-- div  2 -->
-			<div class="table-responsive"><!-- div  3 -->
-				<h4>Nos Produits</h4>	
-				<?php foreach ($product as $row)
-				{
-					echo '
-						<div class="col-md-4" style="padding:16px;
-							background-color:#f1f1f1; border:1px solid #ccc;
-							margin-bottom:16px; height:400px" align="center">
-							<img src="'.base_url().'assets/images/'.$row->Img_Produit.'"
-							class="img-thumbnail" /><br />
-							<h4>'.$row->LibelleCourt.'</h4>
-							<h3 class="text-danger">'.$row->Prix.'</h3>
-							<input type="text" name="quantity" class="quantity" id="'.$row->NoProduit.'">
-							<button type="button" name="add_cart" class="btn 
-							btn-success add_cart" data-productname="'.$row->LibelleCourt.'" 
-							data-price="'.$row->Prix.'" data-productid="'.$row->NoProduit.'" />Ajouter</button>
-						</div>';
-				}
-				
-				?>
-			</div><!-- /div  3 -->
+				<div class="table-responsive"><!-- div  3 -->
+					<h4>Nos Produits</h4>	
+					<?php foreach ($product as $row)
+					{
+						echo '
+							<div class="col-md-4" style="padding:16px;
+								background-color:#f1f1f1; border:1px solid #ccc;
+								margin-bottom:16px; height:400px" align="center">
+								<img src="'.base_url().'assets/images/'.$row->Img_Produit.'"
+								class="img-thumbnail" /><br />
+								<h4>'.$row->LibelleCourt.'</h4>
+								<h3 class="text-danger">'.$row->Prix.'</h3>
+								<input type="text" name="quantity" class="quantity" id="'.$row->NoProduit.'">
+								<button type="button" name="add_cart" class="btn 
+								btn-success add_cart" data-productname="'.$row->LibelleCourt.'" 
+								data-price="'.$row->Prix.'" data-productid="'.$row->NoProduit.'" />Ajouter</button>
+							</div>';
+					}
+					
+					?>
+				</div><!-- /div  3 -->
 		</div><!-- /div  2 -->
 		<div class="col-lg-6 col-md-6"><!-- div  2 bis -->
 			<div id="cart_cetails"><!-- div  3 bis -->

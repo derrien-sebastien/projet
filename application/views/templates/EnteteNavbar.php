@@ -55,7 +55,7 @@
                     <a href="<?php echo site_url('membre/InfosCompte') ?>">Gérer votre compte</a>
                   </li>
                   <li>
-                    <a href="<?php echo site_url('visiteur/ModificationMdp') ?>">Modifier votre mot de passe</a>
+                    <a href="<?php echo site_url('membre/ModificationMdp') ?>">Modifier votre mot de passe</a>
                   </li>
                 </ul>
               </li>
