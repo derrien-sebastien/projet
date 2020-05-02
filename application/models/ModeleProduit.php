@@ -29,21 +29,28 @@ class ModeleProduit extends CI_Model
      return $result->result();
   }
 
-   public function getLesProduitsDuTableau($desIdProduit) 
+   public function getRows($id='') 
    {
-      $nbProduits = count($desIdProduit);
-      $ip = 0;
-      if ($nbProduits != 0) 
+      $this->db->select('*');
+      $this->db->from('ge_produit');
+      $this->db->join('ge_evenement','ge_evenement.NoEvenement=ge_produit.NoEvenement AND ge_evenement.Annee=ge_produit.Annee');
+      $this->db->join('ge_ev_marchand','ge_ev_marchand.NoEvenement=ge_produit.NoEvenement AND ge_ev_marchand.Annee=ge_produit.Annee');
+      $this->db->where('ge_evenement.EnCours', 1);
+      if($id)
       {
-         foreach ($desIdProduit as $unIdProduit) 
-         {
-            $req = "select * from ge_produit where NoProduit ='$unIdProduit'";
-            $query = $this->db->get_where('ge_produit', array('NoProduit' => $unIdProduit));
-            $result = $query->result();
-            $lesProduits[$ip] = $result[0];
-            $ip++;
-         }
+         $this->db->where('NoProduit', $id);
+         $query=$this->db->get();
+         $result=$query->row_array();
       }
+<<<<<<< HEAD
+      else
+      {
+         $this->db->order_by('LibelleCourt','asc');
+         $query=$this->db->get();
+         $result=$query->result_array();
+      }
+      return !empty($result)?$result:false;
+=======
       return !empty($result)?$result:false;
    }
 
@@ -57,6 +64,7 @@ class ModeleProduit extends CI_Model
       $this->db->where('ge_evenement.EnCours', 1);      
       $maCommande = $this->db->get();
       return $maCommande->result(); 
+>>>>>>> e899c1b8d568d0fc9f63fcdf3341a27d98162461
    } 
 
   /************************************************************************************
@@ -151,13 +159,6 @@ class ModeleProduit extends CI_Model
      $maListe = $this->db->get();
      return $maListe->result();    
   } 
-
-  /* SELECT DISTINCT * 
-  FROM `ge_produit` 
-  join `ge_evenement` 
-  where `ge_produit`.`NoEvenement`=`ge_evenement`.`NoEvenement` And`ge_produit`.`Annee`=`ge_evenement`.`Annee`
-  AND `ge_produit`.`stock`>0 
-  order by NumeroOrdreApparition */
 
   /* public function getProduitEnStock()
   {

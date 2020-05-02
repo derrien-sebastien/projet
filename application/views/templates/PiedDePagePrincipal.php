@@ -1,4 +1,4 @@
-		<footer id="footer">
+<footer id="footer">
 			<div>
 				<div>
 					<a href="#">Contacter</a> le responsable 

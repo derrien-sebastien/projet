@@ -1,5 +1,23 @@
-<?php echo form_open('path/to/controller/update/method'); ?>
-
+<div class="container"><br /><!-- div  1 -->
+		<div class="col-lg-6 col-md-6"><!-- div  2 -->
+			<div class="table-responsive"><!-- div  3 -->
+				<h4>Nos Produits</h4>	
+                <?php foreach ($product as $row)
+				{
+                    echo '<h4>'.$row->LibelleCourt.'</h4>';
+                    echo '<h3>'.$row->Prix.'</h3>';
+                    echo '<button type="button" name="ajout" onClick= id='.$row->NoProduit.'> Ajouter</button>';
+						
+                }
+                ?>
+            </div><!-- /div  3 -->
+		</div><!-- /div  2 -->
+    </div><!-- /div  1 -->
+<?php echo form_open('visiteur/majPanier');?>
+<!--$variable=resultat function js
+$hidden=array('button'=>$variable)
+echo form_hidden($hidden)
+-->
 <table cellpadding="6" cellspacing="1" style="width:100%" border="0">
 
 <tr>
@@ -50,3 +68,5 @@
 </table>
 
 <p><?php echo form_submit('', 'Update your Cart'); ?></p>
+</body>
+</html>

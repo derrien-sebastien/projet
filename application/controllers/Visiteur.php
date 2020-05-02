@@ -26,7 +26,16 @@ class Visiteur extends CI_Controller
 		{
 			$annee=date('Y')+1;
 			define('AnneeEnCour',$annee); 
-		}
+      }
+      if (!isset($_SESSION))
+      {
+         $dataSession=array(
+            'email'=>'',
+            'profil'=>'',
+            'actif'=>''
+         );                    
+         $this->session->set_userdata($dataSession);
+      }
    }
 
 
@@ -124,7 +133,7 @@ class Visiteur extends CI_Controller
          
          if(isset($personne)) 
          {
-            $this->session->session_start;                                   
+            //$this->session->session_start;                                   
             $dataSession=array(
                'email'=>$personne->Email,
                'profil'=>$personne->profil,
@@ -259,102 +268,53 @@ class Visiteur extends CI_Controller
    {
       $this->load->view('templates/EntetePrincipal');
       $this->load->view('templates/EnteteNavbar');
-      $data['product']=$this->mProd->get_all_produit();
+      $data['product']=$this->mProd->getProduitsActif();
       $this->load->view('visiteur/vueCatalogueProduits copy',$data); 
    }
 
-    public function add()
+   public function index()
    {
+      $data['cartItems']=$this->cart->contents();
+      $this->load->view('templates/EntetePrincipal');
+      $this->load->view('templates/EnteteNavbar');
+      $this->load->view('visiteur/panier/index',$data);
+   }
+   public function add()
+   {
+      $product=$this->ModeleProduit->getRows($proID);
       $data = array(
-         "id"     => $_GET["product_id"],
-         "name"   => $_POST["product_name"],
-         "qty"    => $_POST["quantity"],
-         "price"  => $_POST["product_price"]);
-         $this->cart->insert($data);
-   }
-    /* public function catalogueProduits()
-   {
-      if (!isset($_POST['valider']))
-		{
-         $this->load->view('templates/EntetePrincipal');
-         $this->load->view('templates/EnteteNavbar');
-         $donnees['produits']=$this->ModeleProduit->get_all_produit();
-         $this->load->view('visiteur/vueCatalogueProduits copy',$donnees);
-      }
-      else 
-      {
-         $LesProduits=$this->ModeleProduit->GetProduit();
-			//var_dump($LesProduits);
-			//die();
-			
-			$i=0;
-			
-			$DonneesPanier= array();
-			foreach ($LesProduits as $unProduit) 
-			{
-						$DonneesPanier[] = array(
-							'id'        =>$UnProduit->Annee.'/'.$UnProduit->NoEvenement.'/'.$UnProduit->NoProduit,
-							'qty'       =>$this->input->post($i),
-							'price'     =>$UnProduit->Prix,
-                     'name'      =>$UnProduit->LibelleCourt                
-						);
-			}
-			$this->card->insert($DonneesPanier);
-         $this->load->view('visiteur/vuePanier',$DonneesPanier);
-         $i++;
-         $this->cart->update($data);
-      }
-   } */ 
-
-  /*  public function ajouterProduitAuPanier($NoEvenement,$Annee)// ajout produit au panier
-   {
-      $produit=$this->ModeleProduit->getProduits($NoEvenement,$Annee);//Récupérer un produit spécifique par ID
-      $i=1;
-      foreach
-      ($Produit as $UnProduit) :
-      $data=array(
-      'id'=>$UnProduit->Annee.'/'.$UnProduit->NoEvenement.'/'.$UnProduit->NoProduit,
-      'qty'=>$this->input->post($i),
-      'price'=>$UnProduit->Prix,
-      'name'=>$UnProduit->LibelleCourt
-      );
+            'id'    => $product['NoProduit'],
+            'qty'   => 1,
+            'price' => $product['Prix'],
+            'name'  => $product['LibelleCourt'],
+            'image' => $product['Img_Produit']
+         );
       $this->cart->insert($data);
-   } */
-   public function ajouterProduitAuPanier($NoEvenement,$Annee)// ajout produit au panier
-   {
-      {
-         if (!isset($_POST['valider']))
-         {
-            $this->load->view('templates/EntetePrincipal');
-            $this->load->view('templates/EnteteNavbar');
-            $donnees['produits']=$this->mProd->get_all_produit();
-            $this->load->view('visiteur/vueCatalogueProduits copy',$donnees);
-         }
-         else 
-         {
-            $LesProduits=$this->mProd->GetProduits();
-            //var_dump($LesProduits);
-            //die();
-            
-            $i=0;
-            
-            $DonneesPanier= array();
-            foreach ($LesProduits as $unProduit) 
-            {
-                     $DonneesPanier[] = array(
-                        'id'        =>$UnProduit->Annee.'/'.$UnProduit->NoEvenement.'/'.$UnProduit->NoProduit,
-                        'qty'       =>$this->input->post($i),
-                        'price'     =>$UnProduit->Prix,
-                        'name'      =>$UnProduit->LibelleCourt,              
-                     );
-            }
-            $this->card->insert($DonneesPanier);
-            $this->load->view('visiteur/vuePanier',$DonneesPanier);
-            $i++;
-            $this->cart->update($data);
-         }
-      }
+      redirect('visiteur/panier');
    }
+
+   public function updateItemQty()
+   {
+       $update=0;
+       $rowid=$this->input->get('rowid');
+       $qty=$this->input->get('qty');
+       if(!empty($rowid) && !empty($qty))
+       {
+           $data=array(
+               'rowid'     =>  $rowid,
+               'qty'       =>$qty
+           );
+           $update=$this->cart->update($data);
+       }
+       echo $update?'ok':'err';
+   }
+   
+   function removeItem($rowid)
+   {
+       $remove=$this->cart->remove($rowid);
+       redirect('cart/');
+   }
+
 
    public function viderPanier()
    {
