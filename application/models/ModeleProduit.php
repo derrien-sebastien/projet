@@ -193,7 +193,7 @@ class ModeleProduit extends CI_Model
 
 
   
-  public function getProduitsActif()
+ /* public function getProduitsActif()
   {
      $this->db->select('*');
      $this->db->from('ge_produit');
@@ -201,5 +201,5 @@ class ModeleProduit extends CI_Model
      $this->db->where('ge_evenement.EnCours', 1);      
      $maCommande = $this->db->get();
      return $maCommande->result(); 
-  } 
+  } */
 } // CLASSE

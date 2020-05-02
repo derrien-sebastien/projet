@@ -1313,4 +1313,56 @@ donnée de sortie:
 		}
 	}
 
+	public function changerLEtatDunEvenement()
+	{
+		if(!isset($_POST['evenement']))
+		{
+						
+			$donneesInjectees['lesEvenements']= $this->ModeleEvenement->getEvenementGeneral(AnneeEnCour);
+			$donneesInjectees['Provenance']='activer';
+			$this->load->view('templates/EntetePrincipal');
+			$this->load->view('templates/EnteteNavbar');
+			$this->load->view('administrateur/vueSelectionEvenements',$donneesInjectees);		
+			$this->load->view('templates/PiedDePagePrincipal');
+			
+		}
+		else
+		{
+			if(!isset($_POST['submit']))
+			{
+				$AncienEvenement=explode("/",$_POST['evenement']);
+   	 			$Annee=$AncienEvenement['0'];
+				$NoEvenement=$AncienEvenement['1'];
+				$donneesInjectees['evenement']=$this->ModeleEvenement->retournerUnEvenement($NoEvenement,$Annee);
+				$this->load->view('templates/EntetePrincipal');
+				$this->load->view('templates/EnteteNavbar');
+				$this->load->view('administrateur/vueActivation',$donneesInjectees);
+				$this->load->view('templates/PiedDePagePrincipal');
+			}
+			else
+			{	
+				$AncienEvenement=explode("/",$_POST['evenement']);
+   	 			$Annee=$AncienEvenement['0'];
+				$NoEvenement=$AncienEvenement['1'];
+				$donnees=array(
+					'Annee'=>$Annee,
+					'NoEvenement'=>$NoEvenement
+				);
+				var_dump($_POST);		
+				if(!isset($_POST['activer']))
+				{
+					$donnees['EnCours']=0;
+																																	
+					//update evenement EnCour0
+				}
+				else
+				{
+					$donnees['EnCours']=1;
+				}
+				$this->ModeleEvenement->modifierEvenement($donnees);
+				$this->accueil();
+			}
+		}
+	}
+/*ajouter membre, ajouter admin, ajouter eleve*/
 }//fin  de class
