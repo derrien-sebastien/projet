@@ -1360,9 +1360,43 @@ donnée de sortie:
 					$donnees['EnCours']=1;
 				}
 				$this->ModeleEvenement->modifierEvenement($donnees);
-				$this->accueil();
+				$this->accueil();//ou vue affichage membre
 			}
 		}
 	}
-/*ajouter membre, ajouter admin, ajouter eleve*/
+
+	public function ajouterUnMembre($admin=null)
+	{
+		//validation
+		//if !form validation
+		$this->form_validation->set_rules('ajoutProduit','ajout de produit');		
+		if ($this->form_validation->run() === FALSE)//si le formulaire n'est pas validé
+	 	{
+			if(!isset($admin))
+			{
+				$donneesInjectees=array();
+			}
+			else
+			{
+				$donneesInjectees['profil']='admin';
+			}
+			$this->load->view('administrateur/vueFormulaireMembre',$donnees);		
+		}
+		else
+		{
+
+		//creation $donnees
+		//if email non present
+		//if admin generation motDePasse envoye par mail
+		//insert donnees
+		//retour accueil ou vue affichage membre
+		}
+		
+		
+		
+
+	}
+/*
+ ajouter eleve , retirer admin, modifier membre  (visiteur/activation)
+*/
 }//fin  de class
