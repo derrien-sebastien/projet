@@ -126,7 +126,7 @@ echo '<table>';
     echo '</tr>';
     echo '</br>';
 echo '</table>';
-echo 'une validation sera envoyer par mail '
+echo 'une validation sera envoyer par mail ';
 
 
 
