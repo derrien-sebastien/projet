@@ -272,7 +272,7 @@ class Visiteur extends CI_Controller
       $this->load->view('visiteur/vueCatalogueProduits copy',$data); 
    }
 
-   public function index()
+   public function index2()
    {
       $data['cartItems']=$this->cart->contents();
       $this->load->view('templates/EntetePrincipal');

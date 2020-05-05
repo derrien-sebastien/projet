@@ -14,6 +14,12 @@ else
 $email=array(
     'name'=>'email'
 );
+$nom=array(
+    'name'=>'nom'
+);
+$prenom=array(
+    'name'=>'prenom'
+);
 $adresse=array(
     'name'=>'adresse'
 );
@@ -35,7 +41,7 @@ $telPortable=array(
     'value'=>'06.00.00.00.00.'
 );
 $telFixe=array(
-    'name'=>'telPortable',
+    'name'=>'telFixe',
     'type'=>'tel',
     'pattern'=>'[0-9]{2}.[0-9]{2}.[0-9]{2}.[0-9]{2}.[0-9]{2}',
     'value'=>'02.00.00.00.00.'

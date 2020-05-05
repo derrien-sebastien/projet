@@ -42,7 +42,6 @@ class ModeleProduit extends CI_Model
          $query=$this->db->get();
          $result=$query->row_array();
       }
-<<<<<<< HEAD
       else
       {
          $this->db->order_by('LibelleCourt','asc');
@@ -50,7 +49,6 @@ class ModeleProduit extends CI_Model
          $result=$query->result_array();
       }
       return !empty($result)?$result:false;
-=======
       return !empty($result)?$result:false;
    }
 
@@ -64,7 +62,6 @@ class ModeleProduit extends CI_Model
       $this->db->where('ge_evenement.EnCours', 1);      
       $maCommande = $this->db->get();
       return $maCommande->result(); 
->>>>>>> e899c1b8d568d0fc9f63fcdf3341a27d98162461
    } 
 
   /************************************************************************************
