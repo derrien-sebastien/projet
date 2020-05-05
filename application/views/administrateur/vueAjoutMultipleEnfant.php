@@ -54,6 +54,9 @@ $dateDebut=array(
     'name'=>'dateDebut',
     'type'=>'date'
 );
+$infoParent=array(
+    'name'=>'infoParent'
+);
 $envoyer=array(
     'name'=>'envoyer',
     'value'=>'envoyer'
@@ -128,6 +131,14 @@ echo '<div id="gauche">';
                 echo '</td>';
                 echo '<td>';
                     echo form_input($email4);
+                echo '</td>';
+            echo'</tr>';
+            echo'<tr>';
+                echo '<td>';
+                    echo form_label('voulez vous renseigner les info sur les responsable legaux','infoParent');
+                echo '</td>';
+                echo '<td>';
+                    echo form_checkbox($infoParent);
                 echo '</td>';
             echo'</tr>';
         echo '</table>';
