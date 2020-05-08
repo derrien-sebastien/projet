@@ -52,7 +52,9 @@ class Administrateur extends CI_Controller
 			define('AnneeEnCour',$annee); //AnneeEnCour=année actuel+1	
 		}
 
-
+		//creation des constante mail de l'administration 
+		define('AddresseReferente','damienboucard@yahoo.fr');
+		define('NomReferent',"Assosiation des parents d'élèves");
 		//verification de la presence evenement 0 AnneeEnCour
 		$evenement0=array(
 			'NoEvenement'=>0,
@@ -1369,7 +1371,15 @@ donnée de sortie:
 	{
 		//validation
 		//if !form validation
-		$this->form_validation->set_rules('ajoutProduit','ajout de produit');		
+		$this->form_validation->set_rules('profil','profil','require');
+		$this->form_validation->set_rules('email','email','require');
+		$this->form_validation->set_rules('nom','nom');	
+		$this->form_validation->set_rules('prenom','prenom');
+		$this->form_validation->set_rules('adresse','adresse');
+		$this->form_validation->set_rules('ville','ville');
+		$this->form_validation->set_rules('codePostal','codePostal');
+		$this->form_validation->set_rules('telPortable','telPortable');
+		$this->form_validation->set_rules('telFixe','telFixe');				
 		if ($this->form_validation->run() === FALSE)//si le formulaire n'est pas validé
 	 	{
 			if(!isset($admin))
@@ -1378,25 +1388,295 @@ donnée de sortie:
 			}
 			else
 			{
-				$donneesInjectees['profil']='admin';
+				$donneesInjectees['admin']='admin';
 			}
 			$this->load->view('administrateur/vueFormulaireMembre',$donnees);		
 		}
 		else
-		{
-
-		//creation $donnees
-		//if email non present
-		//if admin generation motDePasse envoye par mail
-		//insert donnees
-		//retour accueil ou vue affichage membre
+		{	
+			$noPersonnemax=$this->ModelePersonne->maxPersonne();
+			$donnees=array(
+				'NoPersonne'=>$noPersonnemax+1,
+				'Profil'=>$_POST['profil'],
+				'Email'=>$_POST['email'],
+				'Nom'=>$_POST['nom'],
+				'Prenom'=>$_POST['prenom'],
+				'Adresse'=>$_POST['adresse'],
+				'Ville'=>$_POST['ville'],
+				'CodePostal'=>$_POST['codePostal'],
+				'TelPortable'=>$_POST['telPortable'],
+				'TelFixe'=>$_POST['telFixe']
+			);
+			if(!$this->ModelePersonne->rechercherEmailPresent($_POST['email']))
+			{
+				if($_POST['profil']=='admin')
+				{
+					$caracteres = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+					$longueurMax = strlen($caracteres);
+					$chaineAleatoire = '';
+					for ($i = 0; $i < 10; $i++)
+					{
+						$chaineAleatoire .= $caracteres[rand(0, $longueurMax - 1)];
+					}
+					$donnees['MotDePasse']=$chaineAleatoire;
+					if($this->ModelePersonne->insererInformationPersonne($donnees))
+					{
+						$this->email->from(AddresseReferente,NomReferent); 
+						$this->email->to($_POST['email']);				
+						$this->email->subject( 'mot de passe' ); 
+						$this->email->message( "bienvenue sur notre site vous avez été ajouter en tant qu'administrateur sur notre site </br> votre mot de passe est : ".$message ."</br> merci de le changer rapidement" );
+						$this->email->send();
+					}
+					else
+					{
+						$infoError=array(
+							'heading'=>'Les infomations ne sont pas inserer dans la table',
+							'message'=>"suite a un probleme nous n'avons pu créer votre nouvel administrateur"
+						);
+						$this->load->view('administrateur/error_db');
+					}
+				
+				}
+				else
+				{
+					if(!$this->ModelePersonne->insererInformationPersonne($donnees))
+					{
+						$infoError=array(
+							'heading'=>'Les infomations ne sont pas inserer dans la table',
+							'message'=>"suite a un probleme nous n'avons pu créer votre nouveau membre"
+						);
+						$this->load->view('administrateur/error_db');
+					}
+				}
+			}
+			else
+			{
+				$infoError=array(
+					'heading'=>'Les infomations ne sont pas inserer dans la table',
+					'message'=>"l'email fourni est deja dans la base de données </br> merci de contacter la personne ou le cas echeant l'adminitration du site "
+				);
+				$this->load->view('administrateur/error_db');
+			}
+			$this->accueil();
 		}
-		
-		
-		
+	}
+
+	public function ajoutMultipleEnfant()
+	{
+		$this->form_validation->set_rules('nom','nom','required');
+		$this->form_validation->set_rules('prenom','prenom','required');
+		$this->form_validation->set_rules('dateNaissance','date de naissance');
+		$this->form_validation->set_rules('classe','classe');
+		$this->form_validation->set_rules('email[]','emails');				
+		if ($this->form_validation->run() === FALSE)//si le formulaire n'est pas validé
+	 	{	
+			
+			$donneesVue=array(
+				'lesClasses'=>$this->ModeleClasse->retournerClasse(),
+				'lesEnfants'=>$this->ModeleEnfant->getEnfants()
+			);
+			
+			$this->load->view('templates/EntetePrincipal');
+			$this->load->view('templates/EnteteNavbar');
+			$this->load->view('administrateur/vueAjoutMultipleEnfant',$donneesVue);
+			$this->load->view('templates/PiedDePagePrincipal');
+		}
+		else
+		{
+			if(!$this->ModeleEnfant->presenceEnfant($_POST['nom'],$_POST['prenom']))
+			{
+				$numeroEnfant=$this->ModeleEnfant->maxEnfant()+1;
+				$donneesEnfant=array(
+					'NoEnfant'=>$numeroEnfant,
+					'Nom'=>$_POST['nom'],
+					'Prenom'=>$_POST['prenom'],
+					'DateNaissance'=>$_POST['dateNaissance']
+				);
+				$this->ModeleEnfant->insetEnfant($donneesEnfant);
+				if($_POST['classe']!='0')
+				{
+					$donneesAppartenir=array(
+						'NoEnfant'=>$numeroEnfant,
+						'NoClasse'=>$_POST['classe'],	
+					);
+					$this->ModeleEnfant->insetAppartenir($donneesAppartenir);
+
+				}
+			}
+			else
+			{
+				//voir confirmation homonime
+				$donneesEnfant['NoEnfant']=$this->ModeleEnfant->getEnfant($_POST['nom'],$_POST['prenom']);
+
+			}
+			if (isset($_POST['emails']))
+			{
+				$i=0;
+				foreach ($_POST['emails'] as $unEmail)
+				{
+					if(!$this->ModelePersonne->presenceMdp($unEmail))
+					{
+						$noPersonne=$this->ModelePersonne->maxPersonne()+1;
+						$donneesPersonne=array(
+							'NoPersonne'=>$noPersonne,
+							'Email'=>$unEmail
+						);						
+						
+						$this->ModelePersonne->insererInformationPersonne($donneesPersonne);
+						}
+					else
+					{
+						$Personne=$this->ModelePersonne->rechercheInfoPersonne($unEmail);
+						$noPersonne=$presonne->NoPersonne;
+					}
+					$memoire[$i]=$noPersonne;
+					$i++;
+					$donneesPersonneParent=array(
+						'NoPersonne'=>$noPersonne,
+						'NoEnfant'=>$donneesEnfant['NoEnfant'],
+						'EtreCorrespondant'=>1
+					);
+					$this->ModelePersonne->insererInformationPersonneParent($donneesPersonneParent);
+					
+				}
+				if(isset($_POST['infosParents']))
+				{
+					//$this->load->view(modifierInfoPersonne)
+				}
+			}
+			unset($_POST);
+			$this->ajoutMultipleEnfant;
+				
+		}
+	}
+	public function modificationEnfant()
+	{
+
 
 	}
+	public function creerParent()
+	{
+		
+		//if (!submit
+			//donnees parent 
+			//affichage vue creerParent
+		//else
+			//foreach
+				//form validation 
+					//mail unique
+						//donne parent !numero max
+						//insert personne 
+						//insert parent
+					//else 
+						//si donnee diferente 
+						//update personne
+						//
+			
+
+	}
+
+	/* public function ajoutEleve()
+	{
+		var_dump($_POST);
+			
+			if(!isset($_POST['selection']))
+			{
+				$this->load->view('administrateur/vueSelectionFormulaireEnfant');
+			}
+			else
+			{
+				$lesClasses=$this->ModeleClasse->retournerClasse();
+				$donneesInjectees=array(
+					'selection'=>$_POST['selection'],
+					'lesClasses'=>$lesClasses
+				);
+				$this->load->view('administrateur/vueFormulaireEnfant',$donneesInjectees);
+			}
+		
+		
+			
+
+
+	}
+	public function ajoutEleve2()
+	{	
+		if(isset($_POST['selection']))
+		{
+		if($_POST['selection']=='plusieur')
+		{
+			$nonValide=0;
+			for ($i=1;$i<=25;$i++):
+			$this->form_validation->set_rules('nom['.$i.']','nom','required');
+			$this->form_validation->set_rules('prenom['.$i.']','prenom','required');
+			$this->form_validation->set_rules('dateNaissance['.$i.']','date de naissance','required');
+			$this->form_validation->set_rules('classe['.$i.']','classe');				
+			if ($this->form_validation->run() === FALSE)//si le formulaire n'est pas validé
+	 		{
+				var_dump($_POST);
+				$nonValide++;
+				$ng[]=$i;
+			}
+			else
+			{
+				//afficher les eleve ajouter
+				//creation données !!!noEnfant
+				//envoye base donnees en foreach
+			}
+			endfor;
+			if($nonValide=25)
+			{
+				$afficherFormulair=1
+			}
+		}
+		else
+		{
+			$this->form_validation->set_rules('nom[0]','nom','required');
+			$this->form_validation->set_rules('prenom','prenom');
+			$this->form_validation->set_rules('dateNaissance','date de naissance');
+			$this->form_validation->set_rules('classe','classe');				
+			if ($this->form_validation->run() === FALSE)//si le formulaire n'est pas validé
+	 		{
+				$afficherFormulair=1
+			}
+			else
+			{
+				
+				//creation données !!!noEnfant
+				//envoye base donnees en foreach
+			}
+		}
+		if(isset($afficherFormulair))
+		{ 
+			$i=0;
+			foreach($ng as $numeroLigne)
+			{
+				$donnees=array(
+
+				'nom['.$i.']'=>$_POST['nom['.$numeroLigne.']'],
+				'prenom['.$i.']'=>$_POST['prenom['.$numeroLigne.']']
+				);
+				$i++
+			}
+			$lesClasses=$this->ModeleClasse->retournerClasse();
+				$donneesInjectees=array(
+					'selection'=>$_POST['selection'],
+					'lesClasses'=>$lesClasses
+				);
+				$this->load->view('administrateur/vueFormulaireEnfant',$donneesInjectees);
+		}
+	}
+	else
+	{
+		$this->load->view('administrateur/vueSelectionFormulaireEnfant');
+	}
+
+	
+			
+
+
+	} */
 /*
- ajouter eleve , retirer admin, modifier membre  (visiteur/activation)
+ ajouter eleve , retirer admin, modifier membre  (visiteur/activation),
+ ajouter parent , migration classe
 */
 }//fin  de class

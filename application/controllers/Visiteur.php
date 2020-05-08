@@ -259,8 +259,28 @@ class Visiteur extends CI_Controller
    /**********************************************************************
    **                               PANIER                             ***
    **********************************************************************/
+<<<<<<< HEAD
   
    public function ajoutPanier($pNoEven = NULL, $pAnne = NULL, $pNoProd = NULL)
+=======
+   
+   public function catalogueProduits()
+   {
+      $this->load->view('templates/EntetePrincipal');
+      $this->load->view('templates/EnteteNavbar');
+      $data['product']=$this->mProd->getProduitsActif();
+      $this->load->view('visiteur/vueCatalogueProduits copy',$data); 
+   }
+
+   public function index2()
+   {
+      $data['cartItems']=$this->cart->contents();
+      $this->load->view('templates/EntetePrincipal');
+      $this->load->view('templates/EnteteNavbar');
+      $this->load->view('visiteur/panier/index',$data);
+   }
+   public function add()
+>>>>>>> ef1122d5b5b1e6b9c796d464aec8f555b5ee7a47
    {
        
       $DonneesProduit=$this->ModeleProduit->getRows($pNoEven, $pAnne, $pNoProd);

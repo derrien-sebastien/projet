@@ -34,7 +34,14 @@ class ModelePersonne extends CI_Model
       $maListe = $this->db->get(); 
       return $maListe->result(); 
    }
-
+   public function getUnePersonne($noPersonne)
+   {
+      $this->db->select('*');
+      $this->db->from('ge_personne'); 
+      $this->db->where('NoPersonne', $noPersonne);      
+      $Liste = $this->db->get();
+      return $Liste->row(); 
+   }
 
    /**********************************************************************
    **                    Requete pour 1 Utilisateur                     **
@@ -171,6 +178,16 @@ class ModelePersonne extends CI_Model
       $requete = $this->db->get_where('ge_personne',$pPersonne);
       return $requete->row();
    } 
+
+   public function maxPersonne()
+  {
+     $this->db->select_max('NoPersonne');
+     $this->db->from('ge_personne');
+     $query=$this->db->get();
+     $ligne = $query->row();	    
+     $noMax= $ligne->NoPersonne;	
+     return $noMax;
+  }
 
 
    /*********************************************************************************************************************************************/

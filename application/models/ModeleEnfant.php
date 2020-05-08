@@ -56,7 +56,25 @@ class ModeleEnfant extends CI_Model
 		$this->db->where('nom', $nom);
 		$this->db->where('prenom', $prenom);
 		$maListe = $this->db->get(); 
-      	return $maListe->result();
+      	return $maListe->row();
+	}
+	public function presenceEnfant($nom,$prenom)
+	{
+		$this->db->select('*');
+		$this->db->from('ge_enfant');
+		$this->db->where('nom', $nom);
+		$this->db->where('prenom', $prenom);
+		$maListe = $this->db->get(); 
+		if ($maListe->num_rows()>0)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+		  
+		  
 	}
 	public function getEnfants()
 	{
@@ -109,6 +127,15 @@ class ModeleEnfant extends CI_Model
 		$query=$this->db->get();
 		return $query->result();
 	}
+	public function maxEnfant()
+	{
+	   $this->db->select_max('NoEnfant');
+	   $this->db->from('ge_enfant');
+	   $query=$this->db->get();
+	   $ligne = $query->row();	    
+	   $noMax= $ligne->NoEnfant;	
+	   return $noMax;
+	}
 /*public function getEnfantClasse($classe) a modifier where numero enfant $query row
 	{
 		$this->db->select('*');
@@ -145,6 +172,14 @@ class ModeleEnfant extends CI_Model
 	public function insetScolariser($donnees)
 	{
 		return $this->db->insert('ge_scolariser', $donnees);
+	}
+	public function insetEnfant($donnees)
+	{
+		return $this->db->insert('ge_enfant', $donnees);
+	}
+	public function insetAppartenir($donnees)
+	{
+		return $this->db->insert('ge_appartenir', $donnees);
 	}
 
     
