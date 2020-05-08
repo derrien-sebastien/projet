@@ -1,6 +1,6 @@
             <div class="container"><!--  div 1   -->
                 <h2 align="center">Les Produits</h2>
-                <a href="<?php echo base_url('index.php/cart'); ?>" class="cart-link" title="View Cart">
+                <a href="<?php echo site_url('visiteur/panier'); ?>" class="cart-link" title="View Cart">
                     <i class="glyphicon glyphicon-shopping-cart"></i>
                     <span><?php echo $this->cart->total_items(); ?></span>
                 </a>
@@ -19,7 +19,7 @@
                                                 <p><?php echo $row['LibelleHTML']; ?></p>
                                             </div><!--  /div   6-->
                                             <div class="atc"><!--  div  7 -->
-                                                <a href="<?php echo base_url('index.php/Products/addToCart/'.$row['NoProduit']); ?>" class="btn ">Ajouter au panier</a>
+                                                <a href="<?php echo site_url('visiteur/addToCart/'.$row['NoProduit']); ?>" class="btn ">Ajouter au panier</a>
                                             </div><!--  /div  7 -->
                                         </div><!--  /div 5   -->
                                     </div><!--  /div 4  -->

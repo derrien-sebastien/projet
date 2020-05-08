@@ -4,20 +4,29 @@
 
 <script type="text/javascript"> function GereChkbox() 
 { 
-    if(document.getElementById($connu).checked) 
+    if(document.getElementById($esp).checked) 
     {   
-        document.getElementById($nonConnu).disabled = "disabled"; 
-        document.getElementById($connu).disabled = ""; 
+        document.getElementById($chk).disabled = "disabled"; 
+        document.getElementById($cb).disabled = "disabled"; 
+        document.getElementById($esp).disabled = ""; 
     } 
-    else if(document.getElementById($nonConnu).checked) 
+    else if(document.getElementById($chk).checked) 
     { 
-        document.getElementById($connu).disabled = "disabled"; 
-        document.getElementById($nonConnu).disabled = ""; 
+        document.getElementById($esp).disabled = "disabled"; 
+        document.getElementById($cb).disabled = "disabled"; 
+        document.getElementById($chk).disabled = ""; 
+    } 
+    else if(document.getElementById($cb).checked) 
+    { 
+        document.getElementById($esp).disabled = "disabled"; 
+        document.getElementById($chk).disabled = "disabled"; 
+        document.getElementById($cb).disabled = ""; 
     } 
     else 
     { 
-        document.getElementById($connu).disabled = ""; 
-        document.getElementById($nonConnu).disabled = ""; 
+        document.getElementById($esp).disabled = ""; 
+        document.getElementById($chk).disabled = "";
+        document.getElementById($cb).disabled = ""; 
     } 
 } </script>
 <?php 
@@ -36,10 +45,12 @@ echo "<table align='center'>";
             echo "Comment souhaitez-vous payer ?";
         echo "</td>";
         echo "<td>";
-            echo form_checkbox('connu','1',FALSE,$js);
-            echo "oui";
-            echo form_checkbox('nonConnu','2',FALSE,$js);
-            echo "non";
+            echo form_checkbox('esp','1',FALSE,$js);
+            echo "Espèces";
+            echo form_checkbox('chk','2',FALSE,$js);
+            echo "Chèque";
+            echo form_checkbox('cb','3',FALSE,$js);
+            echo "Par carte bancaire";
         echo "</td>";
     echo "</tr>";
     echo "<tr>";

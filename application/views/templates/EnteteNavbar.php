@@ -18,9 +18,7 @@
             <li>
               <a href="<?php echo site_url('visiteur/catalogueEvenement') ?>">Nos Evenements</a>
             </li>
-            <li>
-                <a href="<?php echo site_url('visiteur/catalogueProduits') ?>">Nos Produits disponibles</a>
-            </li>
+          
             <?php if ($this->session->profil=='membre') : ?>
               
                 
@@ -123,3 +121,29 @@
     </nav>
     </br>
     </br>
+
+
+    <<!-- /br>
+<div class="menuAdmin">
+        <ul>
+            <li>
+                <span>
+                <a href="<?php /* echo site_url('visiteur/') */?>"><img src="<?php /* echo base_url(); */ ?>assets/images/maison.svg" height="25" width="25">Accueil
+                </span>
+            </li>
+            <li>
+                <span>
+                    <a href="<?php/*  echo site_url('visiteur/catalogueProduits') */?>"><img src="<?php /* echo base_url(); */ ?>assets/images/catalogue.svg" height="25" width="25">Nos Produits</a>
+                </span>
+            </li>
+            <li>
+                <span>
+                    <img src="<?php /* echo base_url(); */ ?>assets/images/euro.svg" height="25" width="25">Vos Commandes
+                </span>
+                <ul>  
+                    <li><a href="<?php /* echo site_url('Administrateur/selectionCommande')  */?>">Recapitulatif des commandes</a></li>
+                    <li><a href="<?php /* echo site_url('Administrateur/formulaireMail')  */?>">Validation des commandes</a></li>
+                </ul>
+            </li>
+        </ul>
+</br> -->

@@ -50,9 +50,14 @@ class Cart extends CI_Controller
         }
         echo $update?'ok':'err';
     }
-    function removeItem($rowid)
-    {
-        $remove=$this->cart->remove($rowid);
-        redirect('cart/');
-    }
+    
+    function removeItem($rowid) {   
+        $data = array(
+            'rowid'   => $rowid,
+            'qty'     => 0
+        );
+
+        $this->cart->update($data);
+        redirect('Cart/');
+}
 }

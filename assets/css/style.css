@@ -98,7 +98,18 @@ p span
     widows: 65%;
 }
 
-
+input
+{
+    font-size: 2.5em;
+    width: 50px;
+    margin: 0;
+}
+  
+input#result
+{
+    width: 50px;
+    text-align: center;
+}
 
 
 

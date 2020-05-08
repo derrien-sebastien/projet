@@ -32,20 +32,21 @@ body
 #bodyLogin 
 {
   margin: 0;
+  width:100%;
   background-image: url("../images/log.jpg");
   background-repeat: no-repeat;
-  background-size: 100% 720px;
+  background-size: 100% ;
 }
 
 .containerLogin 
 {
   width: 500px;
-  height: 400px;
+  height: 500px;
   text-align: center;
   background-color:rgba(134, 134, 134, 0.7) ;  
   border-radius: 4px;
   margin:0 auto;
-  margin-top: 150px;
+  margin-top: 100px;
   margin-bottom: 100px; 
 }
 .containerLogin img
@@ -98,7 +99,14 @@ input[type='email'],input[type='password']
   -o-transition: all 0.3s;
   transition: all 0.3s;
 }
-
+#encadre
+{
+  border: 5px double rgb(12, 12, 12);
+}
+#souligne
+{
+  text-decoration: 5px underline rgba(20, 20, 20, 0.521);
+}
 .menuAdmin ul li:hover
 {
   background-color: #7a79799c;
@@ -5222,8 +5230,8 @@ a.badge:focus {
   padding: 4px;
   margin-bottom: 20px;
   line-height: 1.42857143;
-  background-color: #fff;
-  border: 1px solid #ddd;
+  background-color: rgb(134, 134, 134);
+  border: 1px solid rgb(134, 134, 134);
   border-radius: 4px;
   -webkit-transition: border 0.2s ease-in-out;
   -o-transition: border 0.2s ease-in-out;

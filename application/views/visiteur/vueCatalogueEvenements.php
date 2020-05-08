@@ -1,43 +1,53 @@
-</br>
-<div class="menuAdmin">
-        <ul>
-            <li>
-                <span>
-                <a href="<?php echo site_url('visiteur/')?>"><img src="<?php echo base_url(); ?>assets/images/maison.svg" height="25" width="25">Accueil
-                </span>
-            </li>
-            <li>
-                <span>
-                    <a href="<?php echo site_url('visiteur/catalogueProduits')?>"><img src="<?php echo base_url(); ?>assets/images/catalogue.svg" height="25" width="25">Nos Produits</a>
-                </span>
-            </li>
-            <li>
-                <span>
-                    <img src="<?php echo base_url(); ?>assets/images/euro.svg" height="25" width="25">Vos Commandes
-                </span>
-                <ul>  
-                    <li><a href="<?php echo site_url('Administrateur/selectionCommande') ?>">Recapitulatif des commandes</a></li>
-                    <li><a href="<?php /* echo site_url('Administrateur/formulaireMail')  */?>">Validation des commandes</a></li>
-                </ul>
-            </li>
-        </ul>
-</br>
 
-<div align=center>
-    <h2>Nos Evenements Marchands </h2>
-        <?php 
-            foreach ($lesEvenementsMarchands as $unEvenementMarchand):
-                echo '<h3>'.anchor('visiteur/EvenementMarchand/'.$unEvenementMarchand->NoEvenement.'/'.$unEvenementMarchand->Annee,$unEvenementMarchand->TxtHTMLEntete,array('class'=>'btn-primary')).'</h3>';
-            endforeach;
-        ?>
-</div>
-<div align=center>
-    <h2 >Nos Evenements non Marchands </h2>
-        <?php
-            foreach ($lesEvenementsNonMarchands as $unEvenementNonMarchand):
-                echo '<h3>'.anchor('visiteur/EvenementNonMarchand/'.$unEvenementNonMarchand->NoEvenement.'/'.$unEvenementNonMarchand->Annee,$unEvenementNonMarchand->TxtHTMLEntete,array('class'=>'btn-primary')).'</h3>';
-            endforeach;
-        ?>
-</div>
-<p align='center'>Afin d'afficher plus de détails sur nos évènements, cliquer sur son titre</p>
+<h1 id="encadre">Catalogue de nos évènements scolaires</h1>
 
+<div class="container">
+    <h2 id="souligne"><i class="glyphicon glyphicon-euro"></i> Nos produits en ventes </h2>
+    <div class="row">
+        <div class="col-lg-12">
+            <?php if(!empty($lesEvenementsMarchands))
+                {
+                    foreach($lesEvenementsMarchands as $unEvenementMarchand)
+                    {   
+                        $NoEvenement  = $unEvenementMarchand->NoEvenement;
+                        $Annee      = $unEvenementMarchand->Annee;
+                        $adress     = "visiteur/EvenementMarchand/$NoEvenement/$Annee";
+                        $libEven    = $unEvenementMarchand->TxtHTMLEntete ?>
+                        <div class="col-sm-4 col-lg-4 col-md-4">
+                            <div class="thumbnail">
+                                <?php echo '<img src="'.base_url().'assets/images/'.$unEvenementMarchand->ImgEntete.'"class="img-thumbnail" style="width: 250px; height: 200px;"/>'; ?>
+                                <div class="atc" align="center"><!--  div  7 -->
+                                    <?php echo '<h3><i class="glyphicon glyphicon-search:before"></i>'.anchor($adress,$libEven,array('class'=>'btn-primary')).'</h3>';?>
+                                </div>
+                            </div>
+                        </div>
+            <?php   }
+                }
+                else
+                { ?>
+                    <p>Aucune vente en cours</p>
+        <?php   } ?>      
+        </div>
+    </div>
+</div>
+<div class="container">
+    <h2 id="souligne"><i class="glyphicon glyphicon-film"></i> Nos évènements scolaires</h2>
+    <div class="row">
+        <div class="col-lg-12">
+            <?php if(!empty($lesEvenementsNonMarchands))
+            {foreach($lesEvenementsNonMarchands as $unEvenementNonMarchand)
+                { ?>
+                    <div class="col-sm-4 col-lg-4 col-md-4">
+                        <div class="thumbnail">
+                            <?php echo '<img src="'.base_url().'assets/images/'.$unEvenementNonMarchand->ImgEntete.'"class="img-thumbnail" style="width: 250px; height: 200px;"/>'; ?>
+                            <div class="atc" align="center"><!--  div  7 -->
+                                <?php echo '<h3><i class="glyphicon glyphicon-search:before"></i>'.anchor('visiteur/EvenementMArchand/'.$unEvenementNonMarchand->NoEvenement.'/'.$unEvenementNonMarchand->Annee,$unEvenementNonMarchand->TxtHTMLEntete,array('class'=>'btn-primary')).'</h3>';?>
+                            </div>
+                        </div>
+                    </div>
+            <?php } }else{ ?>
+                <p>Aucun évènement marchand en cours</p>
+            <?php } ?>      
+        </div>
+    </div>
+</div>

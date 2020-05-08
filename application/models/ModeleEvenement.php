@@ -138,7 +138,7 @@ class ModeleEvenement extends CI_Model
       $this->db->select('*');
       $this->db->from('ge_evenement');
       $this->db->join('ge_ev_marchand','ge_evenement.NoEvenement=ge_ev_marchand.NoEvenement AND ge_evenement.Annee=ge_ev_marchand.Annee');
-      $this->db->where('ge_evenement.EnCours','1'); 
+      $this->db->where('ge_evenement.EnCours',1); 
       $this->db->order_by('ge_evenement.NoEvenement','ge_evenement.Annee','asc');
       $evMarchand = $this->db->get();
       return $evMarchand->result(); 
@@ -151,18 +151,18 @@ class ModeleEvenement extends CI_Model
    ***************************************************************************************************/
 
 
-   public function getEvenementMarchand($Annee,$NoEvenement)
-   {
-      $this->db->select('*');
-      $this->db->from('ge_evenement');
-      $this->db->join('ge_ev_marchand','ge_evenement.NoEvenement=ge_ev_marchand.NoEvenement AND ge_evenement.Annee=ge_ev_marchand.Annee');
-      $this->db->where('ge_ev_marchand.Annee', $Annee);
-      $this->db->where('ge_ev_marchand.NoEvenement', $NoEvenement);
-      $this->db->where('ge_evenement.EnCours','1'); 
-      $this->db->order_by('ge_evenement.NoEvenement','ge_evenement.Annee','asc'); 
-      $maListe = $this->db->get();
-      return $maListe->row();
-   }//row()
+      public function getEvenementMarchand($Annee,$NoEvenement)
+      {
+         $this->db->select('*');
+         $this->db->from('ge_evenement');
+         $this->db->join('ge_ev_marchand','ge_evenement.NoEvenement=ge_ev_marchand.NoEvenement AND ge_evenement.Annee=ge_ev_marchand.Annee');
+         $this->db->where('ge_ev_marchand.Annee', $Annee);
+         $this->db->where('ge_ev_marchand.NoEvenement', $NoEvenement);
+         $this->db->where('ge_evenement.EnCours','1'); 
+         $this->db->order_by('ge_evenement.NoEvenement','ge_evenement.Annee','asc'); 
+         $maListe = $this->db->get();
+         return $maListe->row();
+      }//row()
 
    public function presenceEvenement($donnees)
    {

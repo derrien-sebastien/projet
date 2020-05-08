@@ -1,6 +1,6 @@
 <body id="bodyLogin">
 	<div class="containerLogin">
-		<img src="<?php echo base_url(); ?>assets/images/utilisateur.svg" >
+		<img src="<?php echo base_url(); ?>assets/img_site/utilisateur.svg" >
 		<h3>Saisissez votre adresse mail</h1>
 		<?php
 			$email=array(	'name'=>'txtEmail',
@@ -14,7 +14,7 @@
 								'id'=>'password',
 								'placeholder'=>'Mot de passe'				
 							);
-			$style=array('class'=>'btnSubmit');
+			$style=array('class'=>'btnSubmit btn-lg btn-primary');
 
 			echo "Première connexion ? Laisser le mot de passe vide";
 			echo '</br>';
@@ -44,4 +44,4 @@
 			?>
 		</div>
 	</div>
-
+		

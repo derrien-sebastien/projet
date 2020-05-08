@@ -36,10 +36,6 @@ class Visiteur extends CI_Controller
          );                    
          $this->session->set_userdata($dataSession);
       }
-      if (!isset($_SESSION['panier']))
-      {
-         $_SESSION['panier'] = array();
-      }
    }
 
 
@@ -186,9 +182,11 @@ class Visiteur extends CI_Controller
     
    public function mentionsLegales()
    {
-      $this->index();
-      $DonneesInjectees['TitreDeLaPage'] = 'Informations Légales';                                                      
-      $this->load->view('visiteur/vueMentionsLegales', $DonneesInjectees);                                          
+      $DonneesInjectees['TitreDeLaPage'] = 'Informations Légales';                     
+      $this->load->view('templates/EntetePrincipal'); 
+      $this->load->view('templates/EnteteNavbar');                                 
+      $this->load->view('visiteur/vueMentionsLegales', $DonneesInjectees);            
+      $this->load->view('templates/PiedDePagePrincipal');                              
    }
   
 
@@ -212,24 +210,22 @@ class Visiteur extends CI_Controller
    public function catalogueEvenement()            
    {   
       $DonneesInjectees['lesEvenementsMarchands'] = $this->mEven->retournerEvenementsMarchands();
-      var_dump($DonneesInjectees['lesEvenementsMarchands'][0]);
       $DonneesInjectees['lesEvenementsNonMarchands'] = $this->mEven->retournerEvenementsNonMarchands();
-      /* $this->index(); */
+      $this->load->view('templates/EntetePrincipal');
+      $this->load->view('templates/EnteteNavbar');
       $this->load->view('visiteur/vueCatalogueEvenements', $DonneesInjectees);
    } 
  
    /**********************************************************************
-   **                       UN EVENEMENT CHOISI                        ***
+   **                         UN EVENEMENT                             ***
    **********************************************************************/
 
   public function EvenementMarchand($noEvenement = NULL, $annee=NULL)
    {
-      
-      $DonneesProduit['lesProduits'] = $this->mProd->getProduits($noEvenement, $annee);   
-      $DonneesProduit['unEvenementMarchand'] = $this->mEven->retournerEvenements($noEvenement, $annee);
-      var_dump($DonneesProduit['lesProduits']);
-      $DonneesProduit['prodPanier']=$this->cart->contents();
-      if (empty($DonneesProduit['unEvenementMarchand']))
+      $DonneesEven['lesEvenementsMarchands'] = $this->mEven->retournerEvenementsMarchands();
+      $DonneesProduit['lesProduits'] = $this->mProd->obtenirLesProduits($noEvenement, $annee);   
+      $DonneesProduit['unEvenementMarchand'] = $this->mEven->retournerEvenements($noEvenement, $annee); 
+      if (!empty($DonneesEven['unEvenementMarchand']))
       {   
          show_404();
       }
@@ -237,8 +233,7 @@ class Visiteur extends CI_Controller
       {
          $this->load->view('templates/EntetePrincipal');
          /* $this->load->view('templates/EnteteNavbar'); */
-         $this->load->view('visiteur/vueEvenementMarchandEntete', $DonneesProduit);
-         
+         $this->load->view('visiteur/vueEvenementMarchandEntete', $DonneesProduit, $DonneesEven);
       }
    }
    
@@ -259,17 +254,24 @@ class Visiteur extends CI_Controller
    /**********************************************************************
    **                               PANIER                             ***
    **********************************************************************/
-  
-   public function ajoutPanier($pNoEven = NULL, $pAnne = NULL, $pNoProd = NULL)
+   
+   public function catalogueProduits()
    {
-       
-      $DonneesProduit=$this->ModeleProduit->getRows($pNoEven, $pAnne, $pNoProd);
+      $this->load->view('templates/EntetePrincipal');
+      $this->load->view('templates/EnteteNavbar');
+      $data=array();
+      $data['product']=$this->ModeleProduit->getRows();
+      $this->load->view('visiteur/vueCatalogueProduits', $data);
+   }
+   public function addToCart($proID)
+   {
+      $product=$this->ModeleProduit->getRows($proID);
       $data = array(
-            'id'    => $DonneesProduit['NoProduit'],
-            'qty'   => 1,
-            'price' => $DonneesProduit['Prix'],
-            'name'  => $DonneesProduit['LibelleCourt'],
-            'image' => $DonneesProduit['Img_Produit']
+            'id'    => $product['NoProduit'],
+            'qty'   => 1,//$qty pour ajouter avec input
+            'price' => $product['Prix'],
+            'name'  => $product['LibelleCourt'],
+            'image' => $product['Img_Produit']
         );
       $this->cart->insert($data);
       redirect('visiteur/panier');
@@ -278,10 +280,9 @@ class Visiteur extends CI_Controller
    public function panier($noEvenement=NULL, $Annee=NULL)
    {  
       $this->load->view('templates/EntetePrincipal');
-      $DonneesProduit['unEvenementMarchand'] = $this->mEven->retournerEvenements($noEvenement,$Annee);
-      $data['prodPanier']=$this->cart->contents();
-      $this->load->view('visiteur/vueEvenementMarchandEntete', $DonneesProduit,$data);
-      var_dump($DonneesProduit, $data);
+      $this->load->view('templates/EnteteNavbar');
+      $data['cartItems']=$this->cart->contents();
+      $this->load->view('visiteur/vuePanier',$data);
    }
 
    public function updateItemQty()
@@ -301,14 +302,8 @@ class Visiteur extends CI_Controller
    }
    
    function removeItem($rowid)
-   {   
-      $data = array(
-          'rowid'   => $rowid,
-          'qty'     => 0
-      );
-      var_dump($data);
-      $this->cart->update($data);
-      redirect('visiteur/panier');
+   {
+       $remove=$this->cart->remove($rowid);
    }
 
 
@@ -357,7 +352,7 @@ class Visiteur extends CI_Controller
             }
          }
       $data['donneesUtilisateur'] = $donneesUtilisateur;// Données personne
-      $data['prodPanier'] = $this->cart->contents();// Récupérer les données du panier 
+      $data['cartItems'] = $this->cart->contents();// Récupérer les données du panier 
       $this->load->view('Visiteur/catalogueProduits', $data);// Transférer les données à la vue
       
    }
@@ -371,10 +366,10 @@ class Visiteur extends CI_Controller
       $insertComande = $this->mProd->insererCommande($commande);
       if($insertCommande)
       {
-         $prodPanier = $this->cart->contents();// Récupérer les données du panier
+         $cartItems = $this->cart->contents();// Récupérer les données du panier
          $commandeItemData = array();
          $i=0;
-         foreach($prodPanier as $item)
+         foreach($cartItems as $item)
          {
             $commandeItemData[$i]['noCommande']     = $insertCommande;
             $commandeItemData[$i]['noProduit']     = $item['id'];

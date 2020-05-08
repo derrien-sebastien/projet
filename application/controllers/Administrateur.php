@@ -118,7 +118,7 @@ class Administrateur extends CI_Controller
 		{
 		$AncienEvenement=explode("/",$_POST['evenement']);
    	 	$Annee=$AncienEvenement['0'];
-		$NoEvenement=$AncienEvenement['1'];
+		$NoEvenement=$AncienEvenement['1'];// 0 et 1 tableau
 		$donnees['evenement']=$this->ModeleEvenement->retournerUnEvenement($NoEvenement,$Annee);
 		}
 		$this->formulaireEvenement($donnees);
