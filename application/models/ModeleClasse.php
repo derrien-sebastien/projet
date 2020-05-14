@@ -117,5 +117,5 @@ class ModeleClasse extends CI_Model
     	$this->db->where('NoClasse', $donnees['NoClasse']);
       	$this->db->where('NoEnfant', $donnees['NoEnfant']);
       	return $this->db->update('ge_appartenir', $donnees);
-   }
+   	}
 }

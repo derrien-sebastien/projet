@@ -1467,13 +1467,22 @@ donnée de sortie:
 		$this->form_validation->set_rules('prenom','prenom','required');
 		$this->form_validation->set_rules('dateNaissance','date de naissance');
 		$this->form_validation->set_rules('classe','classe');
-		$this->form_validation->set_rules('email[]','emails');				
+		$this->form_validation->set_rules('email[]','emails');
+		$this->form_validation->set_rules('nomParent[]','Nom des parents');
+		$this->form_validation->set_rules('prenomParent[]','Prenom des parents');
+		$this->form_validation->set_rules('adresseParent[]','Adresse des parents');
+		$this->form_validation->set_rules('villeParent[]','Ville des parents');
+		$this->form_validation->set_rules('cpParent[]','Code postal des parents');
+		$this->form_validation->set_rules('telFixe[]','Telephone fixe des parents');
+		$this->form_validation->set_rules('telPort[]','Telephone portable des parents');
+
 		if ($this->form_validation->run() === FALSE)//si le formulaire n'est pas validé
 	 	{	
 			
 			$donneesVue=array(
 				'lesClasses'=>$this->ModeleClasse->retournerClasse(),
-				'lesEnfants'=>$this->ModeleEnfant->getEnfants()
+				'lesEnfants'=>$this->ModeleEnfant->getEnfants(),
+				'provenance'=>'ajouter'
 			);
 			
 			$this->load->view('templates/EntetePrincipal');
@@ -1519,7 +1528,14 @@ donnée de sortie:
 						$noPersonne=$this->ModelePersonne->maxPersonne()+1;
 						$donneesPersonne=array(
 							'NoPersonne'=>$noPersonne,
-							'Email'=>$unEmail
+							'Email'=>$unEmail,
+							'Nom'=>$_POST['nomParent['.$i.']'],
+							'Prenom'=>$_POST['prenomParent['.$i.']'],
+							'Adresse'=>$_POST['AdresseParent['.$i.']'],
+							'Ville'=>$_POST['VilleParent['.$i.']'],
+							'CodePostal'=>$_POST['cpParent['.$i.']'],
+							'TelPortable'=>$_POST['telPort['.$i.']'],
+							'TelFixe'=>$_POST['telFixe['.$i.']'],
 						);						
 						
 						$this->ModelePersonne->insererInformationPersonne($donneesPersonne);
@@ -1528,6 +1544,39 @@ donnée de sortie:
 					{
 						$Personne=$this->ModelePersonne->rechercheInfoPersonne($unEmail);
 						$noPersonne=$presonne->NoPersonne;
+					
+					$donneesPersonne=array(
+						'NoPersonne'=>$noPersonne,
+						'Email'=>$unEmail
+					);
+					}
+					if($_POST['nomParent['.$i.']']!='')
+					{
+						$donneesPersonne['Nom']=$_POST['nomParent['.$i.']'];
+					}
+					if($_POST['prenomParent['.$i.']']!='')
+					{
+						$donneesPersonne['Prenom']=$_POST['prenomParent['.$i.']'];
+					}
+					if($_POST['adresseParent['.$i.']']!='')
+					{
+						$donneesPersonne['Adresse']=$_POST['adresseParent['.$i.']'];
+					}
+					if($_POST['villeParent['.$i.']']!='')
+					{
+						$donneesPersonne['Ville']=$_POST['villeParent['.$i.']'];
+					}
+					if($_POST['cpParent['.$i.']']!='')
+					{
+						$donneesPersonne['CodePostal']=$_POST['cpParent['.$i.']'];
+					}
+					if($_POST['telFixe['.$i.']']!='')
+					{
+						$donneesPersonne['TelFixe']=$_POST['telFixe['.$i.']'];
+					}					
+					if($_POST['telPort['.$i.']']!='')
+					{
+						$donneesPersonne['TelPortable']=$_POST['telPort['.$i.']'];
 					}
 					$memoire[$i]=$noPersonne;
 					$i++;
@@ -1536,6 +1585,7 @@ donnée de sortie:
 						'NoEnfant'=>$donneesEnfant['NoEnfant'],
 						'EtreCorrespondant'=>1
 					);
+					//update/parent
 					$this->ModelePersonne->insererInformationPersonneParent($donneesPersonneParent);
 					
 				}
@@ -1549,8 +1599,154 @@ donnée de sortie:
 				
 		}
 	}
+
 	public function modificationEnfant()
 	{
+		$this->form_validation->set_rules('nom','nom','required');
+		$this->form_validation->set_rules('prenom','prenom','required');
+		$this->form_validation->set_rules('dateNaissance','date de naissance');
+		$this->form_validation->set_rules('classe','classe');
+		$this->form_validation->set_rules('email[]','emails');
+		$this->form_validation->set_rules('nomParent[]','Nom des parents');
+		$this->form_validation->set_rules('prenomParent[]','Prenom des parents');
+		$this->form_validation->set_rules('adresseParent[]','Adresse des parents');
+		$this->form_validation->set_rules('villeParent[]','Ville des parents');
+		$this->form_validation->set_rules('cpParent[]','Code postal des parents');
+		$this->form_validation->set_rules('telFixe[]','Telephone fixe des parents');
+		$this->form_validation->set_rules('telPort[]','Telephone portable des parents');				
+		if ($this->form_validation->run() === FALSE)//si le formulaire n'est pas validé
+	 	{	
+			$enfants=$this->ModeleEnfant->retournerEnfant($_POST['enfant']);
+			$personne=$this->ModeleEnfant->personne($_POST['enfant']);
+			$appartenir=$this->ModeleEnfant->appartenir($_POST['enfant']);
+			$info=array(
+				'nom'=>$enfant->Nom,
+				'prenom'=>$enfant->Prenom,
+				'dateNaissance'=>$enfant->DateDebut,
+				'noEnfant'=>$_POST['enfant']
+			);
+			$i=1;
+			foreach ($personne as $unePersonne)
+			{
+				$info['email'.$i]=$unePersonne->Email;
+				if (isset($unePersonne->Nom))
+				{
+					$info['nomParent'.$i]=$unePersonne->Nom;
+				}
+				else
+				{
+					$info['nomParent'.$i]='';
+				}
+				if (isset($unePersonne->Prenom))
+				{
+					$info['prenomParent'.$i]=$unePersonne->Prenom;
+				}
+				else
+				{
+					$info['prenomParent'.$i]='';
+				}
+				if (isset($unePersonne->Adresse))
+				{
+					$info['adresseParent'.$i]=$unePersonne->Adresse;
+				}
+				else
+				{
+					$info['adresseParent'.$i]='';
+				}
+				if (isset($unePersonne->Ville))
+				{
+					$info['villeParent'.$i]=$unePersonne->Ville;
+				}
+				else
+				{
+					$info['villeParent'.$i]='';
+				}
+				if (isset($unePersonne->CodePostale))
+				{
+					$info['cpParent'.$i]=$unePersonne->CodePostale;
+				}
+				else
+				{
+					$info['cpParent'.$i]='';
+				}
+				if (isset($unePersonne->TelFixe))
+				{
+					$info['telFixe'.$i]=$unePersonne->Telfixe;
+				}
+				else
+				{
+					$info['telfixe'.$i]='';
+				}
+				if (isset($unePersonne->TelPortable))
+				{
+					$info['telport'.$i]=$unePersonne->TelPortable;
+				}
+				else
+				{
+					$info['telPort'.$i]='';
+				}
+				$i++;
+			}
+			if(isset($classe))
+			{
+				$info['classe']=$appartenir->NoClasse;
+				$info['dateDebut']=$appartenir->DateDebut;
+			}
+			$donneesModification=array(
+				'info'=>$info,
+				'provenance'=>'modifier',
+				'lesClasses'=>$this->ModeleClasse->retournerClasse(),
+				'lesEnfants'=>$this->ModeleEnfant->getEnfants()
+			); 
+			$this->load->view('templates/EntetePrincipal');
+			$this->load->view('templates/EnteteNavbar');
+			$this->load->view('administrateur/vueAjoutMultipleEnfant',$donneesModification);
+			$this->load->view('templates/PiedDePagePrincipal');
+		}
+		else
+		{
+			//création des données enfant
+			$donneesEnfant=array(
+				'NoEnfant'=>$_POST['NoEnfant'],
+				'Nom'=>$_POST['nom'],
+				'Prenom'=>$_POST['prenom'],
+				'DateNaissance'=>$_POST['dateNaissance']
+			);
+			$this->ModeleEnfant->modifierEnfant($donneesEnfant);
+			//création des données parents
+			$i=0;
+			foreach($email as $unEmail)
+			{
+				//si l'email est pas dans la base de donnée
+				//création de la personne
+				if(!$this->ModelePersonne->rechercherEmailPresent($unEmail))
+				{
+					$noPersonne=$this->ModelePersonne->maxPersonne()+1;
+					$donneesPersonne=array(
+						'NoPersonne'=>$noPersonne,
+						'Email'=>$unEmail,
+						'Nom'=>$_POST['nom['.$i.']'],
+						'Prenom'=>$_POST['prenom['.$i.']'],
+						'Nom'=>$_POST['nom['.$i.']'],
+					);
+					$this->ModelePersonne->insererInformationPersonne($donneesPersonne);
+				}
+				else
+				{
+
+				}
+			}
+		
+			//else 
+				//recherche nopersonne 
+			//if(!personne parent)
+				//creation donnée parent
+				//ajout personne parent et scolariser
+			//if (! scolariser)
+				//ajout a scolariser
+
+			//retour formulaire ajout multiple
+		}
 
 
 	}
