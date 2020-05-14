@@ -46,7 +46,8 @@ if (isset($evenement->NoEvenement))
 }
 $anneeEvenement=array(
     'type'=>'number',
-    'name'=>'anneeEvenement'    
+    'name'=>'anneeEvenement',
+    'value'=>'2020',    
 );
 if(isset($evenement->Annee))
 {
@@ -150,15 +151,15 @@ $submit=array(
     'value'=>'envoyer'
 );
 
+/////////////////////////////   FORMULAIRE  ////////////////////////////
 
-echo form_open_multipart('Administrateur/formulaireEvenement');
-echo form_hidden($hidden);
+echo '<div class="container">';
+echo    "<h1 class='encadre'>Création d'un évènement</h1>";
+echo    form_open_multipart('Administrateur/formulaireEvenement');
+echo    form_hidden($hidden);
 
-echo "<table>";
 if ($Provenance=='ajouter')
 {
-    echo"<tr>";
-        echo "<td>";
             echo form_label('année:','AnneeEvenement' );            
         echo "</td>";
         echo "<td>";
@@ -322,28 +323,38 @@ if ($Provenance=='ajouter')
             echo form_submit($submit);
         echo "</td>\n";
     echo "</tr>";
-echo "</table>";
-echo form_close();
-echo "<script>
-$(document).ready(function() {
-    $('#summernote').summernote();
-});
-</script>";
-echo "<script>
-$(document).ready(function() {
-    $('#summernote1').summernote();
-});
-</script>";
-echo "<script>
-$(document).ready(function() {
-    $('#summernote2').summernote();
-});
-</script>";
-echo "<script>
-$(document).ready(function() {
-    $('#summernote3').summernote();
-});
-</script>";
-
+echo    '</table>';
+echo    form_close();
+echo '</div>';
+//////////////////////////////  FIN DE FORMULAIRE ///////////////////////////////////////
 
 ?>
+
+<!----------------------------------------------------------------------------------------
+||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+||||||||||||||||||||||||||||||||       SCRIPT       ||||||||||||||||||||||||||||||||||||||
+||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+----------------------------------------------------------------------------------------->
+
+
+<script>
+    $(document).ready(function()
+    {
+        $('#summernote').summernote();
+    });
+
+    $(document).ready(function() 
+    {
+        $('#summernote1').summernote();
+    });
+
+    $(document).ready(function() 
+    {
+        $('#summernote2').summernote();
+    });
+
+    $(document).ready(function() 
+    {
+        $('#summernote3').summernote();
+    });
+</script>;

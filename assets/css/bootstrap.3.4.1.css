@@ -37,11 +37,14 @@ body
   background-repeat: no-repeat;
   background-size: 100% ;
 }
-
+#tailleControl
+{
+  width: 3em;
+}
 .containerLogin 
 {
-  width: 500px;
-  height: 500px;
+  width: 35%;
+  height: 50%;
   text-align: center;
   background-color:rgba(134, 134, 134, 0.7) ;  
   border-radius: 4px;
@@ -54,7 +57,16 @@ body
   width: 120px;
   height: 120px;
   margin-top:-60px;
-  margin-bottom: 30px;
+  margin-bottom: 10px;
+}
+.lien
+{
+  color:  rgb(34, 34, 34);
+  font-size: 18px;
+}
+.lien:hover
+{
+  color: rgb(255, 255, 255)
 }
 input[type='email'],input[type='password']
 {
@@ -63,7 +75,7 @@ input[type='email'],input[type='password']
   width: 300px;
   font-size: 18px;
   margin-bottom: 20px;
-  background-color: #fff;
+  background-color: rgb(54, 54, 54);
   padding-left: 20px;
 }
 .btnSubmit
@@ -99,11 +111,12 @@ input[type='email'],input[type='password']
   -o-transition: all 0.3s;
   transition: all 0.3s;
 }
-#encadre
+.encadre
 {
+  text-align: center;
   border: 5px double rgb(12, 12, 12);
 }
-#souligne
+.souligne
 {
   text-decoration: 5px underline rgba(20, 20, 20, 0.521);
 }
@@ -160,6 +173,30 @@ span
   margin:0 auto;
   
 }
+.drop
+{
+  position: relative;
+  display: inline-block;
+}
+
+.drop-content
+{
+  display: none;
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+.drop:hover .drop-content 
+{
+  display: block;
+}
+.desc {
+  padding: 15px;
+  text-align: center;
+}
+
 
 /*//////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////
@@ -313,6 +350,8 @@ input[type="radio"] {
 }
 input[type="number"]::-webkit-inner-spin-button,
 input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none; 
+  margin: 0;
   height: auto;
 }
 input[type="search"] {
@@ -341,6 +380,7 @@ optgroup {
   font-weight: bold;
 }
 table {
+  padding-top:-60;
   border-collapse: collapse;
   border-spacing: 0;
 }
@@ -413,11 +453,11 @@ th {
   }
   .table td,
   .table th {
-    background-color: #fff !important;
+    background-color: rgb(255, 255, 255) !important;
   }
   .table-bordered th,
   .table-bordered td {
-    border: 1px solid #ddd !important;
+    border: 3px solid  #000 !important;
   }
 }
 @font-face {
@@ -1248,12 +1288,12 @@ textarea {
   line-height: inherit;
 }
 a {
-  color: #337ab7;
+  color: #b8b8b8;
   text-decoration: none;
 }
 a:hover,
 a:focus {
-  color: #23527c;
+  color: #d6d6d6;
   text-decoration: underline;
 }
 a:focus {
@@ -1281,8 +1321,8 @@ img {
 .img-thumbnail {
   padding: 4px;
   line-height: 1.42857143;
-  background-color: #fff;
-  border: 1px solid #ddd;
+  background-color: rgb(36, 36, 36);
+  border: 1px solid rgba(7, 7, 7, 0.692);
   border-radius: 4px;
   -webkit-transition: all 0.2s ease-in-out;
   -o-transition: all 0.2s ease-in-out;
@@ -1524,7 +1564,7 @@ a.text-danger:focus {
 }
 .bg-primary {
   color: #fff;
-  background-color: #222;
+  background-color: rgb(128, 122, 122);
 }
 a.bg-primary:hover,
 a.bg-primary:focus {
@@ -2498,7 +2538,7 @@ pre code {
   }
 }
 table {
-  background-color: transparent;
+  background-color:  #25252546;
 }
 table col[class*="col-"] {
   position: static;
@@ -2552,7 +2592,7 @@ th {
   border-top: 2px solid #ddd;
 }
 .table .table {
-  background-color: #fff;
+  background-color: #292929;
 }
 .table-condensed > thead > tr > th,
 .table-condensed > tbody > tr > th,
@@ -2578,7 +2618,7 @@ th {
   border-bottom-width: 2px;
 }
 .table-striped > tbody > tr:nth-of-type(odd) {
-  background-color: #f9f9f9;
+  background-color: #a3a3a381;
 }
 .table-hover > tbody > tr:hover {
   background-color: #f5f5f5;
@@ -3362,6 +3402,7 @@ fieldset[disabled] .btn-default.focus {
   background-color: #333;
 }
 .btn-primary {
+  align-items:center;
   color: #8a8888;
   background-color: #222;
   border-color: #222;
@@ -4501,7 +4542,7 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
 .navbar-brand {
   float: left;
   height: 50px;
-  padding: 15px 15px;
+  padding: 12px 15px;
   font-size: 18px;
   line-height: 20px;
 }
@@ -4553,6 +4594,7 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
 .navbar-nav > li > a {
   padding-top: 10px;
   padding-bottom: 10px;
+  font-size: 1.6rem;
   line-height: 20px;
 }
 @media (max-width: 767px) {
@@ -4816,7 +4858,7 @@ fieldset[disabled] .navbar-default .btn-link:focus {
   color: #ccc;
 }
 .navbar-inverse {
-  background-color: #222;
+  background-color: rgb(49, 49, 49);
   border-color: #080808;
 }
 .navbar-inverse .navbar-brand {
@@ -5170,7 +5212,7 @@ a.badge:focus {
 }
 .list-group-item.active > .badge,
 .nav-pills > .active > a > .badge {
-  color: #337ab7;
+  color: #535353af;
   background-color: #fff;
 }
 .list-group-item > .badge {
@@ -5397,7 +5439,7 @@ a.thumbnail.active {
   background-image: linear-gradient(45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent);
 }
 .progress-bar-info {
-  background-color: #5bc0de;
+  background-color: #444444;
 }
 .progress-striped .progress-bar-info {
   background-image: -webkit-linear-gradient(45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent);

@@ -13,38 +13,45 @@ sortie:
 -aTitrePersonnel
 -destinataire (probablement un tableau a tester en var dump)
 */
-$adresseExpediteur=array(
-    'type'  =>'email',
-    'name'  =>'adresseExpediteur',
-    'value' =>$adExpediteur
-);
-$object=array(
-    'type'=>'text',
-    'name'=>'object'
-);
+//////////////////////////////  Déclaration de nos Variables ////////////////////////////
+        $adresseExpediteur=array(
+            'type'  =>'email',
+            'name'  =>'adresseExpediteur',
+            'value' =>$adExpediteur
+        );
+        $object=array(
+            'type'=>'text',
+            'name'=>'object'
+        );
+        $message=array(
+            'id'=>'summernote',
+            'type'=>'texte',
+            'name'=>'message'
+        );
+        $expediteur=array(
+            'name'=>'aTitrePersonnel'
+        );
+        $pieceJointe=array(
+            'type'=>'file',
+            'name'=>'pieceJointe',
+            'accept'=>'.doc,.txt,.jpg,.pdf,.bmp,.avi,.mp3,.mp4',//a completer
+            'multiple'=>TRUE
+        );
+
+///////////////////////// Variables déjà connu ? On réassigne... ////////////////////////
+
 if(isset($objet))
 {
     $object['value']=$objet;
 };
-$message=array(
-    'id'=>'summernote',
-    'type'=>'texte',
-    'name'=>'message'
-);
 if(isset($corpsTexte))
 {
     $message['value']=$corpsTexte;
 };
-$expediteur=array(
-    'name'=>'aTitrePersonnel'
-);
-$pieceJointe=array(
-    'type'=>'file',
-    'name'=>'pieceJointe',
-    'accept'=>'.doc,.txt,.jpg,.pdf,.bmp,.avi,.mp3,.mp4',//a completer
-    'multiple'=>TRUE
-);
-echo form_open_multipart('Administrateur/formulaireMail');//vers la function formulaireEmail
+
+/////////////////////////////// FORMULAIRE   ////////////////////////////////////////
+
+echo form_open_multipart('Administrateur/formulaireMail');
 echo "<table><tr>";
 echo "<td><label for='adresseExpediteur'>entrez votre adresse mail</label></td>";
 echo "<td>";
@@ -87,8 +94,22 @@ echo "<td>";
 echo form_input($pieceJointe);
 echo"</tr></td></table>";
 echo form_submit('envoyer','envoyer');
-echo "<script>
-$(document).ready(function() {
-    $('#summernote').summernote();
-});
-</script>";
+echo form_close(); 
+echo'</div>';
+
+//////////////////////////////  FIN DE FORMULAIRE ///////////////////////////////////////
+
+?>
+
+<!----------------------------------------------------------------------------------------
+||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+||||||||||||||||||||||||||||||||       SCRIPT       ||||||||||||||||||||||||||||||||||||||
+||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+----------------------------------------------------------------------------------------->
+
+<script>
+    $(document).ready(function() 
+    {
+        $('#summernote').summernote();
+    });
+</script>

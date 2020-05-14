@@ -1,3 +1,11 @@
-Insertion réussie !
-
-<p><a href="<?php echo site_url('visiteur/nosEvenements') ?>">Retour à la page d'accueil</a></p>
+<?php
+echo '</br>';
+echo '<div class="container">';
+echo    'Insertion réussie !';
+echo '</div>';
+echo '<p>';
+echo    '<a href="';
+echo        site_url('visiteur/catalogueEvenement');
+echo        '">Retour à la page Accueil';
+echo    '</a>';
+echo '</p>';

@@ -4,38 +4,48 @@
 		    <!--                              NAVBAR                                   -->
 		    <!--------------------------------------------------------------------------->	
 		    <!--------------------------------------------------------------------------->         
-      
-  <body>  
+       
     <nav class="navbar navbar-inverse navbar-fixed-top">
       <div class="container-fluid">
         <div class="navbar-header">
-          <a class="navbar-brand" href="<?php echo site_url('visiteur/accueil') ?>"><img src="<?php echo base_url(); ?>assets/images/accueil.png" height="25" width="25"></a>
+          <a class="navbar-brand" href="<?php echo site_url('Visiteur/accueil') ?>"><img src="<?php echo base_url(); ?>assets/images/accueil.png" height="25" width="25"></a>
         </div>
           <ul class="nav navbar-nav">
 
             <!--visiteur-->
             
             <li>
-              <a href="<?php echo site_url('visiteur/catalogueEvenement') ?>">Nos Evenements</a>
+              <a href="<?php echo site_url('Visiteur/catalogueEvenement') ?>"><i class="glyphicon  glyphicon-book"></i>&nbsp;Nos Evenements</a>
+            </li>
+            <li>
+            <a href="<?php echo site_url('Visiteur/panier') ?>"><i class="glyphicon glyphicon-shopping-cart"></i><span><?php echo $this->cart->total_items(); ?></span>Panier</a>
             </li>
           
             <?php if ($this->session->profil=='membre') : ?>
               
                 
                 <li class="dropdown">
-                  <a class="dropdown-toggle" data-toggle="dropdown" href="#">Gestion compte<!--lien activation des evenement-->
+                  <a class="dropdown-toggle" data-toggle="dropdown" href="#"><i class="glyphicon  glyphicon-cog"></i>&nbsp;Gestion compte
                     <span class="caret"></span>
                   </a>
                   <ul class="dropdown-menu">
                     <li>
-                      <a href="<?php echo site_url('membre/InfosCompte') ?>">Gérer votre compte</a>
+                      <a href="<?php echo site_url('Membre/InfosCompte') ?>">Gérer votre compte</a>
                     </li>&nbsp;&nbsp;
                     <li>
-                      <a href="<?php echo site_url('membre/ModificationMdp') ?>">Modifier votre mot de passe</a>
+                      <a href="<?php echo site_url('Membre/ModificationMdp') ?>">Modifier votre mot de passe</a>
                     </li> &nbsp;
                     <li>
-                      <a href="<?php echo site_url('membre/Actif') ?>">Se désinscrire de la newsletter</a>
+                      <a href="<?php echo site_url('Membre/Actif') ?>">Se désinscrire de la newsletter</a>
                     </li>&nbsp;
+                  </ul>
+                </li> 
+                <li class="dropdown">
+                  <a class="dropdown-toggle" data-toggle="dropdown" href="#"><i class="glyphicon  glyphicon-envelope"></i>&nbsp;Réclamation<span class="caret"></span></a>
+                  <ul class="dropdown-menu">
+                    <li>
+                      <a href="<?php echo site_url('Visiteur/problemGeneral') ?>">Signaler un problème</a>
+                    </li>
                   </ul>
                 </li>   
               <?php endif; ?>
@@ -45,20 +55,20 @@
 
             <?php if ($this->session->profil=='admin') : ?>
               <li class="dropdown">
-                <a class="dropdown-toggle" data-toggle="dropdown" href="#">Gestion compte<!--lien activation des evenement-->
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#">Gestion compte
                   <span class="caret"></span>
                 </a>
                 <ul class="dropdown-menu">
                   <li>
-                    <a href="<?php echo site_url('membre/InfosCompte') ?>">Gérer votre compte</a>
+                    <a href="<?php echo site_url('Membre/InfosCompte') ?>">Gérer votre compte</a>
                   </li>
                   <li>
-                    <a href="<?php echo site_url('membre/ModificationMdp') ?>">Modifier votre mot de passe</a>
+                    <a href="<?php echo site_url('Membre/ModificationMdp') ?>">Modifier votre mot de passe</a>
                   </li>
                 </ul>
               </li>
               <li class="dropdown">
-                <a class="dropdown-toggle" data-toggle="dropdown" href="#">Gestion des évènements<!--lien activation des evenement-->
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#">Gestion des évènements
                   <span class="caret"></span>
                 </a>
                 <ul class="dropdown-menu">
@@ -109,11 +119,11 @@
           <ul class="nav navbar-nav navbar-right">
             <?php if ($this->session->userdata('email') == False) {?>
               <li>
-                <a href="<?php echo site_url('visiteur/seConnecter') ?>">Connexion</a>                    
+                <a href="<?php echo site_url('Visiteur/seConnecter') ?>">Connexion</a>                    
               </li>  
             <?php }elseif ($this->session->userdata('email') == True) { ?>
               <li>
-                <a href="<?php echo site_url('visiteur/seDeConnecter') ?>">Déconnexion</a>
+                <a href="<?php echo site_url('Visiteur/seDeConnecter') ?>">Déconnexion</a>
               </li>
             <?php } ?>
           </ul>            
@@ -121,29 +131,3 @@
     </nav>
     </br>
     </br>
-
-
-    <<!-- /br>
-<div class="menuAdmin">
-        <ul>
-            <li>
-                <span>
-                <a href="<?php /* echo site_url('visiteur/') */?>"><img src="<?php /* echo base_url(); */ ?>assets/images/maison.svg" height="25" width="25">Accueil
-                </span>
-            </li>
-            <li>
-                <span>
-                    <a href="<?php/*  echo site_url('visiteur/catalogueProduits') */?>"><img src="<?php /* echo base_url(); */ ?>assets/images/catalogue.svg" height="25" width="25">Nos Produits</a>
-                </span>
-            </li>
-            <li>
-                <span>
-                    <img src="<?php /* echo base_url(); */ ?>assets/images/euro.svg" height="25" width="25">Vos Commandes
-                </span>
-                <ul>  
-                    <li><a href="<?php /* echo site_url('Administrateur/selectionCommande')  */?>">Recapitulatif des commandes</a></li>
-                    <li><a href="<?php /* echo site_url('Administrateur/formulaireMail')  */?>">Validation des commandes</a></li>
-                </ul>
-            </li>
-        </ul>
-</br> -->

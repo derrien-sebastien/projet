@@ -1234,6 +1234,7 @@ donnée de sortie:
 		$this->load->view('administrateur/vueSelectionClasse',$donnees);
 		if(isset($_POST['envoyer']))
 		{
+			var_dump($_POST);
 			$donneesEleves=array(
 				'eleves'=>$this->ModeleEnfant->getEnfantClasse($_POST['classe'])
 			);

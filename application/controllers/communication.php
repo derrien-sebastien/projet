@@ -120,3 +120,145 @@ et pouf il a deux sapin dans son evenement et j'ai aucun d'eviter ca !!! grrrr
 la seul chose que je peu lui faire c'est lui preselectionné ceux qu'il a mais il clic sans 
 appuyer sur ctrl et pouf il se deselectionne tous 
 distinct?
+
+
+
+public function ajoutMultipleEnfant()
+	{
+		$this->form_validation->set_rules('nom','nom','required');
+		$this->form_validation->set_rules('prenom','prenom','required');
+		$this->form_validation->set_rules('dateNaissance','date de naissance');
+		$this->form_validation->set_rules('classe','classe');
+		$this->form_validation->set_rules('email[]','emails');
+		$this->form_validation->set_rules('nomParent[]','Nom des parents');
+		$this->form_validation->set_rules('prenomParent[]','Prenom des parents');
+		$this->form_validation->set_rules('adresseParent[]','Adresse des parents');
+		$this->form_validation->set_rules('villeParent[]','Ville des parents');
+		$this->form_validation->set_rules('cpParent[]','Code postal des parents');
+		$this->form_validation->set_rules('telFixe[]','Telephone fixe des parents');
+		$this->form_validation->set_rules('telPort[]','Telephone portable des parents');
+
+		if ($this->form_validation->run() === FALSE)//si le formulaire n'est pas validé
+	 	{	
+			
+			$donneesVue=array(
+				'lesClasses'=>$this->ModeleClasse->retournerClasse(),
+				'lesEnfants'=>$this->ModeleEnfant->getEnfants(),
+				'provenance'=>'ajouter'
+			);
+			
+			$this->load->view('templates/EntetePrincipal');
+			$this->load->view('templates/EnteteNavbar');
+			$this->load->view('administrateur/vueAjoutMultipleEnfant',$donneesVue);
+			$this->load->view('templates/PiedDePagePrincipal');
+		}
+		else
+		{
+			if(!$this->ModeleEnfant->presenceEnfant($_POST['nom'],$_POST['prenom']))
+			{
+				$numeroEnfant=$this->ModeleEnfant->maxEnfant()+1;
+				$donneesEnfant=array(
+					'NoEnfant'=>$numeroEnfant,
+					'Nom'=>$_POST['nom'],
+					'Prenom'=>$_POST['prenom'],
+					'DateNaissance'=>$_POST['dateNaissance']
+				);
+				$this->ModeleEnfant->insetEnfant($donneesEnfant);
+				if($_POST['classe']!='0')
+				{
+					$donneesAppartenir=array(
+						'NoEnfant'=>$numeroEnfant,
+						'NoClasse'=>$_POST['classe'],	
+					);
+					$this->ModeleEnfant->insetAppartenir($donneesAppartenir);
+
+				}
+			}
+			else
+			{
+				//voir confirmation homonime
+				$donneesEnfant['NoEnfant']=$this->ModeleEnfant->getEnfant($_POST['nom'],$_POST['prenom']);
+
+			}
+			if (isset($_POST['emails']))
+			{
+				$i=0;
+				foreach ($_POST['emails'] as $unEmail)
+				{
+					if(!$this->ModelePersonne->presenceMdp($unEmail))
+					{
+						$noPersonne=$this->ModelePersonne->maxPersonne()+1;
+						$donneesPersonne=array(
+							'NoPersonne'=>$noPersonne,
+							'Email'=>$unEmail,
+							'Nom'=>$_POST['nomParent['.$i.']'],
+							'Prenom'=>$_POST['prenomParent['.$i.']'],
+							'Adresse'=>$_POST['AdresseParent['.$i.']'],
+							'Ville'=>$_POST['VilleParent['.$i.']'],
+							'CodePostal'=>$_POST['cpParent['.$i.']'],
+							'TelPortable'=>$_POST['telPort['.$i.']'],
+							'TelFixe'=>$_POST['telFixe['.$i.']'],
+						);						
+						
+						$this->ModelePersonne->insererInformationPersonne($donneesPersonne);
+						}
+					else
+					{
+						$Personne=$this->ModelePersonne->rechercheInfoPersonne($unEmail);
+						$noPersonne=$presonne->NoPersonne;
+					}
+					$donneesPersonne=array(
+						'NoPersonne'=>$noPersonne,
+						'Email'=>$unEmail
+					}
+					if($_POST['nomParent['.$i.']']!='')
+					{
+						$donneesPersonne['Nom']=$_POST['nomParent['.$i.']'];
+					}
+					if($_POST['prenomParent['.$i.']']!='')
+					{
+						$donneesPersonne['Prenom']=$_POST['prenomParent['.$i.']'];
+					}
+					if($_POST['adresseParent['.$i.']']!='')
+					{
+						$donneesPersonne['Adresse']=$_POST['adresseParent['.$i.']'];
+					}
+					if($_POST['villeParent['.$i.']']!='')
+					{
+						$donneesPersonne['Ville']=$_POST['villeParent['.$i.']'];
+					}
+					if($_POST['cpParent['.$i.']']!='')
+					{
+						$donneesPersonne['CodePostal']=$_POST['cpParent['.$i.']'];
+					}
+					if($_POST['telFixe['.$i.']']!='')
+					{
+						$donneesPersonne['TelFixe']=$_POST['telFixe['.$i.']'];
+					}					
+					if($_POST['telPort['.$i.']']!='')
+					{
+						$donneesPersonne['TelPortable']=$_POST['telPort['.$i.']'];
+					}
+					$memoire[$i]=$noPersonne;
+					$i++;
+					$donneesPersonneParent=array(
+						'NoPersonne'=>$noPersonne,
+						'NoEnfant'=>$donneesEnfant['NoEnfant'],
+						'EtreCorrespondant'=>1
+					);
+					//update/parent
+					$this->ModelePersonne->insererInformationPersonneParent($donneesPersonneParent);
+					
+				}
+				if(isset($_POST['infosParents']))
+				{
+					//$this->load->view(modifierInfoPersonne)
+				}
+			}
+			unset($_POST);
+			$this->ajoutMultipleEnfant;
+				
+		}
+    }
+    
+    

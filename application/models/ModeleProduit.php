@@ -42,29 +42,38 @@ class ModeleProduit extends CI_Model
       return $query->result();
    }
 
-   public function getRows($noEv, $ann, $noProd) //pour le panier
+   public function getRows($noEv=null, $ann=null,$noProduit=null) //pour le panier
    {
       $this->db->select('*');
       $this->db->from('ge_produit');
       $this->db->join('ge_evenement','ge_evenement.NoEvenement=ge_produit.NoEvenement AND ge_evenement.Annee=ge_produit.Annee');
       $this->db->join('ge_ev_marchand','ge_ev_marchand.NoEvenement=ge_produit.NoEvenement AND ge_ev_marchand.Annee=ge_produit.Annee');
       $this->db->where('ge_evenement.EnCours', 1);
-      if($noEv && $ann && $noProd)
+      if($noProduit)
       {
          $this->db->where('ge_produit.NoEvenement', $noEv);
          $this->db->where('ge_produit.Annee', $ann);
-         $this->db->where('ge_produit.NoProduit', $noProd);
+         $this->db->where('ge_produit.NoProduit', $noProduit);
          $query=$this->db->get();
          $result=$query->row_array();
       }
+      elseif($noEv && $ann )
+      {
+         
+         $this->db->where('ge_produit.NoEvenement', $noEv);
+         $this->db->where('ge_produit.Annee', $ann);
+         
+         $query=$this->db->get();
+         $result=$query->result_array();
+      }
       else
       {
+         
          $this->db->order_by('LibelleCourt','asc');
          $query=$this->db->get();
          $result=$query->result_array();
       }
       return !empty($result)?$result:false;
-<<<<<<< HEAD
    } 
 
    public function getOrder($id)
@@ -82,8 +91,6 @@ class ModeleProduit extends CI_Model
       $this->db->where('cont.NoProduit',$id);
       $query2 = $this->db->get();
       $result['items'] = ($query2->num_rows() > 0)?$query2->result_array():array();
-=======
->>>>>>> ef1122d5b5b1e6b9c796d464aec8f555b5ee7a47
       return !empty($result)?$result:false;
    }
 
@@ -101,7 +108,7 @@ class ModeleProduit extends CI_Model
       return $insert?$this->db->insert_id():false;
    }
 
-   public function insertOrder($data)
+   public function insererCommande($data)
    {
       if(!array_key_exists("created",$data))
       {
@@ -117,20 +124,10 @@ class ModeleProduit extends CI_Model
 
    public function insertOrderItems($data=array())
    {
-<<<<<<< HEAD
       $insert = $this->db->insert_batch($this->ordItemsTable, $data);
       return $insert?true:false;
    }
 
-=======
-      $this->db->select('*');
-      $this->db->from('ge_produit');
-      $this->db->join('ge_evenement','ge_evenement.NoEvenement=ge_produit.NoEvenement AND ge_evenement.Annee=ge_produit.Annee');
-      $this->db->where('ge_evenement.EnCours', 1);      
-      $maCommande = $this->db->get();
-      return $maCommande->result(); 
-   } 
->>>>>>> ef1122d5b5b1e6b9c796d464aec8f555b5ee7a47
 
   /************************************************************************************
   **   Tous les produits en cours de vente et en stock de notre table ge_produit     **

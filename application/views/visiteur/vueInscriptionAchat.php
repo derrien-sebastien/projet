@@ -53,7 +53,7 @@ if(isset($Personne->TelPortable))
     $txtTelP['value']=$Personne->TelPortable;
 }
 
-echo form_open('membre/infosCompte','class="form-horizontal" name="form"');               
+echo form_open('membre/placerCommande','class="form-horizontal" name="form"');               
     echo "<table class='table-bordered td' align=center>"; 
         echo "<tr>";
             echo "<td >";

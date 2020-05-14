@@ -52,67 +52,46 @@ class Membre extends CI_Controller
     /*********************************************************************************************************************************************/
     /*********************************************************************************************************************************************/
     /*********************************************************************************************************************************************/
-    //OK
+
+    /* FUNCTION DE NOTRE INDEX Membre
+   
+         Comprend :  
+
+            Entete ( bootstrap // summernote // javascript )
+            Navbar ( générée en fonction des utilisateurs )
+            Pied de Page ( informations sur le site/l'association - les administrateurs )
+   */
+   public function indexMembre()
+   {
+      $this->load->view('templates/EntetePrincipal');
+      $this->load->view('templates/EnteteNavbar');
+      $this->load->view('templates/PiedDePagePrincipal');
+   }
+
     public function accueil()
     {
-        $this->load->view('templates/EntetePrincipal');
-        $this->load->view('templates/EnteteNavbar');
-        $this->load->view('membre/vueAccueilPersonne');
-        
+        $this->indexMembre();
+        $this->load->view('membre/vueAccueilPersonne');  
     }
 
-    /**********************************************************************
-    **                      MOT DE PASSE OUBLIE                          **
-    **********************************************************************/
-    //OK
-    public function oublieMotDePasse()
-	{
-        $this->load->view('templates/EntetePrincipal');
-        $this->load->view('templates/EnteteNavbar');
-        $this->form_validation->set_rules('txtLogin','email','required');
-        if($this->form_validation->run() === FALSE)
-        { 
-            $this->load->view('membre/vueMotDePasseOublie');
-            $this->load->view('templates/PiedDePagePrincipal');
-        }
-        else
-        {    
-            if (!($rechercherEmailPresent($_POST['txtLogin'])))
-            {   //erreure de mail a refaire
-                $Value['Value'] = 'Adresse e-mail incorrect';
-                //$this->load->view('vueErreur');
-                $this->load->view('membre/vueMotDePasseOublie');
-                $this->load->view('templates/PiedDePagePrincipal');
-            }
-            else
-            {
-                $nouveauMdp='';
-                for ($i=1;$i<=10;$i++)
-                {
-                    $nouveauMdp= chr(floor(rand(0, 25)+97));
-                }   
-                $this->email->from('ge_personne');
-                $this->email->to($DonneesPersonne['Email']);
-                $this->email->subject('MOT DE PASSE GES');
-                $message = "Votre mot de passe est : '".$nouveauMdp."'. Pensez à changer votre mot de passe.";
-                $this->email->message($message);
-                if (!$this->email->send())
-                {
-                    $this->email->print_debugger();
-                }
-                redirect('visiteur/nosEvenements');
-            }          
-        }
-    }
+
+    /*********************************************************************************************************************************************/
+    /*********************************************************************************************************************************************/
+    /*********************************************************************************************************************************************/
+    /**************************                                                                              *************************************/
+    /**************************                                GESTION COMPTE                                *************************************/
+    /**************************                                                                              *************************************/
+    /*********************************************************************************************************************************************/
+    /*********************************************************************************************************************************************/
+    /*********************************************************************************************************************************************/
 
     /**********************************************************************
     **        AJOUTER | VOIR | MODIFIER LES INFORMATIONS DU COMPTE       **
     **********************************************************************/
-    //OK
+    
     public function infosCompte ()	
     {	
-        $this->load->view('templates/EntetePrincipal');
-        $this->load->view('templates/EnteteNavbar'); 
+        $this->indexMembre(); 
         $this->form_validation->set_rules('txtNom','Nom','required');
         $this->form_validation->set_rules('txtPrenom','Prenom');
         $this->form_validation->set_rules('txtAdresse','Adresse');
@@ -125,7 +104,7 @@ class Membre extends CI_Controller
             if($this->ModelePersonne->presenceMdp($this->session->email))
             {   
                 $DonneesInjectees['Personne']=$this->ModelePersonne->rechercheInfoPersonne($this->session->email);                                                                                                
-                $this->load->view('membre/vueGestionDeCompte',$DonneesInjectees);//charge la vue formulaire eventuelment prérempli
+                $this->load->view('membre/vueGestionDeCompte',$DonneesInjectees);
             }
             else
             {
@@ -139,7 +118,7 @@ class Membre extends CI_Controller
         {
             $donneesInsererPersonne = array(
             'email'=>$_SESSION['email'],
-            'Nom' => $this->input->post('txtNom'),//$_POST['txtNom]
+            'Nom' => $this->input->post('txtNom'),
             'Prenom' => $this->input->post('txtPrenom'),    
             'Adresse' => $this->input->post('txtAdresse'),
             'CodePostal' => $this->input->post('txtCp'),
@@ -148,19 +127,22 @@ class Membre extends CI_Controller
             'TelFixe' => $this->input->post('txtTelF')
             );           
             $this->ModelePersonne->modifierInfoPersonne($donneesInsererPersonne);
+            $DonneesInjectees['Personne']=$this->ModelePersonne->rechercheInfoPersonne($this->session->email);
             $this->load->view('templates/EntetePrincipal');
             $this->load->view('templates/EnteteNavbar');
-            $this->load->view('membre/vueInsertionReussi');
+            $this->load->view('membre/vueInsertionReussi', $DonneesInjectees);
             $this->load->view('templates/PiedDePagePrincipal');
         } 
        
     }
 
-    //Modification mot de passe OK
+    /**********************************************************************
+    **                    MODIFICATION DU MOT DE PASSE                   **
+    **********************************************************************/
+
     public function ModificationMdp()
     {  
-        $this->load->view('templates/EntetePrincipal');
-        $this->load->view('templates/EnteteNavbar');
+        $this->indexMembre();
         $this->form_validation->set_rules( 'password', 'mot de passe','required');
         $this->form_validation->set_rules( 'password2', 'repetez mot de passe','required');
         if($this->form_validation->run() === FALSE)
@@ -188,18 +170,13 @@ class Membre extends CI_Controller
         }
     }
 
-    function indexPanier()
-    {
-      $this->load->view('templates/EntetePrincipal');
-      $this->load->view('templates/EnteteNavbar');
-      $data['data']=$this->ModeleProduit->get_all_produit();
-      $this->load->view('visiteur/vuePanier',$data);
-    }
-    
+    /**********************************************************************
+    **                      DESINSCRIPTION NEWSLETTER                    **
+    **********************************************************************/
+
     public function Actif()
     {
-        $this->load->view('templates/EntetePrincipal');
-        $this->load->view('templates/EnteteNavbar');
+        $this->indexMembre();
         $this->form_validation->set_rules('Etre_Correspondant AND Actif','checkbox','required'); 
         $personne=$this->ModelePersonne->rechercheInfoPersonne($_SESSION['email']);
         $parent=$this->ModelePersonne->getPersonneParent($personne->NoPersonne);
@@ -239,24 +216,4 @@ class Membre extends CI_Controller
             }
         
    }
-   /* function actif
-{
-    $personne=$this----rechercheInfoPersonne($_SESSION['Email'])
-    $parent=$this----getPersonneParent($personne->NoPersone)
-    if($personne->actif==1)
-    if $parent->EtreCorespondant==1
-    {
-        vueEtesVousSur car correspondant
-    
-    //$donné=array('EtreCorespondant'=>0,'NoPersonne'=>$personne->NoPersone)
-    $this db modifierPersParent($donné)
-    }
-    $info=array(Actif=>0,Email=>$_SESSION['email'])
-    this db modifierInfoPersonne($info)
-    vue on vous emerdera plus
-
-}///monSite.com/Membre/actif */
-
-
-
 }

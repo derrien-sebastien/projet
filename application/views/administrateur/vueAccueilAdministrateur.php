@@ -1,4 +1,4 @@
-  <h1>Bienvenu sur l'accueil administrateur</h1>
+  <h1>Bienvenue sur l'accueil administrateur</h1>
   <div class="menuAdmin">
     <ul>
       <li>

@@ -1,11 +1,8 @@
-<?php
-defined('BASEPATH')OR exit('No direct script access allowed');
-?>
+<?php defined('BASEPATH')OR exit('No direct script access allowed'); ?>
 <!DOCTYPE html >
 <html>
 	<head>
 			<meta charset="utf-8">
-     
                   <!--------------------------------------------------------------------------->	
 		      <!--------------------------------------------------------------------------->	
 		      <!--                         FEUILLES DE STYLE                             -->
@@ -24,13 +21,12 @@ defined('BASEPATH')OR exit('No direct script access allowed');
                   <?php echo '<script src='.js_url('jquery-3.2.1').'></script>';?>
                   <?php echo '<script src='.js_url('bootstap').'></script>';?>
                   <?php echo '<script src='.js_url('bootstap.summer').'></script>';?>
-          
-  </head>    
                   <!--------------------------------------------------------------------------->	
 		      <!--------------------------------------------------------------------------->	
 		      <!--                     FIN DE NOS FEUILLES DE STYLE                      -->
 		      <!--------------------------------------------------------------------------->	
-		      <!--------------------------------------------------------------------------->
+                  <!--------------------------------------------------------------------------->
+      </head>
 
       
 
