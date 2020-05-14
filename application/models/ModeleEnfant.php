@@ -1,9 +1,6 @@
 <?php
-
 class ModeleEnfant extends CI_Model
-
 {
-
 
 	/**********************************************************************
 	**                           Constructeur                            **
@@ -14,7 +11,6 @@ class ModeleEnfant extends CI_Model
 	    $this->load->database();
     }
 
-
 	/*********************************************************************************************************************************************/
 	/*********************************************************************************************************************************************/
 	/*********************************************************************************************************************************************/
@@ -24,6 +20,7 @@ class ModeleEnfant extends CI_Model
 	/*********************************************************************************************************************************************/
 	/*********************************************************************************************************************************************/
 	/*********************************************************************************************************************************************/
+	
 	public function enfant($email) 
    	{
 		$this->db->select('ge_enfant.Nom as NomEnfant, ge_enfant.Prenom as PrenomEnfant,ge_enfant.DateNaissance, ge_classe.Nom as NomClasse, ge_enfant.NoEnfant');
@@ -46,8 +43,8 @@ class ModeleEnfant extends CI_Model
 		$this->db->where('ge_scolariser.NoEnfant', $noEnfant);
 		$maListe = $this->db->get();
       	return $maListe->result();
-
 	}
+
 	public function appartenir($noEnfant)
 	{
 		$this->db->select('*');
@@ -57,6 +54,7 @@ class ModeleEnfant extends CI_Model
       	return $maListe->result();
 
 	}
+
 	public function retournerEnfant($noEnfant)
 	{
 		$this->db->select('*');
@@ -89,9 +87,7 @@ class ModeleEnfant extends CI_Model
 		else
 		{
 			return false;
-		}
-		  
-		  
+		}  
 	}
 	public function getEnfants()
 	{
@@ -131,9 +127,8 @@ class ModeleEnfant extends CI_Model
 		$this->db->where_not_in('NoEnfant', $enfantsAC);
 		$query=$this->db->get();
 		return $query->result();
-		
-		
 	}
+
 	public function getEnfantClasse($classe)
 	{
 		$this->db->select('*');
@@ -144,6 +139,7 @@ class ModeleEnfant extends CI_Model
 		$query=$this->db->get();
 		return $query->result();
 	}
+
 	public function maxEnfant()
 	{
 	   $this->db->select_max('NoEnfant');
@@ -153,17 +149,6 @@ class ModeleEnfant extends CI_Model
 	   $noMax= $ligne->NoEnfant;	
 	   return $noMax;
 	}
-/*public function getEnfantClasse($classe) a modifier where numero enfant $query row
-	{
-		$this->db->select('*');
-		$this->db->from('ge_enfant');
-		$this->db->join('ge_appartenir','ge_enfant.NoEnfant=ge_appartenir.NoEnfant');
-		$this->db->where('ge_appartenir.DateFin',NULL);
-		$this->db->where('ge_appartenir.NoClasse',$classe);
-		$query=$this->db->get();
-		return $query->result();
-	}*/
-
 
 	/*********************************************************************************************************************************************/
 	/*********************************************************************************************************************************************/
@@ -175,20 +160,20 @@ class ModeleEnfant extends CI_Model
 	/*********************************************************************************************************************************************/
 	/*********************************************************************************************************************************************/
 	
-	
 	public function insetScolariser($donnees)
 	{
 		return $this->db->insert('ge_scolariser', $donnees);
 	}
+
 	public function insetEnfant($donnees)
 	{
 		return $this->db->insert('ge_enfant', $donnees);
 	}
+
 	public function insetAppartenir($donnees)
 	{
 		return $this->db->insert('ge_appartenir', $donnees);
 	}
-
 
 	/*********************************************************************************************************************************************/
 	/*********************************************************************************************************************************************/

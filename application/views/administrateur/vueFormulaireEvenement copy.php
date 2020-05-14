@@ -1,4 +1,3 @@
-</br>
 <?php
 /*données d'entrée:
  -$evenement
@@ -155,11 +154,16 @@ $submit=array(
 
 echo '<div class="container">';
 echo    "<h1 class='encadre'>Création d'un évènement</h1>";
+echo '</div>';
+echo '</br>';
+echo '<div class="container">';
 echo    form_open_multipart('Administrateur/formulaireEvenement');
 echo    form_hidden($hidden);
-
+echo '<table class="table table-striped">';
 if ($Provenance=='ajouter')
 {
+    echo '<tr>';
+        echo '<td>';
             echo form_label('année:','AnneeEvenement' );            
         echo "</td>";
         echo "<td>";

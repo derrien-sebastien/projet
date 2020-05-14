@@ -20,11 +20,9 @@ class ModelePersonne extends CI_Model
    /*********************************************************************************************************************************************/
    /*********************************************************************************************************************************************/
 
-
    /**********************************************************************
    **                    Tous les champs de notre table                 **
    **********************************************************************/
-
 
    public function getPersonne()
    {
@@ -44,23 +42,8 @@ class ModelePersonne extends CI_Model
    }
 
    /**********************************************************************
-   **                    Requete pour 1 Utilisateur                     **
-   **********************************************************************/
-
-
-  /* public function getByNoPersonne($NoPersonne)
-  {
-     $limit=1;
-     $offset=0;
-     $requete = $this->db->get_where('ge_personne', array('NoPersonne' => $NoPersonne),$limit,$offset);
-     return $this->db->query($requete)->result_array(); 
-  } */
-
-
-   /**********************************************************************
    **                      recherche Email existante                    **
    **********************************************************************/ 
-
 
    public function rechercherEmail($Email,$MotDePasse) 
    {
@@ -69,39 +52,38 @@ class ModelePersonne extends CI_Model
       $this->db->where('Email', $Email);
       $this->db->where('MotDePasse', $MotDePasse);
       $query = $this->db->get('utilisateur');
-      // SELECT * FROM ge_personne WHERE Email = $Email AND MotDePasse = $MotDePasse
       if ($query->num_rows() > 0)
          {
             return true;
          }
          else  
-            {
-               return false;
-            }
+         {
+            return false;
+         }
    }
+
    public function rechercherEmailPresent($Email) 
    {
       $this->db->select('*');
       $this->db->from('ge_personne'); 
       $this->db->where('Email', $Email);      
       $query = $this->db->get();
-      // SELECT * FROM ge_personne WHERE Email = $Email AND MotDePasse = $MotDePasse
       if ($query->num_rows() > 0)
          {
             return true;
          }
          else  
-            {
-               return false;
-            }
+         {
+            return false;
+         }
    }
+
    public function presenceMdp($Email) 
    {
       $this->db->select('MotDePasse');
       $this->db->from('ge_personne'); 
       $this->db->where('Email', $Email);      
       $query = $this->db->get();
-      // SELECT * FROM ge_personne WHERE Email = $Email AND MotDePasse = $MotDePasse
       $mdp=$query->row();
       if ($mdp->MotDePasse and $mdp!='')
          {
@@ -139,39 +121,21 @@ class ModelePersonne extends CI_Model
       $Liste = $this->db->get();
       return $Liste->row(); 
    }
+
    /**********************************************************************
    **                   Récupérer des données uniques                   **
    **********************************************************************/
-
 
    public function retourInfos($info)
    {
       $this->db->where('infos',$infos);
       $query=$this->db->get('ge_personne');
       return $query;
-  }
-
-
-
-  
-
-   /**********************************************************************
-   **                 Personne existante dans la db                     **
-   **********************************************************************/
-
-
-   /* public function existe($pPersonne)
-   {
-      $this->db->where($pPersonne);
-      $this->db->from('ge_personne');
-      return $this->db->count_all_results(); 
-   } */
-   
+   }
 
    /**********************************************************************
    **       Renvoi la personne existante sous forme d'objet            **
    **********************************************************************/   
-
 
    public function retournerPersonne($pPersonne)
    {
@@ -180,15 +144,14 @@ class ModelePersonne extends CI_Model
    } 
 
    public function maxPersonne()
-  {
-     $this->db->select_max('NoPersonne');
-     $this->db->from('ge_personne');
-     $query=$this->db->get();
-     $ligne = $query->row();	    
-     $noMax= $ligne->NoPersonne;	
-     return $noMax;
-  }
-
+   {
+      $this->db->select_max('NoPersonne');
+      $this->db->from('ge_personne');
+      $query=$this->db->get();
+      $ligne = $query->row();	    
+      $noMax= $ligne->NoPersonne;	
+      return $noMax;
+   }
 
    /*********************************************************************************************************************************************/
    /*********************************************************************************************************************************************/
@@ -200,17 +163,9 @@ class ModelePersonne extends CI_Model
    /*********************************************************************************************************************************************/
    /*********************************************************************************************************************************************/
 
-
-   /* function majDonnees($Donnees,$infos)
-   {
-      $this->db->where('infos',$infos);
-      $this->db->update('ge_personne',$Donnees);
-   } */
-
    /**********************************************************************
    **        Modifier les informations de la table ge_personne          **
    **********************************************************************/
-
 
    public function modifierPersonne($pDonneesAInserer)
    {        
@@ -254,22 +209,18 @@ class ModelePersonne extends CI_Model
    /*********************************************************************************************************************************************/
    /*********************************************************************************************************************************************/
    
-   
    /**********************************************************************
    **       Ajouter des informations sur la table ge_pers_parent        **
    **********************************************************************/ 
-
 
    public function insererInformationPersonneParent($donneesInsererPersonneParent)
    {
       return $this->db->insert('ge_pers_parent', $donneesInsererPersonneParent);
    }
 
-
    /**********************************************************************
    **       Ajouter des informations sur la table ge_pers_parent        **
    **********************************************************************/
-
 
    public function insererInformationPersonne($donneesInsererPersonne)
    {

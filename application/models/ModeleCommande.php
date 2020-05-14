@@ -24,24 +24,6 @@ class ModeleCommande extends CI_Model
     /*********************************************************************************************************************************************/
     /*********************************************************************************************************************************************/
 
-
-    /* public function obtenirCommande($id)
-    {
-    $this->db->select('*');
-    $this->db->from('ge_commande');
-    $this->db->join('ge_personne', 'ge_personne.NoPersonne = ge_commande.NoPersonne');
-    $this->db->where('ge_personne.NoPersonne', $id);
-    $query = $this->db->get();
-    $result = $query->row_array();
-    // Get order items
-    $this->db->select('i.*, p.image, p.name, p.price');
-    $this->db->from($this->ordItemsTable.' as i');
-    $this->db->join($this->proTable.' as p', 'p.id = i.product_id', 'left');
-    $this->db->where('i.order_id', $id);
-    $query2 = $this->db->get();
-    $result['items'] = ($query2->num_rows() > 0)?$query2->result_array():array();
-    return !empty($result)?$result:false;
-    } */
     public function commandeParEvenement($envenement,$annee)
     {
         $this->db->select('*');
