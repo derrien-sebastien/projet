@@ -84,15 +84,18 @@ class ModelePersonne extends CI_Model
       $this->db->from('ge_personne'); 
       $this->db->where('Email', $Email);      
       $query = $this->db->get();
+      /* var_dump($query);
+      die; */
       $mdp=$query->row();
-      if ($mdp->MotDePasse and $mdp!='')
-         {
-            return true;
-         }
-         else  
-         {
-            return false;
-         }
+      
+      if (isset($mdp->MotDePasse) and $mdp!='' )
+      {
+         return true;
+      }
+      else  
+      {
+         return false;
+      }
    }
 
    public function recherchePersonne($Email,$MotDePasse) 
@@ -104,10 +107,10 @@ class ModelePersonne extends CI_Model
       $Liste = $this->db->get();
       return $Liste->row();     
    }
-
+                   
    public function rechercheInfoPersonne($Email) 
    {
-      $this->db->select('NoPersonne,Email,Nom,Prenom,Adresse,Ville,CodePostal,TelPortable,TelFixe,Actif');
+      $this->db->select('NoPersonne,Email,Nom,Prenom,Adresse,Ville,CodePostal,TelPortable,TelFixe,Actif,profil');
       $this->db->from('ge_personne'); 
       $this->db->where('Email', $Email);      
       $Liste = $this->db->get();
@@ -167,18 +170,6 @@ class ModelePersonne extends CI_Model
    **        Modifier les informations de la table ge_personne          **
    **********************************************************************/
 
-   public function modifierPersonne($pDonneesAInserer)
-   {        
-      $this->db->where('email', $pDonneesAInserer['Email']);
-      $this->db->where('adress', $pDonneesAInserer['Adresse']);
-      $this->db->where('vil', $pDonneesAInserer['Ville']);
-      $this->db->where('cp', $pDonneesAInserer['CodePostal']);
-      $this->db->where('telP', $pDonneesAInserer['TelPortable']);
-      $this->db->where('telF', $pDonneesAInserer['TelFixe']);
-      $this->db->where('mdp', $pDonneesAInserer['MotDePasse']);
-      return $this->db->update('ge_personne', $pDonneesAInserer);
-   }
-
    public function modifierEtreCorrespondant($pDonneesAInserer)
    {
       $this->db->where('Etre_Correspondant', $pDonneesAInserer['Etre_Correspondant']);
@@ -188,7 +179,7 @@ class ModelePersonne extends CI_Model
    public function modifierInfoPersonne($pDonneesAInserer)
    {   
       
-      $this->db->where('email',  $pDonneesAInserer['email']);      
+      $this->db->where('Email',  $pDonneesAInserer['Email']);      
       return $this->db->update('ge_personne', $pDonneesAInserer);
    }
 

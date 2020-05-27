@@ -15,27 +15,27 @@ sortie:
 */
 //////////////////////////////  Déclaration de nos Variables ////////////////////////////
         $adresseExpediteur=array(
-            'type'  =>'email',
-            'name'  =>'adresseExpediteur',
-            'value' =>$adExpediteur
+            'type'      =>  'email',
+            'name'      =>  'adresseExpediteur',
+            'value'     =>  $adExpediteur
         );
         $object=array(
-            'type'=>'text',
-            'name'=>'object'
+            'type'      =>  'text',
+            'name'      =>  'object'
         );
         $message=array(
-            'id'=>'summernote',
-            'type'=>'texte',
-            'name'=>'message'
+            'id'        =>  'summernote',
+            'type'      =>  'texte',
+            'name'      =>  'message'
         );
         $expediteur=array(
-            'name'=>'aTitrePersonnel'
+            'name'      =>  'aTitrePersonnel'
         );
         $pieceJointe=array(
-            'type'=>'file',
-            'name'=>'pieceJointe',
-            'accept'=>'.doc,.txt,.jpg,.pdf,.bmp,.avi,.mp3,.mp4',//a completer
-            'multiple'=>TRUE
+            'type'      =>  'file',
+            'name'      =>  'pieceJointe',
+            'accept'    =>  '.doc,.txt,.jpg,.pdf,.bmp,.avi,.mp3,.mp4',//a completer
+            'multiple'  =>  TRUE
         );
 
 ///////////////////////// Variables déjà connu ? On réassigne... ////////////////////////
@@ -96,7 +96,7 @@ echo"</tr></td></table>";
 echo form_submit('envoyer','envoyer');
 echo form_close(); 
 echo'</div>';
-
+echo form_close();      
 //////////////////////////////  FIN DE FORMULAIRE ///////////////////////////////////////
 
 ?>

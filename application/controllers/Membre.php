@@ -20,11 +20,9 @@ class Membre extends CI_Controller
             }
         }  
             $this->load->model('ModeleIdentifiantSite');
-            /* $this->load->model('ModeleClasse'); */
             $this->load->model('ModeleCommande');
-            /* $this->load->model('ModeleEnfant'); */
-            $this->load->model('ModeleEvenement');
-            /* $this->load->model('ModeleIdentifiantSite'); */    	
+            $this->load->model('ModeleEnfant');
+            $this->load->model('ModeleEvenement');	
             $this->load->model('ModelePersonne');
             $this->load->model('ModeleProduit');
         
@@ -38,9 +36,12 @@ class Membre extends CI_Controller
 		    {
 			    $annee=date('Y')+1;
 			    define('AnneeEnCour',$annee); 
-		    }
-        }
+            }
+            $this->load->library('email');
+            date_default_timezone_set('Europe/Paris');
     
+        }
+        
          
 
     /*********************************************************************************************************************************************/
@@ -61,17 +62,22 @@ class Membre extends CI_Controller
             Navbar ( générée en fonction des utilisateurs )
             Pied de Page ( informations sur le site/l'association - les administrateurs )
    */
-   public function indexMembre()
-   {
-      $this->load->view('templates/EntetePrincipal');
-      $this->load->view('templates/EnteteNavbar');
-      $this->load->view('templates/PiedDePagePrincipal');
-   }
+    public function indexMembre($vue, $donnees = NULL, $vue2= null, $donnees2=null)
+    {
+        $this->load->view('templates/EntetePrincipal');
+        $this->load->view('templates/EnteteNavbar');
+        $this->load->view($vue,$donnees);
+        if(isset($vue2))
+        {
+            $this->load->view($vue2,$donnees2);
+        }
+        $this->load->view('templates/PiedDePagePrincipal');
+    }
+
 
     public function accueil()
     {
-        $this->indexMembre();
-        $this->load->view('membre/vueAccueilPersonne');  
+        $this->indexMembre('membre/vueAccueilPersonne');
     }
 
 
@@ -91,7 +97,6 @@ class Membre extends CI_Controller
     
     public function infosCompte ()	
     {	
-        $this->indexMembre(); 
         $this->form_validation->set_rules('txtNom','Nom','required');
         $this->form_validation->set_rules('txtPrenom','Prenom');
         $this->form_validation->set_rules('txtAdresse','Adresse');
@@ -104,7 +109,7 @@ class Membre extends CI_Controller
             if($this->ModelePersonne->presenceMdp($this->session->email))
             {   
                 $DonneesInjectees['Personne']=$this->ModelePersonne->rechercheInfoPersonne($this->session->email);                                                                                                
-                $this->load->view('membre/vueGestionDeCompte',$DonneesInjectees);
+                $this->indexMembre('membre/vueGestionDeCompte',$DonneesInjectees);
             }
             else
             {
@@ -117,7 +122,7 @@ class Membre extends CI_Controller
         else
         {
             $donneesInsererPersonne = array(
-            'email'=>$_SESSION['email'],
+            'Email'=>$_SESSION['email'],
             'Nom' => $this->input->post('txtNom'),
             'Prenom' => $this->input->post('txtPrenom'),    
             'Adresse' => $this->input->post('txtAdresse'),
@@ -128,10 +133,7 @@ class Membre extends CI_Controller
             );           
             $this->ModelePersonne->modifierInfoPersonne($donneesInsererPersonne);
             $DonneesInjectees['Personne']=$this->ModelePersonne->rechercheInfoPersonne($this->session->email);
-            $this->load->view('templates/EntetePrincipal');
-            $this->load->view('templates/EnteteNavbar');
-            $this->load->view('membre/vueInsertionReussi', $DonneesInjectees);
-            $this->load->view('templates/PiedDePagePrincipal');
+            $this->indexMembre('membre/vueInsertionReussi', $DonneesInjectees);
         } 
        
     }
@@ -140,22 +142,20 @@ class Membre extends CI_Controller
     **                    MODIFICATION DU MOT DE PASSE                   **
     **********************************************************************/
 
-    public function ModificationMdp()
+    public function modificationMdp()
     {  
-        $this->indexMembre();
         $this->form_validation->set_rules( 'password', 'mot de passe','required');
         $this->form_validation->set_rules( 'password2', 'repetez mot de passe','required');
         if($this->form_validation->run() === FALSE)
         {
-            $this->load->view('membre/vueModifierMotDePasse');
-            $this->load->view('templates/PiedDePagePrincipal');
+            $this->indexMembre('membre/vueModifierMotDePasse');
         }
         else 
         {
             if($_POST['password']==$_POST['password2'])
             {
                 $donnees=array(
-                'email'=>$_SESSION['email'],
+                'Email'=>$_SESSION['email'],
                 'MotDePasse'=>$_POST['password']
                 );
                 $this->ModelePersonne->modifierInfoPersonne($donnees);
@@ -164,8 +164,8 @@ class Membre extends CI_Controller
             else
             {
                 echo '<h1>le mot de passe saisi n\'est pas identique a la confirmation<h1>';
-                $this->load->view('membre/vueModifierMotDePasse');
-                $this->load->view('templates/PiedDePagePrincipal');
+                $this->indexMembre('membre/vueModifierMotDePasse');
+
             }
         }
     }
@@ -174,46 +174,111 @@ class Membre extends CI_Controller
     **                      DESINSCRIPTION NEWSLETTER                    **
     **********************************************************************/
 
-    public function Actif()
+    public function actif()
     {
-        $this->indexMembre();
-        $this->form_validation->set_rules('Etre_Correspondant AND Actif','checkbox','required'); 
         $personne=$this->ModelePersonne->rechercheInfoPersonne($_SESSION['email']);
         $parent=$this->ModelePersonne->getPersonneParent($personne->NoPersonne);
-        if($personne->Actif==1)
-        
-        {      
-            if ($parent->Etre_Correspondant==1)
+        if(!isset($_POST['submit']))
+        {
+            if($personne->Actif==1)
             {
-                $this->load->view('membre/vueDesinscrireMail');
-                
-                if(isset($_POST['confirmer']))
-                {
+                $donnees=array(
+                    'actif'=>'oui'
+                );
+            }
+            else
+            {
+                $donnees=array(
+                    'actif'=>'non'
+                );
+            }
+            $this->indexMembre('membre/vueDesinscrireMail',$donnees);
+        }
+        else
+        {
+            if($personne->Actif==1)
+            
+            {   
+                if(isset($parent->Etre_Correspondant)) 
+                {  
                     $donneesInsererParent=array('Etre_Correspondant'=>0,'NoPersonne'=>$personne->NoPersonne);
                     $this->ModelePersonne->modifierPersParent($donneesInsererParent);
                     $donneesInsererPersonne=array('Actif'=>0,'Email'=>$_SESSION['email']);
                     $this->ModelePersonne->modifierInfoPersonne($donneesInsererPersonne);
-                    $this->load->view('membre/vueConfirmation');
+                    $this->indexMembre('membre/vueConfirmation');
+                }
+                else
+                {
+                    $donneesInsererPersonne=array('Actif'=>0,'Email'=>$_SESSION['email']);
+                    $this->ModelePersonne->modifierInfoPersonne($donneesInsererPersonne);
+                    $this->indexMembre('membre/vueConfirmation');
                 }
             }
-            else 
+            else
             {
-                $this->load->view('membre/vueConfirmation');
+                $donneesInsererPersonne=array('Actif'=>1,'Email'=>$_SESSION['email']);
+                $this->ModelePersonne->modifierInfoPersonne($donneesInsererPersonne);
+                $this->indexMembre('membre/vueConfirmation');
             }
         }
-        else
+    }  
+  
+    public function problem()
+    {
+        $this->form_validation->set_rules( 'message',' ton message ducon', 'required');
+        $this->form_validation->set_rules( 'object','pourquoi tu me derange', 'required');
+        if($this->form_validation->run() === FALSE)
+        {
+            $this->indexMembre('membre/vueEnvoiMail');
+        }
+        else 
+        {
+            $adresse='adresseAssocition@example.com';//adresse de l'association
+            $personne=$this->ModelePersonne->rechercheInfoPersonne($_SESSION['email']);
+            if(isset($personne->Nom))//si aucun nom est inscrit dans le formulaire
             {
-                $this->load->view('membre/vueInscrireMail');
-                $this->form_validation->set_rules('Etre_Correspondant AND Actif','checkbox','required'); 
-                if(isset($_POST['confirmer']))
+                $nom=$personne->Nom;//nom qui figurera sur le mail 
+            }
+            else
+            {
+                $nom=$personne->Email;
+            }
+            $destinataire=$adresse;//destinataire passer dans la funtion
+            $copie=$personne->Email;// adresse a mettre en copie de chaque mail
+            $object=$_POST['object'];//object
+            $texte=$_POST['message'];//corps du message
+            $P=0;
+            if(isset($donnees['piecesJointes']))
+            {
+                foreach($donnees['piecesJointes'] as $pieceJointe)
                 {
-                    $donneesInsererParent=array('Etre_Correspondant'=>1,'NoPersonne'=>$personne->NoPersonne);
-                    $this->ModelePersonne->modifierPersParent($donneesInsererParent);
-                    $donneesInsererPersonne=array('Actif'=>1,'Email'=>$_SESSION['email']);
-                    $this->ModelePersonne->modifierInfoPersonne($donneesInsererPersonne);
-                    $this->load->view('membre/vueConfirmation');
+                    $P++;
+                    $piecesJointes[$nombreDePiecesJointes]=$pieceJointe;
+                }
+            } 
+            $expediteur=$adresse;
+            //envoye du mail a l'expediteur et en copie responsable; 
+            $this->email->from($adresse,$nom); 
+            $this->email->to($expediteur); 
+            $this->email->cc($copie);
+            $this->email->subject( $object ); 
+            $this->email->message( $texte );
+            if(isset($pieceJointe))
+            {
+                foreach($piecesJointes as $attachement)
+                {
+                    $this->email->attach($attachement);
                 }
             }
-        
-   }
+            if($this->email->send())
+            {
+                echo 'votre message a été remis'   ;
+            }
+            else
+            {
+            echo 'votre message etait trop con';
+            }       
+        }
+    }
+
 }

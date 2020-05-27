@@ -1,7 +1,5 @@
 <?php
- 
 class ModeleProduit extends CI_Model 
-
 {
 
    /**********************************************************************
@@ -10,13 +8,7 @@ class ModeleProduit extends CI_Model
 
    public function __construct()
    {
-
-      $this->load->database();
-      $this->proTable='ge_produit','prod';
-      $this->custTable='ge_personne','pers';
-      $this->ordTable='ge_commande','comm';
-      $this->ordItemsTable='ge_contenir','cont';
-      
+      $this->load->database(); 
    }
 
    /*********************************************************************************************************************************************/
@@ -75,14 +67,14 @@ class ModeleProduit extends CI_Model
    {
       $this->db->select('comm.*,pers.Nom,pers.Email,pers.TelPortable,pers.Ville');
       $this->db->from('ge_commande.'as comm');
-      $this->db->join($this->custTable.'as pers','pers.NoPersonne = comm.NoPersonne', 'left');
+      $this->db->join(ge_personne.'as pers','pers.NoPersonne = comm.NoPersonne', 'left');
       $this->db->where('comm.NoCommande', $id);
       $query = $this->db->get();
       $result = $query->row_array();
       
       $this->db->select('cont.*','prod.Img_Produit','prod_LibelleCourt','prod.Prix');
-      $this->db->from($this->ordItemsTable.'as cont');
-      $this->db->join($this->proTable.'as prod','prod.NoProduit=cont.NoProduit','left');
+      $this->db->from(ge_contenir.'as cont');
+      $this->db->join(ge_produit.'as prod','prod.NoProduit=cont.NoProduit','left');
       $this->db->where('cont.NoProduit',$id);
       $query2 = $this->db->get();
       $result['items'] = ($query2->num_rows() > 0)?$query2->result_array():array();
@@ -99,7 +91,7 @@ class ModeleProduit extends CI_Model
       {
          $data['modified'] = date("Y-m-d H:i:s");
       }
-      $insert = $this->db->insert($this->custTable, $data);
+      $insert = $this->db->insert(ge_personne, $data);
       return $insert?$this->db->insert_id():false;
    }
 
@@ -113,13 +105,13 @@ class ModeleProduit extends CI_Model
       {
          $data['DateValidation'] = date("Y-m-d H:i:s");
       }
-      $insert = $this->db->insert($this->ordTable, $data);
+      $insert = $this->db->insert(ge_commande, $data);
       return $insert?$this->db->insert_id():false;
    }
 
    public function insererProduitCommande($data=array())
    {
-      $insert = $this->db->insert_batch($this->ordItemsTable, $data);
+      $insert = $this->db->insert_batch($this->ge_contenir, $data);
       return $insert?true:false;
    } */
 
@@ -158,7 +150,7 @@ class ModeleProduit extends CI_Model
    } 
 
 
-   public function getUnProduit($donneesProduit)
+   public function getUnProduit($donneesProduit=null)
    {
       $this->db->select('*');
       $this->db->from('ge_produit');

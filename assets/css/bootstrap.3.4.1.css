@@ -75,7 +75,7 @@ input[type='email'],input[type='password']
   width: 300px;
   font-size: 18px;
   margin-bottom: 20px;
-  background-color: rgb(54, 54, 54);
+  background-color: rgb(143, 143, 143);
   padding-left: 20px;
 }
 .btnSubmit
@@ -83,6 +83,15 @@ input[type='email'],input[type='password']
   padding: 15px 25px;
   color:  #fff;
   background-color: #0000009c;
+}
+.box {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-gap: 10px 2em;
+}
+
+.box :first-child {
+    align-self: center;
 }
 .accueilP
 {
@@ -102,7 +111,7 @@ input[type='email'],input[type='password']
 {
   padding: 15px;
   position: relative;
-  width: 200px;
+  width: 300px;
   vertical-align: middle;
   background-color: rgb(134, 134, 134);
   cursor: pointer;
@@ -192,11 +201,61 @@ span
 {
   display: block;
 }
-.desc {
+.desc 
+{
   padding: 15px;
   text-align: center;
 }
 
+#envoiMail
+{
+  font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+  margin-left: auto; 
+  margin-right: auto;
+}
+#envoiMail td 
+{
+  height: 70px;
+  max-width: 550px;
+  border: none;
+  padding: 8px;
+  text-align: center;
+}
+
+#infoTable 
+{
+  font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+  margin-left: auto; 
+  margin-right: auto;
+}
+
+#infoTable td 
+{
+  height: 70px;
+  max-width: 250px;
+  border: none;
+  padding: 8px;
+  text-align: center;
+}
+
+#infoTable tr:nth-child(even)
+{
+  background-color: rgb(107, 107, 107);
+}
+
+#infoTable tr:hover 
+{
+  background-color: #ddd;
+}
+
+#infoTable th 
+{
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: center;
+  background-color: rgb(107, 107, 107);
+  color: white;
+}
 
 /*//////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////
@@ -1320,7 +1379,8 @@ img {
 .img-thumbnail {
   padding: 4px;
   line-height: 1.42857143;
-  background-color: rgb(36, 36, 36);
+  color: #fff;
+  background-color: rgb(54, 54, 54);
   border: 1px solid rgba(7, 7, 7, 0.692);
   border-radius: 4px;
   -webkit-transition: all 0.2s ease-in-out;

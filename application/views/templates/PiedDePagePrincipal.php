@@ -1,6 +1,6 @@
 
 			<footer> 
-				<!-- <div>
+			<!-- 	<div>
 					<div align="center">
 						<a href="#">Contacter</a> le responsable 
 						<ul align="center" >
@@ -9,8 +9,8 @@
 						</ul>
 						<p align="center" ><em><pre style="opacity: 0.4;">&copy; DERRIEN Sébastien et KERHIR Renan  2020 / Tous droits réservés.</pre></em></p>
 					</div>
-				</div> -->
-			
+				</div>
+			 -->
 			</footer>
 		</div>
 	</body>

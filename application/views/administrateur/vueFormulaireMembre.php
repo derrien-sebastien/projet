@@ -38,13 +38,18 @@ $telPortable=array(
     'name'=>'telPortable',
     'type'=>'tel',
     'pattern'=>'[0-9]{2}.[0-9]{2}.[0-9]{2}.[0-9]{2}.[0-9]{2}',
-    'value'=>'06.00.00.00.00.'
+    'value'=>'06.00.00.00.00'
 );
 $telFixe=array(
     'name'=>'telFixe',
     'type'=>'tel',
     'pattern'=>'[0-9]{2}.[0-9]{2}.[0-9]{2}.[0-9]{2}.[0-9]{2}',
-    'value'=>'02.00.00.00.00.'
+    'value'=>'02.00.00.00.00'
+);
+$submit=array(
+    'name'=>'submit',
+    'value'=>'Valider',
+    'class'=>'btn btn-primary'
 );
 
 echo form_open('Administrateur/ajouterUnMembre');
@@ -133,6 +138,9 @@ echo '<table>';
     echo '</br>';
 echo '</table>';
 echo 'une validation sera envoyer par mail ';
+echo 
+form_submit($submit);
+echo form_close();
 
 
 

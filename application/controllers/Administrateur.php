@@ -18,10 +18,9 @@ class Administrateur extends CI_Controller
 		creation d'une constante AnneeEnCour 
 		xverification presence evenement 0 si non present creation de celui ci 
 		*/
-		parent::__construct();  
+		parent::__construct();
 		$this->load->model('ModeleProduit');
 		$this->load->model('ModeleEvenement');
-		$this->load->model('ModeleClasse');
 		$this->load->model('ModeleEnfant');
 		$this->load->model('ModeleCommande'); 
 		$this->load->model('ModeleIdentifiantSite');
@@ -73,21 +72,31 @@ class Administrateur extends CI_Controller
 			);
 			$this->ModeleEvenement->ajouterEvenement($donneesEvenement0);
 		}
+		date_default_timezone_set('Europe/Paris');
 	}
 
 	/**********************************************************************
     **                           Accueil                                 **
 	**********************************************************************/
 	
+	public function indexAdmin($vue, $donnees = NULL, $vue2= null, $donnees2=null)
+    {
+        $this->load->view('templates/EntetePrincipal');
+        $this->load->view('templates/EnteteNavbar');
+        $this->load->view($vue,$donnees);
+        if(isset($vue2))
+        {
+            $this->load->view($vue2,$donnees2);
+        }
+        $this->load->view('templates/PiedDePagePrincipal');
+    }
 	public function accueil() 
 	{
 		/*
 			affichage de la page acceuil administrateur aucune variable 
 		*/
-		$this->load->view('templates/EntetePrincipal');
-		$this->load->view('templates/EnteteNavbar');
-		$this->load->view('administrateur/vueAccueilAdministrateur');
-		$this->load->view('templates/PiedDePagePrincipal');
+		$this->indexAdmin('administrateur/vueAccueilAdministrateur');
+
 	}
 
 	/*********************************************************************************************************************************************/
@@ -153,11 +162,7 @@ class Administrateur extends CI_Controller
 			$t2=$this->ModeleEvenement->getEvenementGeneral(AnneeEnCour-1);			
 			$t3=$this->ModeleEvenement->getEvenementGeneral(AnneeEnCour-2);			
 			$donneesInjectees['lesEvenements']= array_merge($t1,$t2,$t3);
-			
-			$this->load->view('templates/EntetePrincipal');
-			$this->load->view('templates/EnteteNavbar');
-			$this->load->view('administrateur/vueSelectionEvenements',$donneesInjectees);		
-			$this->load->view('templates/PiedDePagePrincipal');
+			$this->indexAdmin('administrateur/vueSelectionEvenements',$donneesInjectees);		
 		}
 		else
 		{
@@ -221,18 +226,18 @@ class Administrateur extends CI_Controller
 				//cration de la variable evenement
 				$donneesInjectees['evenement']=$donnees['evenement'];
 			}
-			//chargement des entetes
-			$this->load->view('templates/EntetePrincipal');
-			$this->load->view('templates/EnteteNavbar');
 			if ($donnees['Provenance']=='ajouter')//si on ajoute un evenement
 			{
 				// creation variable lesEvenement année en cours et -1 et -2
 				$t1=$this->ModeleEvenement->getEvenementGeneral(AnneeEnCour);//recuperation les evenement en objet
 				$t2=$this->ModeleEvenement->getEvenementGeneral(AnneeEnCour-1);
 				$t3=$this->ModeleEvenement->getEvenementGeneral(AnneeEnCour-2);
-				$donneesInjectees['lesEvenements']=array_merge($t1,$t2,$t3);
-				//chargement de la vue selection evenement 
-				$this->load->view('administrateur/vueSelectionEvenements',$donneesInjectees);//charge la vue pour preremplir le formulaire
+				$donneesSelection['lesEvenements']=array_merge($t1,$t2,$t3);
+				$donneesSelection['Provenance']=$donnees['Provenance'];
+				$vue1=array(
+					'vue'		=> 'administrateur/vueSelectionEvenements',
+					'donnees'	=> $donneesSelection
+				);
 				
 			}
 			if ($donnees['Provenance']=='modifier')//si on modifie un evenement
@@ -241,8 +246,19 @@ class Administrateur extends CI_Controller
 				$donneesInjectees['produitDeLEvenement']=$this->ModeleProduit->getProduits($evenement->NoEvenement, $evenement->Annee);
 			}
 			//chargement de la vue formulaire evenement et du pied de page
-			$this->load->view('administrateur/vueFormulaireEvenement copy',$donneesInjectees);
-			$this->load->view('templates/PiedDePagePrincipal');
+			
+				$vue2=array(
+					'vue'=>"administrateur/vueFormulaireEvenement copy.php",
+					'donnees'=>$donneesInjectees
+				);
+			if (isset($vue1))
+			{
+				$this->indexAdmin($vue1['vue'],$vue1['donnees'],$vue2['vue'],$vue2['donnees']);
+			}
+			else
+			{
+				$this->indexAdmin($vue2['vue'],$vue2['donnees']);	
+			}
 		}
 		else 
 		{
@@ -347,25 +363,34 @@ class Administrateur extends CI_Controller
 						}
 					}
 					//ajout evenement marchant
+
 					$donnees['DateRemiseProduit']=$_POST['dateRemiseProduit'];
 					$this->ModeleEvenement->ajouterEvenementMarchand($donnees);
 					if ($new=1)
 					{
-						$this->formulaireProduit($donnees['NoEvenement'],$donnees['Annee'],'ajouterEvenement');
+						$donnees['Provenance']='ajouterEvenement';
+						$this->formulaireProduit($donnees);
 					}					
 				}
 				else
 				{
 					$this->ModeleEvenement->ajouterEvenementNonMarchand($donnees);//ajout a la table non marchand					
+					redirect('visiteur/EvenementNonMarchand/'.$donnees['NoEvenement'].'/'.$donnees['Annee']);
 				}
 			}
-			elseif($Provenance=='modifier')//si on modifie un evenement
+			elseif($provenance=='modifier')//si on modifie un evenement
 			{
 				$this->ModeleEvenement->modifierEvenement($donneesAInserer);//modification de la ligne liée a l'evenement dans la db
 				if (isset($_POST['ajoutProduit']))//si on ajoute un produit
 				{	
 					//$i prend la valeur max des produit de l'evenement 
 					$i=$this->ModeleProduit->maxProduit($donnees);
+					if(!isset($_POST['produit']))
+					{
+						$_POST['produit']=array(
+							'0'=>'//'
+						);
+					}
 					foreach ($_POST['produit'] as $unProduit)
 					{
 						if($unProduit!='//')
@@ -390,15 +415,17 @@ class Administrateur extends CI_Controller
 						}
 					}
 					//presence evenement marchant
+					
 					if($this->ModeleEvenement->presenceEvenementMarchand($donnees['Annee'],$donnees['NoEvenement']))
 					{
 						//sortie evenement marchant
-						$evenementMarchant=$this->ModeleEvenement->getEvenementMarchand($donnees['Annee'],$donnees['NoEvenement']);
+						$evenementMarchand=$this->ModeleEvenement->getEvenementMarchand($donnees['Annee'],$donnees['NoEvenement']);
 						//y a t'il eu modification de la date remise produit
-						if($evenementMarchant->DateRemiseProduit!=$donnees['DateRemiseProduit'])
+						$donnees['DateRemiseProduit']=$_POST['dateRemiseProduit'];
+						if($evenementMarchand->DateRemiseProduit!=$donnees['DateRemiseProduit'])
 						{
 							//update evenement marchant
-							$this->ModeleEvenement->modifierEvenementMarchant($donnees);
+							$this->ModeleEvenement->modifierEvenementMarchand($donnees);
 						}
 					}
 					else 
@@ -415,15 +442,20 @@ class Administrateur extends CI_Controller
 					}					
 					if ($new=1)
 					{
-						$this->formulaireProduit($donnees['NoEvenement'],$donnees['Annee'],'modifierEvenement');
+						$donnees['provenance']='modifierEvenement';
+						$this->formulaireProduit($donnees);
+					}
+					else
+					{
+						redirect('visiteur/EvenementNonMarchand/'.$donnees['NoEvenement'].'/'.$donnees['Annee']);
 					}
 					
 				}
 				else
 				{
-					if(!$this->ModeleEvenement->presenceEvenementMarchand($donneesAInserer['annee'],$donneesAInserer['noEvenement']))
+					if(!$this->ModeleEvenement->presenceEvenementMarchand($donneesAInserer['Annee'],$donneesAInserer['NoEvenement']))
 					{
-						if(!$this->ModeleEvenement->presenceEvenementNonMarchand($donneesAInserer['annee'],$donneesAInserer['NoEvenement']))
+						if(!$this->ModeleEvenement->presenceEvenementNonMarchand($donneesAInserer['Annee'],$donneesAInserer['NoEvenement']))
 						{							
 							$this->ModeleEvenement->ajouterEvenementNonMarchand($donnees);//ajout a la table non marchand	
 						}
@@ -450,7 +482,12 @@ class Administrateur extends CI_Controller
 
     public function ajouterProduit($NoEvenement=null,$Annee=null) 
 	{
-		$this->formulaireProduit($NoEvenement,$Annee,'ajouter');		
+		$donnees=array(
+			'NoEvenement'=>$NoEvenement,
+			'Annee'=>$Annee,
+			'provenance'=>'ajouter'
+		);
+		$this->formulaireProduit($donnees);		
 	}
 
 
@@ -473,8 +510,6 @@ class Administrateur extends CI_Controller
 
 
 		*/
-		$this->load->view('templates/EntetePrincipal');
-		$this->load->view('templates/EnteteNavbar');
 		if(isset($donnees['provenance']))
 		{
 			$donneesInjectees['provenance']=$donnees['provenance'];
@@ -495,16 +530,15 @@ class Administrateur extends CI_Controller
 			$t2=$this->ModeleProduit->getProduitGeneral(AnneeEnCour-1);
 			$t3=$this->ModeleProduit->getProduitGeneral(AnneeEnCour-2);
 			$donneesInjectees['lesProduits']=array_merge($t1,$t2,$t3);
-			$this->load->view('administrateur/vueSelectionProduits',$donneesInjectees);
+			$this->indexAdmin('administrateur/vueSelectionProduits',$donneesInjectees);
 		}
 		else
 		{
 			// sortie des evement de l'evenement et ouverture de la vue selection des evenement			
 			$DonneesInjectees['lesProduits']=$this->ModeleProduit->getProduits($evenement->NoEvenement, $evenement->Annee);
-			$this->load->view('administrateur/vueSelectionProduits',$DonneesInjectees);
+			$this->indexAdmin('administrateur/vueSelectionProduits',$DonneesInjectees);
 			
-		}	
-		$this->load->view('templates/PiedDePagePrincipal');	
+		}	;	
 	} 
 
 
@@ -552,20 +586,36 @@ donnée de sortie:
 */
 		// modifier l'arriver en tableau
 		//arriver de la vue selection produit 
-		
-		
+	
 		if(isset($_POST['provenance']))
 		{
-			$donnees['provenance']=$_POST['provenance'];
+			if (!isset($donnees['provenance']))
+			{
+				$donnees['provenance']=$_POST['provenance'];
+			}
 		}
 		if($donnees['provenance']=='modifier')
 		{
 			if(isset($_POST['produit']))
 			{
-				$AncienEvenement=explode("/",$_POST['produit']);
-   	 			$donnees['Annee']=$AncienEvenement['0'];
-				$donnees['NoEvenement']=$AncienEvenement['1'];
-				$donnees['NoProduit']=$AncienEvenement['2'];
+				if ($_POST['produit']==array())
+				{
+					foreach($_POST['produit'] as $unProduit)
+					{
+						$AncienEvenement=explode("/",$unProduit);
+						$donnees['Annee']=$AncienEvenement['0'];
+						$donnees['NoEvenement']=$AncienEvenement['1'];
+						$donnees['NoProduit']=$AncienEvenement['2'];
+					}
+				}
+				else
+				{
+					$AncienEvenement=explode("/",$_POST['produit']);
+					$donnees['Annee']=$AncienEvenement['0'];
+					$donnees['NoEvenement']=$AncienEvenement['1'];
+					$donnees['NoProduit']=$AncienEvenement['2'];
+				}
+			
 			}
 		}
 		$this->form_validation->set_rules('noEvenement','noEvenement','required');
@@ -584,31 +634,42 @@ donnée de sortie:
 		$this->form_validation->set_rules('autreProduit','autreProduit');
 		if ($this->form_validation->run() === FALSE)
 		{
-			
 			$donneesInjectees['provenance']=$donnees['provenance'];
-    		$this->load->view('templates/EntetePrincipal');
-			$this->load->view('templates/EnteteNavbar');
 			if($donnees['provenance']=='ajouter')
     		{
 				$t1=$this->ModeleProduit->getProduitGeneral(AnneeEnCour);
         		$t2=$this->ModeleProduit->getProduitGeneral(AnneeEnCour-1);
 				$t3=$this->ModeleProduit->getProduitGeneral(AnneeEnCour-2);
-				$donneesInjectees['lesProduits']=array_merge($t1,$t2,$t3);
-				$donneesInjectees['evenement']=$this->ModeleEvenement->getEvenementGeneral(AnneeEnCour);
-				$this->load->view('administrateur/vueSelectionProduits',$donneesInjectees);
+				$donneesSelection['lesProduits']=array_merge($t1,$t2,$t3);
+				$donneesSelection['evenement']=$this->ModeleEvenement->getEvenementGeneral(AnneeEnCour);
+				$donneesSelection['provenance']=$donnees['provenance'];
+				$vue1=array(
+					'vue'		=> 'administrateur/vueSelectionProduits',
+					'donnees'	=> $donneesSelection
+				);
 			}
 			if($donnees['provenance']=='modifier')
 			{
-			$donneesInjectees['produit']=$this->ModeleProduit->getUnProduit($donnees);
-			//$donneesInjectees['evenement']=$this->ModeleEvenement->getEvenementGeneral(AnneeEnCour);
+				$donneesInjectees['produit']=$this->ModeleProduit->getUnProduit($donnees);
+				//$donneesInjectees['evenement']=$this->ModeleEvenement->getEvenementGeneral(AnneeEnCour);
 			}
 			if($donnees['provenance']=='modifierEvenement'||$donnees['provenance']=='ajouterEvenement')
 			{
 				$donneesInjectees['NoEvenement']=$donnees['NoEvenement'];
 				$donneesInjectees['Annee']=$donnees['Annee'];
 			}
-			$this->load->view('administrateur/vueFormulaireProduit copy',$donneesInjectees);
-			$this->load->view('templates/PiedDePagePrincipal');
+			$vue2=array(
+				'vue'		=> 'administrateur/vueFormulaireProduit copy',
+				'donnees'	=> $donneesInjectees
+			);
+			if (isset($vue1))
+			{
+				$this->indexAdmin($vue1['vue'],$vue1['donnees'],$vue2['vue'],$vue2['donnees']);
+			}
+			else
+			{
+				$this->indexAdmin($vue2['vue'],$vue2['donnees']);	
+			}
 		}
 		else 
 		{
@@ -630,7 +691,7 @@ donnée de sortie:
 					$nomImageProduit=$this->input->post('img_Produit');//utilisation de l'ancien nom 
 				}
 			}
-			if(isset($_POST['supImgProduit']))//si on a coché supprimer l'image 
+			if(isset($_POST['supImgTicket']))//si on a coché supprimer l'image 
 			{
 				$NomImageTicket=null;//l'image est mise a nul
 			}
@@ -660,6 +721,7 @@ donnée de sortie:
 				'Etre_Ticket'=>$_POST['etreTicket'],
 				'ImgTicket'=>$nomImageTicket
 			);
+			
 			// création de Noproduit soit recuperation si on modifie sinon numero max+1
 			if ($provenance=='modifier')
 			{
@@ -680,6 +742,7 @@ donnée de sortie:
 				else
 				{
 					$this->ModeleProduit->ajouterProduit($donneesProduit);
+					
 				}
 			}
 			else
@@ -708,7 +771,7 @@ donnée de sortie:
 			}
 			else
 			{
-				//affichage produit
+				redirect('Visiteur/EvenementMarchand/'.$donneesProduit["NoEvenement"].'/'.$donneesProduit["Annee"]);
 			}
 			
 		}
@@ -791,7 +854,7 @@ donnée de sortie:
 				$objet='';
 				$corpsTexte='';
 			};
-			$classe=$this->ModeleClasse->retournerClasse();
+			$classe=$this->ModeleEnfant->retournerClasse();
 			
 			$donneesMail= array(
 				'adExpediteur'=> '',//session
@@ -806,11 +869,8 @@ donnée de sortie:
 			else
 			{
 				$donneesMail['questionTechnique']=null;
-			}
-			$this->load->view('templates/EntetePrincipal');
-			$this->load->view('templates/EnteteNavbar');			
-			$this->load->view('administrateur/vueCreationMail',$donneesMail);
-			$this->load->view('templates/PiedDePagePrincipal');
+			}			
+			$this->indexAdmin('administrateur/vueCreationMail',$donneesMail);
 		}
 		else
 		{
@@ -993,8 +1053,8 @@ donnée de sortie:
 			$this->email->message( "le message ne peut etre delivré" );
 			if(!$this->email->send())
 			{
-				$this->load->view(vueErreurMail);//a modifier
-				$this->load->view('templates/PiedDePagePrincipal');
+				$this->indexAdmin('administrateur/vueErreurMail');//a modifier
+
 			}	
 		}
 		if($echec!=0)
@@ -1025,10 +1085,7 @@ donnée de sortie:
 			$t2=$this->ModeleEvenement->getEvenementGeneral(AnneeEnCour-1);
 			$t3=$this->ModeleEvenement->getEvenementGeneral(AnneeEnCour-2);
 			$DonneesInjectees['lesEvenements']=array_merge($t1,$t2,$t3);
-			$this->load->view('templates/EntetePrincipal');
-			$this->load->view('templates/EnteteNavbar');
-			$this->load->view('administrateur/vueSelectionEvenements',$DonneesInjectees);		
-			$this->load->view('templates/PiedDePagePrincipal');
+			$this->indexAdmin('administrateur/vueSelectionEvenements',$DonneesInjectees);		
 		}
 		else
 		{
@@ -1068,11 +1125,8 @@ donnée de sortie:
 			if(isset($modif))
 			{
 				$donnees['modif']=$modif;
-			}
-			$this->load->view('templates/EntetePrincipal');
-			$this->load->view('templates/EnteteNavbar');		
-			$this->load->view('administrateur/vueRecapCommande',$donnees);
-			$this->load->view('templates/PiedDePagePrincipal');
+			}	
+			$this->indexAdmin('administrateur/vueRecapCommande',$donnees);
 		}
 		else
 		{
@@ -1113,11 +1167,7 @@ donnée de sortie:
 				'noEvenement'=>$noEvenement,
 				'modif'=>null		
 			);
-			$this->load->view('templates/EntetePrincipal');
-			$this->load->view('templates/EnteteNavbar');
-			$this->load->view('administrateur/vueRecapCommande',$donnees);
-			$this->load->view('templates/PiedDePagePrincipal');
-
+			$this->indexAdmin('administrateur/vueRecapCommande',$donnees);
 		}
 	}
 
@@ -1131,10 +1181,9 @@ donnée de sortie:
 	{
 		//creation des données
 			//enfants sans correspondant
-		$donnees['enfantSansCorrepondant']=$this->ModeleEnfant->enfantSansCorrespondant();
-			
+		$donnees['enfantSansCorrespondant']=$this->ModeleEnfant->enfantSansCorrespondant();
 			//classe sans enfant
-		$nbEleveParClasse=$this->ModeleClasse->nbEleveParClasse();
+		$nbEleveParClasse=$this->ModeleEnfant->nbEleveParClasse();
 		$i=0;
 		foreach($nbEleveParClasse as $uneClasse)
 		{
@@ -1157,11 +1206,13 @@ donnée de sortie:
 				$i++;
 			}
 		}
+		if (isset($lesProduits))
+		{
 		$donnees['stockLimite']=$lesProduits;
-
+		}
 			// les evenement qui devrait etre en cour mais ne sont pas actif 
 		$evenements=$this->ModeleEvenement->getEvenementGeneral(AnneeEnCour);
-		$date=date();
+		$date=date('Y-m-d');
 		$i=0;
 		foreach ($evenements as $unEvenement)
 		{
@@ -1174,11 +1225,7 @@ donnée de sortie:
 		$donnees['evenementNormalementEnCours']=$lesEvenement;
 
 		//envoye vers la page 
-		$this->load->view('templates/EntetePrincipal');
-		$this->load->view('templates/EnteteNavbar');
-		$this->load->view('administrateur/vueProbleme',$donnees);
-		$this->load->view('templates/PiedDePagePrincipal');
-		
+		$this->indexAdmin('administrateur/vueProbleme',$donnees);
 	}
 
 	/**********************************************************************
@@ -1227,23 +1274,19 @@ donnée de sortie:
 	public function afficherEleveClasse()
 	{
 		$donnees=array(
-			'lesClasses'=>$this->ModeleClasse->retournerClasse()
+			'lesClasses'=>$this->ModeleEnfant->retournerClasse()
 		);
-		$this->load->view('templates/EntetePrincipal');
-		$this->load->view('templates/EnteteNavbar');
-		$this->load->view('administrateur/vueSelectionClasse',$donnees);
+		$this->indexAdmin('administrateur/vueSelectionClasse',$donnees);
 		if(isset($_POST['envoyer']))
 		{
-			var_dump($_POST);
 			$donneesEleves=array(
 				'eleves'=>$this->ModeleEnfant->getEnfantClasse($_POST['classe'])
 			);
 			if($_POST['classe']!=0)
 			{
-				$donneesEleves['classe']=$this->ModeleClasse->retournerinfoClasse($_POST['classe']);
+				$donneesEleves['classe']=$this->ModeleEnfant->retournerinfoClasse($_POST['classe']);
 			}
-			$this->load->view('administrateur/vueTableauEleves',$donneesEleves);
-			$this->load->view('templates/PiedDePagePrincipal');
+			$this->indexAdmin('administrateur/vueTableauEleves',$donneesEleves);
 		}
 		
 	}
@@ -1267,7 +1310,7 @@ donnée de sortie:
 							'NoClasse'=>$_POST['classe'],
 							'DateFin'=>$_POST[$supprime]
 						);
-						$this->ModeleClasse->modifierAppartenir($donnees);						
+						$this->ModeleEnfant->modifierAppartenir($donnees);						
 					}
 				}
 			}
@@ -1280,9 +1323,9 @@ donnée de sortie:
 						'NoClasse'=>$_POST['classe'],
 						'DateDebut'=>$_POST['dateDebut']
 					);
-					if(!($this->ModeleClasse->presenceEnfantDansUneClasse($donnees)))
+					if(!($this->ModeleEnfant->presenceEnfantDansUneClasse($donnees)))
 					{
-						$this->ModeleClasse->insertEnfantDansClasse($donnees);
+						$this->ModeleEnfant->insertEnfantDansClasse($donnees);
 					}
 				}
 			}
@@ -1292,7 +1335,7 @@ donnée de sortie:
 		{ 
 			if(isset($_POST['modifier'])||isset($_POST['envoyer']))
 			{			
-				$classe=$this->ModeleClasse->retournerinfoClasse($_POST['classe']);
+				$classe=$this->ModeleEnfant->retournerinfoClasse($_POST['classe']);
 				$elevesDeLaClasse=$this->ModeleEnfant->getEnfantClasse($_POST['classe']);
 				$eleves=$this->ModeleEnfant->getEnfants();
 				$donnees=array(
@@ -1300,18 +1343,12 @@ donnée de sortie:
 					'elevesDeLaClasse'=>$elevesDeLaClasse,
 					'eleves'=>$eleves
 				);
-				$this->load->view('templates/EntetePrincipal');
-				$this->load->view('templates/EnteteNavbar');
-				$this->load->view('administrateur/vueModificationDeClasse',$donnees);
-				$this->load->view('templates/PiedDePagePrincipal');
+				$this->indexAdmin('administrateur/vueModificationDeClasse',$donnees);
 			}
 			else
 			{
-				$donnees['lesClasses']=$this->ModeleClasse->retournerClasse();
-				$this->load->view('templates/EntetePrincipal');
-				$this->load->view('templates/EnteteNavbar');
-				$this->load->view('administrateur/vueSelectionClasse',$donnees);
-				$this->load->view('templates/PiedDePagePrincipal');
+				$donnees['lesClasses']=$this->ModeleEnfant->retournerClasse();
+				$this->indexAdmin('administrateur/vueSelectionClasse',$donnees);
 			}
 		}
 	}
@@ -1323,11 +1360,7 @@ donnée de sortie:
 						
 			$donneesInjectees['lesEvenements']= $this->ModeleEvenement->getEvenementGeneral(AnneeEnCour);
 			$donneesInjectees['Provenance']='activer';
-			$this->load->view('templates/EntetePrincipal');
-			$this->load->view('templates/EnteteNavbar');
-			$this->load->view('administrateur/vueSelectionEvenements',$donneesInjectees);		
-			$this->load->view('templates/PiedDePagePrincipal');
-			
+			$this->indexAdmin('administrateur/vueSelectionEvenements',$donneesInjectees);				
 		}
 		else
 		{
@@ -1337,10 +1370,7 @@ donnée de sortie:
    	 			$Annee=$AncienEvenement['0'];
 				$NoEvenement=$AncienEvenement['1'];
 				$donneesInjectees['evenement']=$this->ModeleEvenement->retournerUnEvenement($NoEvenement,$Annee);
-				$this->load->view('templates/EntetePrincipal');
-				$this->load->view('templates/EnteteNavbar');
-				$this->load->view('administrateur/vueActivation',$donneesInjectees);
-				$this->load->view('templates/PiedDePagePrincipal');
+				$this->indexAdmin('administrateur/vueActivation',$donneesInjectees);
 			}
 			else
 			{	
@@ -1350,8 +1380,7 @@ donnée de sortie:
 				$donnees=array(
 					'Annee'=>$Annee,
 					'NoEvenement'=>$NoEvenement
-				);
-				var_dump($_POST);		
+				);		
 				if(!isset($_POST['activer']))
 				{
 					$donnees['EnCours']=0;
@@ -1391,7 +1420,7 @@ donnée de sortie:
 			{
 				$donneesInjectees['admin']='admin';
 			}
-			$this->load->view('administrateur/vueFormulaireMembre',$donnees);		
+			$this->indexAdmin('administrateur/vueFormulaireMembre',$donneesInjectees);		
 		}
 		else
 		{	
@@ -1404,10 +1433,17 @@ donnée de sortie:
 				'Prenom'=>$_POST['prenom'],
 				'Adresse'=>$_POST['adresse'],
 				'Ville'=>$_POST['ville'],
-				'CodePostal'=>$_POST['codePostal'],
-				'TelPortable'=>$_POST['telPortable'],
-				'TelFixe'=>$_POST['telFixe']
+				'CodePostal'=>$_POST['codePostal']
+				
 			);
+			if($_POST['telPortable']!='06.00.00.00.00')
+			{
+				$donnees['TelPortable'] = $_POST['telPortable'];
+			}
+			if($_POST['telFixe']!='02.00.00.00.00')
+			{
+				$donnees['TelFixe'] = $_POST['telFixe'];
+			}
 			if(!$this->ModelePersonne->rechercherEmailPresent($_POST['email']))
 			{
 				if($_POST['profil']=='admin')
@@ -1434,7 +1470,7 @@ donnée de sortie:
 							'heading'=>'Les infomations ne sont pas inserer dans la table',
 							'message'=>"suite a un probleme nous n'avons pu créer votre nouvel administrateur"
 						);
-						$this->load->view('administrateur/error_db');
+						$this->indexAdmin('administrateur/error_db');// a modifier
 					}
 				
 				}
@@ -1446,7 +1482,7 @@ donnée de sortie:
 							'heading'=>'Les infomations ne sont pas inserer dans la table',
 							'message'=>"suite a un probleme nous n'avons pu créer votre nouveau membre"
 						);
-						$this->load->view('administrateur/error_db');
+						$this->indexAdmin('administrateur/error_db');//a modifier
 					}
 				}
 			}
@@ -1456,7 +1492,7 @@ donnée de sortie:
 					'heading'=>'Les infomations ne sont pas inserer dans la table',
 					'message'=>"l'email fourni est deja dans la base de données </br> merci de contacter la personne ou le cas echeant l'adminitration du site "
 				);
-				$this->load->view('administrateur/error_db');
+				$this->load->view('administrateur/error_db');// a modifier
 			}
 			$this->accueil();
 		}
@@ -1481,15 +1517,11 @@ donnée de sortie:
 	 	{	
 			
 			$donneesVue=array(
-				'lesClasses'=>$this->ModeleClasse->retournerClasse(),
+				'lesClasses'=>$this->ModeleEnfant->retournerClasse(),
 				'lesEnfants'=>$this->ModeleEnfant->getEnfants(),
 				'provenance'=>'ajouter'
 			);
-			
-			$this->load->view('templates/EntetePrincipal');
-			$this->load->view('templates/EnteteNavbar');
-			$this->load->view('administrateur/vueAjoutMultipleEnfant',$donneesVue);
-			$this->load->view('templates/PiedDePagePrincipal');
+			$this->indexAdmin('administrateur/vueAjoutMultipleEnfant',$donneesVue);
 		}
 		else
 		{
@@ -1696,13 +1728,10 @@ donnée de sortie:
 			$donneesModification=array(
 				'info'=>$info,
 				'provenance'=>'modifier',
-				'lesClasses'=>$this->ModeleClasse->retournerClasse(),
+				'lesClasses'=>$this->ModeleEnfant->retournerClasse(),
 				'lesEnfants'=>$this->ModeleEnfant->getEnfants()
 			); 
-			$this->load->view('templates/EntetePrincipal');
-			$this->load->view('templates/EnteteNavbar');
-			$this->load->view('administrateur/vueAjoutMultipleEnfant',$donneesModification);
-			$this->load->view('templates/PiedDePagePrincipal');
+			$this->indexAdmin('administrateur/vueAjoutMultipleEnfant',$donneesModification);
 		}
 		else
 		{
@@ -1773,8 +1802,7 @@ donnée de sortie:
 	}
 
 	/* public function ajoutEleve()
-	{
-		var_dump($_POST);
+	
 			
 			if(!isset($_POST['selection']))
 			{
@@ -1782,7 +1810,7 @@ donnée de sortie:
 			}
 			else
 			{
-				$lesClasses=$this->ModeleClasse->retournerClasse();
+				$lesClasses=$this->ModeleEnfant->retournerClasse();
 				$donneesInjectees=array(
 					'selection'=>$_POST['selection'],
 					'lesClasses'=>$lesClasses
@@ -1809,7 +1837,6 @@ donnée de sortie:
 			$this->form_validation->set_rules('classe['.$i.']','classe');				
 			if ($this->form_validation->run() === FALSE)//si le formulaire n'est pas validé
 	 		{
-				var_dump($_POST);
 				$nonValide++;
 				$ng[]=$i;
 			}
@@ -1854,7 +1881,7 @@ donnée de sortie:
 				);
 				$i++
 			}
-			$lesClasses=$this->ModeleClasse->retournerClasse();
+			$lesClasses=$this->ModeleEnfant->retournerClasse();
 				$donneesInjectees=array(
 					'selection'=>$_POST['selection'],
 					'lesClasses'=>$lesClasses

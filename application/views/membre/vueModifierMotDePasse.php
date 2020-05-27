@@ -19,11 +19,12 @@ $style=array(
 );
 
 ///////////////////////////////   FORMULAIRE   ////////////////////////////////////////
-echo '<div class="container">';
-echo    '<h2 class="encadre" align="center">Paramètre confidentiel de votre compte</h2>';
+echo '</br>';
+echo '<div class="container-fluid">';
+echo    '<h1 class="encadre" align="center">Paramètre confidentiel de votre compte</h1>';
 echo    '</br>';
 echo    '<h3 align="center">Afin de modifier votre mot de passe saisissez deux mots de passe identiques</h3>';
-echo    form_open('membre/ModificationMdp','class="form-horizontal" name="form"');
+echo    form_open('membre/modificationMdp','class="form-horizontal" name="form"');
 echo    '<form onsubmit="return confirmationMotDePasse()" action="'.site_url('membre/ModificationMdp').'" method="post">';
 echo        '<table align="center">';
 echo            '<tr>';

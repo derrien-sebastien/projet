@@ -8,7 +8,7 @@
 
 $données d'entrée:
 
--$enfantSansCorrepondant
+-$enfantSansCorrespondant
 -$lesClassesSansEnfant
 -$stockLimite
 
@@ -27,7 +27,7 @@ controleur a crée :
 
 //un choix possible en modification de classe a mettre en griser si un selectionner
 
-if (isset($enfantSansCorrepondant))
+if(isset($enfantSansCorrespondant['0']))
 {
     $submit=array(
         'name'=>'submit',
@@ -53,7 +53,7 @@ if (isset($enfantSansCorrepondant))
             echo 'entrez un mail de correspondant';
         echo '</td>';
     echo '</tr>';
-    foreach($enfantSansCorrepondant as $unEnfant)
+    foreach($enfantSansCorrespondant as $unEnfant)
     {        
         $nom=$unEnfant->Nom;
         $prenom=$unEnfant->Prenom;
@@ -171,7 +171,7 @@ if(isset($evenementNormalementEnCours))
         'name'=>'submit',
         'value'=>'submit'
     );
-    echo "<H1>les qui devrait etre actif </h1>";
+    echo "<H1>les évènements qui devrait etre actif </h1>";
     echo form_open('Administrateur/activation');
     echo'<table>';
         echo '<tr>';

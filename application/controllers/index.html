@@ -32,3 +32,22 @@ vue questionnaire de validation($hidden['submit']=$submit +$hidden['submit2']=$s
 
 submit = checkbox ????
 submit c'est la 
+
+
+
+var_dump($_POST);
+            $this->indexVisiteur('visiteur/vueInformation');
+            $donneesInsererPersonne = array(
+               'NoPersonne'=>$_POST['noPersonne'],
+               'Email'=>$_POST['email'],
+               'Nom' => $_POST['txtNom'],
+               'Prenom' => $_POST['txtPrenom'],    
+               'Adresse' => $_POST['txtAdresse'],
+               'CodePostal' => $_POST['txtCp'],
+               'Ville' => $_POST['txtVille'],
+               'TelPortable' => $_POST['txtTelP'],
+               'TelFixe' => $_POST['txtTelF']
+            );           
+            $this->ModelePersonne->modifierInfoPersonne($donneesInsererPersonne);
+            $donneesInjectees['Personne']=$this->ModelePersonne->rechercheInfoPersonne($this->session->email);
+            $this->indexVisiteur('visiteur/vueInsertionReussi', $DonneesInjectees);

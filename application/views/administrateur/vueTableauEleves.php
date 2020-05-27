@@ -1,5 +1,4 @@
 <?php
-
 if (isset($eleves['0']->Nom))
 {
     if(isset($classe->Nom))//a modifier if $classe is object

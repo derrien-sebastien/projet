@@ -6,93 +6,178 @@
 
 utilité afficher les produit regrouper par commande et par personne 
 si $modif possibiliter de modifier payer et remis */
-
-if($modif=='modif')
-{    
-    echo form_open('Administrateur/commande');    
-}
-$noPersonnePrecedente=0;//variable qui memorise la personne precedente 
-$noCommandePrecedente=0;//variable qui memorise la commande precedente(!noCommande dif dans un meme evenement)
-echo "<h1>Recapitulatif des commande:</h1>";
-echo "<table>";
-$data =array(
-    'annee'  => $annee,
-    'noEvenement' => $noEvenement    
-);
-echo form_hidden($data);
-foreach($lignesCommandes as $uneLigne)
-{
-    if($uneLigne->NoPersonne!=$noPersonnePrecedente)
-    {
-        
-        //echo "</br>";
-        echo "<tr><td>";
-        echo "___________________________";
-        echo "</br>";
-        echo "</td></tr><tr><td>";        
-        echo "adresse mail: ".$uneLigne->Email."</td><td> Nom: ".$uneLigne->Nom."</td><td> Prenom: ".$uneLigne->Prenom;
-        echo "</br>";
-        if(isset($uneLigne->TelPortable))
-        {
-            echo "</td><td> Telephone: ".$uneLigne->TelPortable;
-        }
-        elseif(isset($uneLigne->TelFixe))
-        {
-            echo "</td><td> Telephone: ".$uneLigne->TelFixe; 
-        }  
-        echo "</td></tr>";      
-    }
-    if($uneLigne->NoCommande!=$noCommandePrecedente)
-    {
-        
-        //echo "</br>";
-        echo "<tr><td>";
-        echo "- - - - - - - - - - - - - - - - - - - - - - -  ";        
-        echo "</td></tr><tr><td></td><td>";        
-        echo "Numero de commande: ".$uneLigne->NoCommande."</td><td> Montant total: ".$uneLigne->MontantTotal;
-        if($modif=='modif')
-        {
-            echo "</td><td> Payé: ";
-            $paye=array(
-                'name'=>'paye['.$uneLigne->NoCommande.']',
-                'value'=>$uneLigne->Payer
-            );
-            echo form_input($paye);
-            
-        }
-        else
-        {
-            echo "</td><td> Payé: ".$uneLigne->Payer;
-        }
-        echo "</td></tr></br>";
-        echo"<tr><td></td><td>Reste a payer: ".$uneLigne->ResteAPayer."</td><td> Type de payement: ".$uneLigne->ModePaiement;
-        echo "</td></tr></br>";
-        echo "<tr><td></td><td>Commentaire acheteur: ".$uneLigne->CommentaireAcheteur;
-        echo "</td></tr></br>";
-        echo "<tr><td></td><td>Commentaire Administrateur: ".$uneLigne->CommentaireAdministrateur;
-        echo "</td></tr>";
-        }
-    
-    echo "</br>";
-    echo "<tr><td></td><td></td><td>";    
-    echo "Produit: ".$uneLigne->LibelleCourt."</td><td> Quantité commandé: ".$uneLigne->Quantite;
+    $data =array(
+        'annee'         =>  $annee,
+        'noEvenement'   =>  $noEvenement    
+    );
+    $submit=array(
+        'name'          =>  'submit',
+        'value'         =>  'Valider',
+        'class'         =>  'btn btn-primary'
+    );
+    $noPersonnePrecedente=0;//variable qui memorise la personne precedente 
+    $noCommandePrecedente=0;//variable qui memorise la commande precedente(!noCommande dif dans un meme evenement)
     if($modif=='modif')
-    {
-        echo "</td><td> Deja remis: ";
-        $remis=array(
-            'name'=>'remis['.$uneLigne->NoCommande.']['.$uneLigne->NoProduit.']',
-            'value'=>$uneLigne->Remis
-        );
-        echo form_input($remis);
+    {    
+        echo form_open('Administrateur/commande');    
     }
-    else
-    {
-        echo "</td><td> Deja remis: ".$uneLigne->Remis;
-    }
-    echo "</td></tr>";
-    $noPersonnePrecedente=$uneLigne->NoPersonne;
-    $noCommandePrecedente=$uneLigne->NoCommande;
-}
-echo "</table>";
-echo "<input type='submit' name='submit' value='envoyer'>";
-echo "</form>";
+    echo '<div class="container-fluid">';
+        echo "<h1 class='encadre'>Recapitulatif des commande:</h1>";
+    echo '</div>';
+    echo "<table id='infoTable'>";
+        echo form_hidden($data);
+        foreach($lignesCommandes as $uneLigne)
+        {
+            if($uneLigne->NoPersonne!=$noPersonnePrecedente)
+            {
+                echo "<tr>";
+                    echo "<td>";
+                        echo "___________________________";
+                        echo "</br>";
+                    echo "</td>";
+                echo "</tr>";
+                echo "<tr>";
+                    echo "<td>";        
+                        echo "Adresse mail : ";
+                        echo $uneLigne->Email;
+                    echo "</td>";
+                    echo "<td>";
+                        echo "Nom : ";
+                        echo $uneLigne->Nom;
+                    echo '</td>';
+                    echo "<td>";
+                        echo "Prénom : ";
+                        echo $uneLigne->Prenom;
+                        echo "</br>";
+                    echo "</td>";
+                    if(isset($uneLigne->TelPortable))
+                    {
+                        echo "<td>";
+                            echo "Téléphone Portable  :  ";
+                            echo $uneLigne->TelPortable;
+                        echo "</td>";
+                    }
+                    elseif(isset($uneLigne->TelFixe))
+                    {
+                        echo "<td>";
+                            echo "Telephone Fixe:";
+                            echo $uneLigne->TelFixe;
+                        echo "</td>"; 
+                    }  
+                echo "</tr>";      
+            }
+            if($uneLigne->NoCommande!=$noCommandePrecedente)
+            {   
+                echo "<tr>";
+                    echo "<td>";
+                        echo "- - - - - - - - - - - - - - - - - - - - - - -  ";        
+                    echo "</td>";
+                echo "</tr>";
+                echo "<tr>";
+                    echo "<td>";
+                    echo "</td>";
+                    echo "<td>";        
+                        echo "Numéro de la commande : ";
+                        echo $uneLigne->NoCommande;
+                    echo "</td>";
+                    echo "<td>";            
+                        echo "Montant total : ";
+                        echo $uneLigne->MontantTotal;
+                        echo "</td>";
+                        $paye=array(
+                            'name'          =>  'paye['.$uneLigne->NoCommande.']',
+                            'value'         =>  $uneLigne->Payer
+                        );
+                        if($modif=='modif' && $uneLigne->ResteAPayer > 0)
+                        {
+                            echo "<td>";
+                                echo "Payé : ";
+                                echo form_input($paye); 
+                            echo "</td>"; 
+                        }
+                        else
+                        {
+                            echo "<td>";
+                                echo "Payé : ";
+                                echo $uneLigne->Payer;
+                            echo "</td>";
+                        }
+                        echo "<td>";
+                            echo form_submit($submit);
+                        echo "</td>";
+                    echo "</td>";
+                echo "</tr>";
+                echo "</br>";
+                echo "<tr>";
+                    echo "<td>";
+                    echo "</td>";
+                    echo "<td>";
+                        echo "Reste à payer :";
+                        echo $uneLigne->ResteAPayer;
+                    echo "</td>";
+                    echo "<td>";
+                        echo "Type de payement :";
+                        echo $uneLigne->ModePaiement;
+                    echo "</td>";
+                echo "</tr>";
+                echo "</br>";
+                echo "<tr>";
+                    echo "<td>";
+                    echo "</td>";
+                    echo "<td>";
+                        echo "Commentaire acheteur :";
+                        echo $uneLigne->CommentaireAcheteur;
+                    echo "</td>";
+                echo "</tr>";
+                echo "</br>";
+                echo "<tr>";
+                    echo "<td>";
+                    echo "</td>";
+                    echo "<td>";
+                        echo "Commentaire Administrateur :";
+                        echo $uneLigne->CommentaireAdministrateur;
+                    echo "</td>";
+                echo "</tr>";
+            }
+            echo "</br>";
+            echo "<tr>";
+                echo "<td>";
+                echo "</td>";
+                echo "<td>";
+                echo "</td>";
+                echo "<td>";    
+                echo "Produit : ";
+                echo $uneLigne->LibelleCourt;
+                echo "</td>";
+                echo "<td>";
+                    echo "Quantité commandée : ";
+                    echo $uneLigne->Quantite;
+                echo "</td>";
+                $remis=array(
+                    'name'          =>  'remis['.$uneLigne->NoCommande.']['.$uneLigne->NoProduit.']',
+                    'value'         =>  $uneLigne->Remis
+                );
+                if($modif=='modif')
+                {
+                    echo "<td>";
+                        echo "Déjà remis :";
+                        echo form_input($remis);
+                    echo "</td>";   
+                }
+                else
+                {
+                    echo "<td>";
+                        echo "Déjà remis :";
+                        echo $uneLigne->Remis;
+                    echo "</td>";
+                }
+                echo "<td>";
+                    echo form_submit($submit);
+                echo "</td>";
+            echo "</tr>";  
+            $noPersonnePrecedente=$uneLigne->NoPersonne;
+            $noCommandePrecedente=$uneLigne->NoCommande;
+        }
+    echo "</table>";
+echo form_close();
+?>

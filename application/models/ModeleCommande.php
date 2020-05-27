@@ -37,6 +37,23 @@ class ModeleCommande extends CI_Model
         $maListe = $this->db->get(); 
         return $maListe->result();
     }
+    public function maxCommande()
+    {
+       $this->db->select_max('NoCommande');
+       $this->db->from('ge_commande');
+       $query=$this->db->get();
+       $ligne = $query->row();	    
+       $noMax= $ligne->NoCommande;	
+       return $noMax;
+    }
+    public function getContenir($pNoCommande)
+    {
+       $this->db->select('*');
+       $this->db->from('ge_contenir');
+       $this->db->where('ge_contenir.NoCommande', $pNoCommande);
+       $query=$this->db->get();	    
+       return $query->result();
+    }
     /*********************************************************************************************************************************************/
     /*********************************************************************************************************************************************/
     /*********************************************************************************************************************************************/
@@ -87,6 +104,11 @@ class ModeleCommande extends CI_Model
         return $this->db->insert('ge_commande',$pDonneesAInserer);
     }
 
+    public function insererContenir($pDonneesAInserer)
+    {
+        return $this->db->insert('ge_contenir', $pDonneesAInserer);
+    }
+
 
     /*********************************************************************************************************************************************/
     /*********************************************************************************************************************************************/
@@ -107,7 +129,7 @@ class ModeleCommande extends CI_Model
        return $this->db->update('ge_contenir', $pDonneesAInserer);
     }
 
-    public function modifierPaye($pDonneesAInserer)
+    public function modifierPaye($pDonneesAInserer)//modifier le nom de la fonction
     {          
        $this->db->where('NoCommande', $pDonneesAInserer['NoCommande']);
        return $this->db->update('ge_commande', $pDonneesAInserer);

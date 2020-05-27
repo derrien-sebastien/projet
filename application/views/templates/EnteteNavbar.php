@@ -36,7 +36,7 @@
                       <a href="<?php echo site_url('Membre/ModificationMdp') ?>">Modifier votre mot de passe</a>
                     </li> &nbsp;
                     <li>
-                      <a href="<?php echo site_url('Membre/Actif') ?>">Se désinscrire de la newsletter</a>
+                      <a href="<?php echo site_url('Membre/Actif') ?>">S'inscrire/Se désinscrire de la newsletter</a>
                     </li>&nbsp;
                   </ul>
                 </li> 
@@ -44,7 +44,7 @@
                   <a class="dropdown-toggle" data-toggle="dropdown" href="#"><i class="glyphicon  glyphicon-envelope"></i>&nbsp;Réclamation<span class="caret"></span></a>
                   <ul class="dropdown-menu">
                     <li>
-                      <a href="<?php echo site_url('Visiteur/problemGeneral') ?>">Signaler un problème</a>
+                      <a href="<?php echo site_url('Membre/problem') ?>">Signaler un problème</a>
                     </li>
                   </ul>
                 </li>   
@@ -73,13 +73,16 @@
                 </a>
                 <ul class="dropdown-menu">
                   <li>
-                    <a href="<?php echo site_url('Administrateur/ajouterEvenement') ?>">Ajouter un Evenement</a>
+                    <a href="<?php echo site_url('Administrateur/ajouterEvenement') ?>">Ajouter un évènement</a>
                   </li>
                   <li>
-                    <a href="<?php echo site_url('Administrateur/modifierEvenement') ?>">Modifier un Evenement</a>
+                    <a href="<?php echo site_url('Administrateur/modifierEvenement') ?>">Modifier un évènement</a>
                   </li>
                   <li>
-                    <a href="<?php echo site_url('Administrateur/ajouterProduit') ?>">Ajouter un Produit</a>
+                    <a href="<?php echo site_url('Administrateur/changerLEtatDunEvenement') ?>">Activer/Désactiver un évènement</a>
+                  </li>
+                  <li>
+                    <a href="<?php echo site_url('Administrateur/ajouterProduit/0/0') ?>">Ajouter un Produit</a>
                   </li>
 		              <li>
                     <a href="<?php echo site_url('Administrateur/modifierProduit') ?>">Modifier un Produit</a>
@@ -92,20 +95,18 @@
                 </a>
                 <ul class="dropdown-menu">
                   <li>
-                    <a href="<?php echo site_url('Administrateur/selectionCommande') ?>">Recapitulatif des commandes</a>
+                    <a href="<?php echo site_url('Administrateur/selectionCommande') ?>">Récapitulatif des commandes</a>
                   </li>
                   <li>
                     <a href="<?php echo site_url('Administrateur/formulaireMail') ?>">Envoyer un mail</a>
                   </li>
                   <li>
-                    <a href="<?php echo site_url('Administrateur/afficherProbleme') ?>">Gestion des problemes d'administration</a>
+                    <a href="<?php echo site_url('Administrateur/afficherProbleme') ?>">Gestion des problèmes d'administration</a>
                   </li>
                   <li>
                     <a href="<?php echo site_url('Administrateur/modifierClasse') ?>">Gestion des classes</a>
                   </li>
-                  <li>
-                    <a href="<?php echo site_url('Administrateur/changerLEtatDunEvenement') ?>">activer desactiver un evenement</a>
-                  </li>
+                  
                   
                   <!-- accuser de reception a faire -->
                   <!-- relance mail-->                  

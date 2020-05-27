@@ -1,4 +1,9 @@
 <?php
+$email=array(
+	'type'	=>	'email',
+	'name'	=>	'txtEmail',
+	'value' =>	set_value('txtEmail')
+);
 $mdp=array(
 	'type'	=>	'password',
 	'name'	=>	'password'
@@ -20,7 +25,7 @@ echo 			'<td>';
 echo 				form_label('Adresse mail : ','txtEmail');
 echo 			'</td>';
 echo 			'<td>';
-echo 				form_input('txtEmail', set_value('txtEmail'));
+echo 				form_input($email);
 echo 			'</td>';
 echo 		'</tr>';
 echo 		'<tr>';

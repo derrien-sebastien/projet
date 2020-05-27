@@ -1,191 +1,260 @@
 <?php
-
+//donnees d'entrée
+//$Personne
+//
 ////////////////////////////// Déclaration de nos Variables ////////////////////////////
 
+            $email2=array(	
+                'type'              =>  'email',
+                'name'			    =>	'txtEmail'
+            );
+            $email=array(
+                'type'              =>  'email',
+                'name'			    =>	'txtEmail'
+                
+            );
             $txtNom=array(
-                'type'  =>  'text',
-                'name'  =>  'txtNom'
+                'type'              =>  'text',
+                'name'              =>  'txtNom',
+                'aria-describedby'  =>  'aideUserName',
+                'class'             =>  'form-control'
             );
             $txtPrenom=array(
-                'type'  =>  'text',
-                'name'  =>  'txtPrenom'
+                'type'              =>  'text',
+                'name'              =>  'txtPrenom',
+                'class'             =>  'form-control'
             );
             $txtAdresse=array(
-                'type'  =>  'text',
-                'name'  =>  'txtAdresse'
+                'type'              =>  'text',
+                'name'              =>  'txtAdresse',
+                'class'             =>  'form-control'
             );
             $txtCp=array(
-                'type'  =>  'text',
-                'name'  =>  'txtCp'
+                'type'              =>  'text',
+                'name'              =>  'txtCp',
+                'class'             =>  'form-control'
             );
             $txtVille=array(
-                'type'  =>  'text',
-                'name'  =>  'txtVille'
+                'type'              =>  'text',
+                'name'              =>  'txtVille',
+                'class'             =>  'form-control'
             );
             $txtTelF=array(
-                'type'=>'text',
-                'name'=>'txtTelF'
+                'type'              =>  'text',
+                'name'              =>  'txtTelF',
+                'class'             =>  'form-control'
             );
             $txtTelP=array(
-                'type'=>'text',
-                'name'=>'txtTelP'
+                'type'              =>  'text',
+                'name'              =>  'txtTelP',
+                'class'             =>  'form-control'
             );
+            
             $submit=array(
-                'name'=>'submit',
-                'value'=>'Soumettre',
-                'class'=>'btn btn-primary'
+                'name'              =>  'submit',
+                'value'             =>  'Paiement par chèque/espèces',
+                'class'             =>  'btn btn-primary'
             );
-            $js=['onClick' => 'GereChkbox();'];
+            $hidden=array();
+            $style=array(
+                'class'		        =>	'btnSubmit btn-lg btn-primary'
+            );
 
 ///////////////////////// Variables déjà connu ? On réassigne... //////////////////////// 
-
+            if(isset($Personne->NoPersonne))
+            {    
+                $hidden['noPersonne']   =  $Personne->NoPersonne;
+            }
+            if(isset($Personne->Email))
+            {
+                $email                  =   $Personne->Email;
+                $hidden['txtEmail']     =   $Personne->Email;
+            }            
             if(isset($Personne->Nom))
             {
-                $txtNom['value']=$Personne->Nom;
+                $txtNom                 =   $Personne->Nom;
+                $hidden['txtNom']       =   $Personne->Nom;
             }
             if(isset($Personne->Prenom))
             {
-                $txtPrenom['value']=$Personne->Prenom;
-            }  
+                $txtPrenom              =   $Personne->Prenom;
+                $hidden['txtPrenom']    =   $Personne->Prenom;
+            }
             if(isset($Personne->Adresse))
             {
-                $txtAdresse['value']=$Personne->Adresse;
+                $txtAdresse             =   $Personne->Adresse;
+                $hidden['txtAdresse']   =   $Personne->Adresse;
             }
             if(isset($Personne->CodePostal))
             {
-                $txtCp['value']=$Personne->CodePostal;
+                $txtCp                  =   $Personne->CodePostal;
+                $hidden['txtCp']        =   $Personne->CodePostal;
             }
             if(isset($Personne->Ville))
             {
-                $txtVille['value']=$Personne->Ville;
+                $txtVille               =   $Personne->Ville;
+                $hidden['txtVille']     =   $Personne->Ville;
             }
             if(isset($Personne->TelPortable))
             {
-                $txtTelP['value']=$Personne->TelPortable;
+                $txtTelP                =   $Personne->TelPortable;
+                $hidden['txtTelP']      =   $Personne->TelPortable;
             }
             if(isset($Personne->TelFixe))
             {
-                $txtTelF['value']=$Personne->TelFixe;
+                $txtTelF                =   $Personne->TelFixe;
+                $hidden['txtTelF']      =   $Personne->TelFixe;
             }
 
 ///////////////////////////////   FORMULAIRE   ////////////////////////////////////////
-
-echo '<h2 align="center">Vos informations en notre possession</h2>';
-echo form_open('visiteur/infosCompte','class="form-horizontal" name="form"');               
-echo '<table class="table-bordered td" align="center">'; 
-echo    '<tr>';
-echo        '<td>';
-echo            form_label('Nom :',"txtNom");
-echo        '</td>';
-echo        '<td>';
-echo            '<span class="marge">';
-echo                form_input($txtNom);                
-echo            '</span>';
-echo        '</td>';
-echo    '</tr>';
-echo    '<br>';
-echo    '<tr>';
-echo        '<td>';
-echo            form_label('Prénom :','txtPrenom');
-echo        '</td>';
-echo        '<td>';
-echo            '<span class="marge">';
-echo                form_input($txtPrenom);                
-echo            '</span>';
-echo        '</td>';
-echo    '</tr>';
-echo    '<br>';
-echo    '<tr>';
-echo        '<td>';
-echo            form_label('Adresse :','txtAdresse');
-echo        '</td>';
-echo        '<td>';
-echo            '<span class="marge">';
-echo                form_input($txtAdresse);                
-echo            '</span>';
-echo        '</td>';
-echo    '</tr>';
-echo    '<br>';
-echo    '<tr>';
-echo        '<td>';
-echo            form_label('Code postal :','txtCp');
-echo        '</td>';
-echo        '<td>';
-echo            '<span class="marge">';
-echo                form_input($txtCp);
-echo            '</span>';
-echo        '</td>';
-echo    '</tr>';
-echo    '<br>';
-echo    '<tr>';
-echo        '<td>';                
-echo            form_label('Ville :','txtVille');
-echo        '</td>';
-echo        '<td>';
-echo            '<span class="marge">';
-echo                form_input($txtVille);                
-echo            '</span>';
-echo        '</td>';
-echo    '</tr>';
-echo    '<br>';
-echo    '<tr>';
-echo        '<td>';
-echo            form_label('Téléphone portable (optionnel) :','txtTelP');
-echo        '</td>';
-echo        '<td>';
-echo            '<span class="marge">';
-echo                form_input($txtTelP);                
-echo            '</span>';
-echo        '</td>';
-echo    '</tr>';
-echo    '<tr>';
-echo        '<td>';
-echo            'Confirmer vous ces informations ?';
-echo        '</td>';
-echo        '<td align="center">';
-echo            form_checkbox('connu','1',FALSE,$js);
-echo            'oui';
-echo            form_checkbox('nonConnu','2',FALSE,$js);
-echo            'non';
-echo        '</td>';
-echo    '</tr>';
-echo    '<tr>';
-echo        '<td align="center">';
-echo        '</td>\n';
-echo        '<td align="center">';
-echo            form_submit($submit);
-echo        '</td>\n';
-echo    '</tr>';
-echo '</table>';
-echo form_close(); 
+if(!isset($Personne->Email))
+{
+    echo form_open('Visiteur/formulaireLivraison');
+    echo '<body id="bodyLogin">';
+    echo '<div class="containerLogin">';
+        echo '<img src="'.base_url().'assets/img_site/utilisateur.svg">';
+        echo '<h4>Saisissez votre adresse mail</h4>';
+        echo '</br>';
+        echo '<div>';
+            echo form_input($email2); 
+        echo '</div>';
+        echo '<div>';
+            echo '</br>';
+            echo form_submit('submit', 'Envoyer',$style);
+        echo '</div>';
+    echo '</div>';
+    echo form_close();
+}
+else
+{
+    echo form_open('Visiteur/formulaireLivraison');
+        echo '<div class="container-fluid">';
+            echo '<h2 class="encadre" align="center">Vos informations</h2>';
+            echo '<div align="right">';
+                if(!isset($Personne->Nom, $Personne->Prenom, $Personne->Adresse, $Personne->CodePostal, $Personne->Ville))
+                {
+                    echo '(*) informations obligatoires';
+                }
+            echo '</div>';
+            echo form_hidden($hidden);  
+            echo '<div align="center">';           
+                echo form_label('<img src="'.base_url().'assets/img_site/utilisateur.svg" height="100" width="100">',"txtEmail");
+                echo form_label($email);
+            echo '</div>';
+            echo '<table id="infoTable">';
+                echo '<thead>';
+                    echo '<tr>';
+                        echo'<th>';
+                            echo form_label("Nom-Prénom");
+                        echo '</th>';
+                        echo'<th>';
+                            echo form_label("Adresse");
+                        echo '</th>';
+                        echo'<th>';
+                            echo form_label("Coordonnées Téléphoniques");
+                        echo '</th>';
+                    echo '</tr>';
+                echo '</thead>';
+                echo '<tbody>';
+                    echo '<tr>';
+                        echo '<td>';
+                            if(isset($Personne->Nom))
+                            {                  
+                                echo form_label($txtNom);
+                                echo '</br>';
+                            } 
+                            else
+                            {
+                                echo form_label('Saisissez votre nom (*)');
+                                echo form_input($txtNom);
+                            }                    
+                            if(isset($Personne->Prenom))
+                            {
+                                echo form_label($txtPrenom);
+                            }
+                            else
+                            {
+                                echo form_label('prénom (*)');
+                                echo form_input($txtPrenom);
+                            }
+                        echo '</td>';
+                        echo '<td>';
+                            if(isset($Personne->Adresse))
+                            {
+                                    echo form_label($txtAdresse).'</br>';
+                            }
+                            else
+                            {
+                                echo form_label('Saisissez votre adresse (*)');
+                                echo form_input($txtAdresse);
+                            }
+                            if(isset($Personne->CodePostal))
+                            {
+                                echo form_label($txtCp).'</br>';
+                            }
+                            else
+                            {
+                                echo form_label('code postal (*)');
+                                echo form_input($txtCp);
+                            }
+                            if(isset($Personne->Ville))
+                            {
+                                echo form_label($txtVille);
+                            }
+                            else
+                            {
+                                echo form_label('votre ville (*)');
+                                echo form_input($txtVille);
+                            }
+                        echo '</td>';
+                        echo '<td>';
+                            echo form_label('Téléphone Fixe').'<br>';
+                            if(isset($Personne->TelFixe))
+                            {
+                                echo form_label($txtTelF); 
+                                echo '</br>';
+                            }
+                            else
+                            {
+                                echo form_input($txtTelF);
+                            }                    
+                            echo form_label('Téléphone Portable').'<br>';
+                            if(isset($Personne->TelPortable))
+                            {
+                                echo form_label($txtTelP);
+                            }
+                            else
+                            {
+                                echo form_input($txtTelP);
+                            }
+                        echo '</td>';
+                    echo '</tr>';        
+                echo '</tbody>';
+                echo '<tfoot>';
+                    if($this->cart->total_items() > 0)
+                    {
+                        echo '<tr>';
+                            echo '<td>';
+                                echo form_label('Comment souhaitez-vous payer ?');
+                            echo '</td">';
+                            echo '<td>';
+                                echo '<a href="';
+                                    echo site_url('Visiteur/payementCb');
+                                    echo '"><button class="btn btn-primary">Paiement par carte bancaire</button>';
+                                echo '</a>';
+                            echo '</td>';
+                            echo '<td>';
+                                echo form_submit($submit);
+                            echo '</td>';
+                        echo '</tr>';    
+                    }    
+                echo '</tfoot>';
+            echo'</table>';
+        echo '</div>';
+        echo '</br>';              
+    echo form_close();  
+}
 
 //////////////////////////////  FIN DE FORMULAIRE ///////////////////////////////////////
 
 ?>
-
-<!----------------------------------------------------------------------------------------
-||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
-||||||||||||||||||||||||||||||||       SCRIPT       ||||||||||||||||||||||||||||||||||||||
-||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
------------------------------------------------------------------------------------------>
-
-
-<script type="text/javascript"> function GereChkbox() 
-{ 
-    if(document.getElementById($connu).checked) 
-    {   
-        document.getElementById($nonConnu).disabled = "disabled"; 
-        document.getElementById($connu).disabled = ""; 
-    } 
-    else if(document.getElementById($nonConnu).checked) 
-    { 
-        document.getElementById($connu).disabled = "disabled"; 
-        document.getElementById($nonConnu).disabled = ""; 
-    } 
-    else 
-    { 
-        document.getElementById($connu).disabled = ""; 
-        document.getElementById($nonConnu).disabled = ""; 
-    } 
-} </script>        
-        

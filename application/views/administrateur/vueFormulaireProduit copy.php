@@ -30,11 +30,14 @@ $hidden=array(
 
 if ($provenance=='modifier')
 {	
-	$hidden['noEvenement']=$produit->NoEvenement;
-	$hidden['annee']=$produit->Annee;
-	$hidden['noProduit']=$produit->NoProduit;
-	$hidden['img_Produit']=$produit->Img_Produit;
-	$hidden['imgTicket']=$produit->ImgTicket;
+	if(isset($produit))
+	{
+		$hidden['noEvenement']=$produit->NoEvenement;
+		$hidden['annee']=$produit->Annee;
+		$hidden['noProduit']=$produit->NoProduit;
+		$hidden['img_Produit']=$produit->Img_Produit;
+		$hidden['imgTicket']=$produit->ImgTicket;
+	}
 }
 elseif($provenance=='modifierEvenement'||$provenance=='ajouterEvenement')
 {
@@ -43,7 +46,8 @@ elseif($provenance=='modifierEvenement'||$provenance=='ajouterEvenement')
 }
 $annee=array(
 	'name'=>'annee',
-	'type'=>'date'
+	'type'=>'number',
+	'value'=>'2020'
 );
 
 if(isset($evenement))
@@ -74,7 +78,8 @@ $prix=array(
 	'type'=>'number',
 	'placeholder'=>'1.0',
 	'step'=>'0.01',
-	'name'=>'prix'
+	'name'=>'prix',
+	'min'=>'1'
 );
 if (isset($produit->Prix))
 {
@@ -92,7 +97,8 @@ $stock=array(
 	'type'=>'number',
 	'placeholder'=>'1.0',
 	'step'=>'1',
-	'name'=>'stock'
+	'name'=>'stock',
+	'min'=>'1'
 );
 if (isset($produit->Stock))
 {
@@ -102,7 +108,8 @@ $numeroOrdreApparition=array(
 	'type'=>'number',
 	'placeholder'=>'1.0',
 	'step'=>'1',
-	'name'=>'numeroOrdreApparition'
+	'name'=>'numeroOrdreApparition',
+	'min'=>'0'
 );
 if (isset($produit->NumeroOrdreApparition))
 {
@@ -113,7 +120,9 @@ $etreTicket=array(
 	'placeholder'=>'1.0',
 	'step'=>'1',
 	'name'=>'etreTicket',
-	'value'=>'1'
+	'value'=>'1',
+	'max'=>'1',
+	'min'=>'0'
 );
 $imgTicket=array(
 	'type'=>'file',
@@ -133,7 +142,7 @@ $submit=array(
 
 
 echo "<br>";           				
-echo "<h1>inserez un nouveau Produit</h1>";
+echo "<h1>Inserez un nouveau Produit</h1>";
 echo form_open_multipart('Administrateur/formulaireProduit');
 echo form_hidden($hidden);
 echo "<table>";
@@ -141,7 +150,7 @@ if ($provenance=='ajouter')
 {
 	echo "<tr>";
 		echo "<td>";
-			echo form_label("année de l'evenement", 'annee');
+			echo form_label("Année de l'evenement", 'annee');
 		echo "</td>";
 		echo "<td>";
 			echo form_input($annee);
@@ -149,7 +158,7 @@ if ($provenance=='ajouter')
 	echo "</tr>";
 	echo "<tr>";
 		echo "<td>";
-			echo form_label('selectionnez un evenement ', 'noEvenment');
+			echo form_label('Selectionnez un evenement ', 'noEvenment');
 		echo "</td>";
 		echo "<td>";
 			echo form_dropdown('noEvenement',$noEvenement);
@@ -158,7 +167,7 @@ if ($provenance=='ajouter')
 }
 	echo "<tr>";
 		echo "<td>";
-			echo form_label('description du produit: ', 'libelleHTML');
+			echo form_label('Description du produit: ', 'libelleHTML');
 		echo "</td>";
 		echo "<td>";
 			echo form_textarea($libelleHtml);
@@ -167,7 +176,7 @@ if ($provenance=='ajouter')
 	echo "<br>";
 	echo "<tr>";
 		echo "<td>";
-			echo form_label('intitulé du produit: ','libelleCourt');
+			echo form_label('Intitulé du produit: ','libelleCourt');
 		echo "</td>";
 		echo "<td>";
 			echo form_textarea($libelleCourt);
@@ -176,7 +185,7 @@ if ($provenance=='ajouter')
 	echo "<br>\n";
 	echo "<tr>";
 		echo "<td>";
-			echo form_label('prix: ','prix');
+			echo form_label('Prix: ','prix');
 		echo "</td>";
 		echo "<td>";
 			echo form_input($prix);
@@ -189,22 +198,20 @@ if ($provenance=='ajouter')
 		echo "</td>";
 		echo "<td>";
 			echo form_input($img_Produit);
-		echo "</td>";
-	 	echo "</tr>";
-	if (isset($produit->img_Produit))
-	{
-		echo "<br>\n";
-		echo "<tr>";
-			echo "<td>";
-				echo 'Image actuellement choisie : ';
-				echo $produit->img_Produit;
+			if(isset($produit->Img_Produit))
+			{
+				if($produit->Img_Produit!='')
+				{
+					echo 'Image actuellement choisie : ';
+					echo'<img class="pull-left" width="150" src="'.base_url().'assets/images/'.$produit->Img_Produit.'"class="img-thumbnail" />';
+				}
+			}
 			echo "</td>";	
 			echo "<td>";
 				echo form_checkbox($supImgProduit);
-				echo " supprimer l'image ";
+				echo " Supprimer l'image ";
 			echo "</td>";
 		echo "</tr>";
-	}
 	echo "<br>\n";
 	echo "<tr>";
 		echo "<td>";
@@ -226,7 +233,7 @@ if ($provenance=='ajouter')
 	echo "<br>\n";
 	echo "<tr>";
 		echo "<td>";
-			echo form_label('edition de ticket neccesaire 0)non 1)oui: ','etreTicket');
+			echo form_label('Edition de ticket neccesaire 0)non 1)oui: ','etreTicket');
 		echo "</td>";
 		echo "<td>";
 			echo form_input($etreTicket);
@@ -235,7 +242,7 @@ if ($provenance=='ajouter')
 	echo "<br>\n";
 	echo "<tr>";
 		echo "<td>";
-			echo form_label('image du produit : ','ImgTicket');
+			echo form_label('Image  du ticket : ','ImgTicket');
 		echo "</td>";
 		echo "<td>";
 			echo form_input($imgTicket);
@@ -272,10 +279,12 @@ if ($provenance=='ajouter')
 	echo "</tr>";
 echo "</table>";
 echo form_close();
-
-echo "<script>
-$(document).ready(function() {
-    $('#summernote').summernote();
-});
-</script>";
 ?>
+
+<script>
+$(document).ready(function()
+    {
+        $('#summernote').summernote({ lang: 'fr-FR' });
+    });
+
+</script>
