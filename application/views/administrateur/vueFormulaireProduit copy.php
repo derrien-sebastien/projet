@@ -173,7 +173,6 @@ if ($provenance=='ajouter')
 			echo form_textarea($libelleHtml);
 		echo "</td>";
 	echo "</tr>";
-	echo "<br>";
 	echo "<tr>";
 		echo "<td>";
 			echo form_label('Intitulé du produit: ','libelleCourt');
@@ -182,7 +181,6 @@ if ($provenance=='ajouter')
 			echo form_textarea($libelleCourt);
 		echo "</td>";
 	echo "</tr>";
-	echo "<br>\n";
 	echo "<tr>";
 		echo "<td>";
 			echo form_label('Prix: ','prix');
@@ -191,7 +189,6 @@ if ($provenance=='ajouter')
 			echo form_input($prix);
 		echo "</td>";
 	echo "</tr>";
-	echo "<br>\n";
 	echo "<tr>";
 		echo "<td>";
 			echo form_label('image du produit: ','img_Produit');
@@ -212,7 +209,6 @@ if ($provenance=='ajouter')
 				echo " Supprimer l'image ";
 			echo "</td>";
 		echo "</tr>";
-	echo "<br>\n";
 	echo "<tr>";
 		echo "<td>";
 			echo form_label('Taille du stock: ','stock');
@@ -221,7 +217,6 @@ if ($provenance=='ajouter')
 			echo form_input($stock);
 		echo "</td>";
 	echo "</tr>";
-	echo "<br>\n";
 	echo "<tr>";
 		echo "<td>";
 			echo form_label("Numero d'ordre d'aparition: ",'numeroOrdreApparition');
@@ -230,7 +225,6 @@ if ($provenance=='ajouter')
 			echo form_input($numeroOrdreApparition);
 		echo "</td>";
 	echo "</tr>";
-	echo "<br>\n";
 	echo "<tr>";
 		echo "<td>";
 			echo form_label('Edition de ticket neccesaire 0)non 1)oui: ','etreTicket');
@@ -239,7 +233,6 @@ if ($provenance=='ajouter')
 			echo form_input($etreTicket);
 		echo "</td>";
 	echo "</tr>";
-	echo "<br>\n";
 	echo "<tr>";
 		echo "<td>";
 			echo form_label('Image  du ticket : ','ImgTicket');
@@ -250,7 +243,6 @@ if ($provenance=='ajouter')
 	echo "</tr>";
 	if (isset($produit->ImgTicket))
 	{
-		echo "<br>\n";
 		echo "<tr>";
 			echo "<td>";
 				echo 'Image actuellement choisie : ';
@@ -262,7 +254,6 @@ if ($provenance=='ajouter')
 			echo "</td>";
 		echo"</tr>";
 	}
-	echo "<br>\n";
 	echo "<tr>";
 		echo"<td>";
 			echo form_label('souhaitez vous inserer un autre produit ?','autre');
@@ -271,7 +262,6 @@ if ($provenance=='ajouter')
 			echo form_checkbox($autre);
 		echo "</td>";
 	echo "</tr>";
-	echo "<br>\n";
 	echo "<tr>";
 		echo"<td>";
 			echo form_submit($submit);			

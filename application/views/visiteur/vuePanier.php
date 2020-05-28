@@ -100,7 +100,10 @@ echo '<div class="container-fluid">';
                         echo '</tbody>';
                         echo '</table>';
                         echo '<div align="center">';
-                        echo '<button class="btn btn-primary">Retour au catalogue</button>';
+                        echo '<a href="';
+                            echo site_url('Visiteur/catalogueEvenement');
+                            echo '"><button class="btn btn-primary">Retour au catalogue</button>';
+                        echo '</a>';
                         echo '</div>';
                     }                     
             

@@ -18,10 +18,7 @@
             </li>
          
           
-            <?php if ($this->session->profil=='membre') : ?>
-              <li class="nav navbar-nav navbar-right">
-                <a href="<?php echo site_url('Membre/aide') ?>"><img src="<?php echo base_url(); ?>assets/img_site/help.png" height="25" width="25"></a>
-              </li>
+            <?php if ($this->session->profil=='membre'||$this->session->profil=='admin') : ?>
               <li class="dropdown">
                 <a class="dropdown-toggle" data-toggle="dropdown" href="#"><i class="glyphicon  glyphicon-cog"></i>&nbsp;Gestion compte
                   <span class="caret"></span>
@@ -51,22 +48,6 @@
             <!--administrateur-->
 
             <?php if ($this->session->profil=='admin') : ?>
-              <li class="nav navbar-nav navbar-right">
-                <a href="<?php echo site_url('Administrateur/aide') ?>"><img src="<?php echo base_url(); ?>assets/img_site/help.png" height="25" width="25"></a>
-              </li>
-              <li class="dropdown">
-                <a class="dropdown-toggle" data-toggle="dropdown" href="#">Gestion compte
-                  <span class="caret"></span>
-                </a>
-                <ul class="dropdown-menu">
-                  <li>
-                    <a href="<?php echo site_url('Membre/InfosCompte') ?>">Gérer votre compte</a>
-                  </li>&nbsp;&nbsp;
-                  <li>
-                    <a href="<?php echo site_url('Membre/ModificationMdp') ?>">Modifier votre mot de passe</a>
-                  </li>&nbsp;
-                </ul>
-              </li>
               <li class="dropdown">
                 <a class="dropdown-toggle" data-toggle="dropdown" href="#">Gestion des évènements
                   <span class="caret"></span>
@@ -122,6 +103,11 @@
         <!-- commun-->
 
           <ul class="nav navbar-nav navbar-right">
+            <?php if ($this->session->profil=='admin') : ?>
+              <li>
+                <a href="<?php echo site_url('Administrateur/aide') ?>"><img src="<?php echo base_url(); ?>assets/img_site/help.png" height="25" width="25"></a>
+              </li>
+            <?php endif; ?>
             <?php if ($this->session->userdata('email') == False) {?>
               <li>
                 <a href="<?php echo site_url('Visiteur/seConnecter') ?>">Connexion</a>                    

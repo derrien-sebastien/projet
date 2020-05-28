@@ -166,10 +166,9 @@
 
 echo '<div class="container-fluid">';
 echo    "<h1 class='encadre'>Création d'évènement</h1>";
-echo '</br>';
+echo '<table align="top">';
 echo    form_open_multipart('Administrateur/formulaireEvenement');
 echo    form_hidden($hidden);
-echo '<table class="table">';// voir avec renan type de table souhaité 
 if ($Provenance=='ajouter')
 {
     echo '<tr>';
@@ -180,9 +179,8 @@ if ($Provenance=='ajouter')
             echo form_input($anneeEvenement);
         echo"</td>";
     echo"</tr>";
-    echo "<br>";
 }
-    echo "<tr>";
+     echo "<tr>";
         echo "<td>";
             echo form_label('Date de mise en ligne :','DateMiseEnLigne');
         echo"</td>";
@@ -190,7 +188,6 @@ if ($Provenance=='ajouter')
             echo form_input($dateMiseEnLigne);
         echo"</td>";
     echo"</tr>";
-    echo "<br>\n";
     echo "<tr>";
         echo "<td>";
             echo form_label('Date de mise hors ligne :','DateMiseHorsLigne');
@@ -199,7 +196,6 @@ if ($Provenance=='ajouter')
             echo form_input($dateMiseHorsLigne);
         echo"</td>";
     echo"</tr>";
-    echo "<br>\n";
     echo "<tr>";
         echo"<td>";
             echo form_label("Texte de l'entête de l'évènement :",'TexteEntete'); 
@@ -208,7 +204,6 @@ if ($Provenance=='ajouter')
             echo form_textarea($texteEntete); 
         echo"</td>";
     echo"</tr>";
-    echo "<br>\n";
     echo "<tr>";
         echo"<td>";
             echo form_label("Descriptif de l'évènement :",'TexteCorps');
@@ -217,7 +212,6 @@ if ($Provenance=='ajouter')
             echo form_textarea($texteCorps);
         echo "</td>";
     echo "</tr>";
-    echo "<br>\n";
     echo "<tr>";
         echo "<td>";
             echo form_label("Texte du pied de page de l'évènement :",'TextePied');
@@ -226,7 +220,6 @@ if ($Provenance=='ajouter')
             echo form_textarea($textePied);
         echo "</td>";
     echo "</tr>";
-    echo "<br>\n";
     echo "<tr>";
         echo "<td>";
             echo form_label("Image de l'entête :",'ImgEntete');
@@ -247,7 +240,6 @@ if ($Provenance=='ajouter')
             echo "Supprimer l'image";
         echo "</td>";
     echo "</tr>";
-    echo "<br>\n";
     echo "<tr>";
         echo "<td>";
             echo form_label('Image du pied de page:','txtImgPiedDePage');
@@ -268,7 +260,6 @@ if ($Provenance=='ajouter')
             echo "Supprimer l'image";
         echo "</td>";
     echo "</tr>";
-    echo "<br>\n";
     echo "<tr>";
         echo "<td>";
             echo form_label('Information à joindre dans le mail:','EmailInfo');
@@ -277,7 +268,6 @@ if ($Provenance=='ajouter')
             echo form_textarea($emailInfo);            
         echo "</td>";
     echo "</tr>";
-    echo "<br>\n";
     echo "<tr>";
         echo "<td>";
             echo form_label("Si vous souhaitez que l'évènement soit activé immédiatement coché",'EnCours');
@@ -286,7 +276,6 @@ if ($Provenance=='ajouter')
             echo form_checkbox($encours);
         echo "</td>";
     echo "</tr>";
-    echo "<br>\n";
     echo "<tr>";
         echo "<td>";
             echo 'Produit';
@@ -302,7 +291,6 @@ if ($Provenance=='ajouter')
          echo form_checkbox($ajouterProduit);
         echo "</td>";
     echo "</tr>";
-    echo "<br>\n";
     echo "<tr>";
         echo "<td>";
             echo form_label('A quelle date les produits seront remis au client : ');
@@ -311,7 +299,6 @@ if ($Provenance=='ajouter')
             echo form_input($dateRemiseProduit);
         echo "</td>";
     echo "</tr>";
-    echo "</br>";
     if ($Provenance=='modifier')
     {
         if(isset($produitDeLEvenement[0]))
@@ -330,7 +317,7 @@ if ($Provenance=='ajouter')
                 echo "</tr>";
             } 
         }
-    }   
+    }    
     
     echo "<tr>";
         echo "<td>";
@@ -344,7 +331,7 @@ if ($Provenance=='ajouter')
     echo "<tr>";
         echo "<td>";
             echo form_submit($submit);
-        echo "</td>\n";
+        echo "</td>";
     echo "</tr>";
 echo    '</table>';
 echo    form_close();

@@ -1360,7 +1360,7 @@ donnée de sortie:
 						
 			$donneesInjectees['lesEvenements']= $this->ModeleEvenement->getEvenementGeneral(AnneeEnCour);
 			$donneesInjectees['Provenance']='activer';
-			$this->indexAdmin('administrateur/vueSelectionEvenements',$donneesInjectees);				
+			$this->indexAdmin('administrateur/vueSelectionEvenements',$donneesInjectees);	 		
 		}
 		else
 		{

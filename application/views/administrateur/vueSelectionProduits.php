@@ -28,16 +28,12 @@ $submit=array(
 );
 ///////////////////////////////   FORMULAIRE   ////////////////////////////////////////
 echo form_open('Administrateur/formulaireProduit');
-    echo '</br>';
     echo '<div class="container-fluid">';
         echo "<h1 class='encadre'>Créer à partir d'un produit existant</h1>";
     echo '</div>';
     echo '<div class="container-fluid">';
         echo form_hidden($hidden);
-        echo "<br>";
-        echo "<br>";
-        echo "<br>";
-        echo "<table>\n";
+        echo "<table>";
             echo "<tr>";
                 echo "<td>";
                     echo form_label('choisissez:','produit');
