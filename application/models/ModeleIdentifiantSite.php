@@ -24,7 +24,20 @@ class ModeleIdentifiantSite extends CI_Model
 	/*********************************************************************************************************************************************/
 	/*********************************************************************************************************************************************/
 
-	
+	public function getLastIdentifiant()
+	{
+		$this->db->select_max('NoIdentifiant');
+      	$this->db->from('ge_identifiants_site');
+      	$query=$this->db->get();
+      	$ligne = $query->row();	    
+      	$noMax= $ligne->NoIdentifiant;	
+		  
+		$this->db->select('*');
+		$this->db->from('ge_identifiants_site'); 
+		$this->db->where('NoIdentifiant', $noMax);      
+		$Liste = $this->db->get();
+		return $Liste->row();
+	}
 	  
 
 	/*********************************************************************************************************************************************/

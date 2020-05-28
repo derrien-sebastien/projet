@@ -835,11 +835,7 @@ class Visiteur extends CI_Controller
    function payementCb($donnees=NULL)
    {//0
       /*
-      $donneesCB=array(
-            'pbx_total'=>$_POST['total'],
-            'numero'=>$numero,
-            'numeroCommande'=>$_POST['noCommande']
-         ); explode $numero recherche libel court pour numero cmd
+
       Donnees entree
          $donnees	= array()
          -	$pbx_total (montant total de la transaction)
@@ -885,22 +881,32 @@ class Visiteur extends CI_Controller
          -	$dateTime(date())
          -	$hmac
          
-      */   
-      //$numeroCmd=libellecourtEvenementXnumeroCommande
-      $pbx_site         = '1999888';// Test (voir Compte de test)=Correspond au numéro du site
-      $pbx_rang         = '32';              		// Test
-      $pbx_identifiant  = '107904482';     // Test = (modele identifiant site)
-      $pbx_cmd          = '2020127';   //'cmd_rabelaisY';   		// forcé ici// numero de comande// a modifier 
-      $pbx_porteur      = $_SESSION['email'];  	// Valeur de test ici, en prod. = mail client
+            $donneesCB=array(
+            'pbx_total'=>$_POST['total'],
+            'numero'=>$numero,
+            'numeroCommande'=>$_POST['noCommande']
+         ); explode $numero recherche libel court pour numero cmd
+      */
+      $donneesEvenement=explode("/",$donnees['numero']);
+      $noEvenement=$donneesEvenement['0'];
+      $annne=$donneesEvenement['1'];   
+      $evenement=$this->ModeleEvenement->retournerUnEvenement($noEvenement, $annee);
+      $numeroCmd=$evenement->libellecourtEvenement.'X'.$donnees['numeroCommande'];
+      $identifiantSite=$this->ModeleIdentifiantSite->getLastIdentifiant();
+      $pbx_site         = $identifiantSite->Site;
+      $pbx_rang         = $identifiantSite->Rang;              		
+      $pbx_identifiant  = $identifiantSite->Identifiant;     
+      $pbx_cmd          = $numeroCmd;   //libbelleCourtXnumeroDeCommande 
+      $pbx_porteur      = $_SESSION['email'];  	
       $pbx_total        = $donnees['pbx_total']*100;                       
       $pbx_total        = str_replace(",", "", $pbx_total);
       $pbx_total        = str_replace(".", "", $pbx_total);
-      $pbx_effectue     = 'http://127.0.0.1/projet/vuePaiementAccepte.php';// a mettre en base_url()
+      $pbx_effectue     = 'http://127.0.0.1/projet/vuePaiementAccepte.php';// a mettre en base_url() voir pk base url fonctionne pas possibilité de passer par une variable intermediaire en string 
       $pbx_annule       = 'http://127.0.0.1/projet/vuePaiementAnnule.php';// a mettre en base_url()
       $pbx_refuse       = 'http://127.0.0.1/projet/vuePaiementRefuse.php';// a mettre en base_url()
       $pbx_repondre_a   = 'http://www.votre-site.extention/page-de-back-office-site';//base_url('visiteur/pageBackOff');
       $pbx_retour       = 'Montant:M;Reference:R;Auto:A;Erreur:E';
-      $keyTest          = '0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF';		// = (ModeleIdentifiantSite->fonction à faire
+      $keyTest          = $identifiantSite->CleHMAC;
       $serveurs         = array('tpeweb.paybox.com','tpeweb1.paybox.com');
       $serveurOK        = "";
       foreach($serveurs as $serveur)
