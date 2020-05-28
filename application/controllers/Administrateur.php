@@ -90,12 +90,12 @@ class Administrateur extends CI_Controller
         }
         $this->load->view('templates/PiedDePagePrincipal');
     }
-	public function accueil() 
+	public function aide() 
 	{
 		/*
 			affichage de la page acceuil administrateur aucune variable 
 		*/
-		$this->indexAdmin('administrateur/vueAccueilAdministrateur');
+		$this->indexAdmin('administrateur/vueAideAdministrateur');
 
 	}
 
@@ -1126,7 +1126,7 @@ donnée de sortie:
 			{
 				$donnees['modif']=$modif;
 			}	
-			$this->indexAdmin('administrateur/vueRecapCommande',$donnees);
+			$this->indexAdmin('administrateur/vueRecapCommande copy',$donnees);
 		}
 		else
 		{
@@ -1396,7 +1396,10 @@ donnée de sortie:
 			}
 		}
 	}
-
+	public function ajouterAdmin()
+	{
+		$this->ajouterUnMembre('admin');
+	}
 	public function ajouterUnMembre($admin=null)
 	{
 		//validation
@@ -1428,7 +1431,6 @@ donnée de sortie:
 			$donnees=array(
 				'NoPersonne'=>$noPersonnemax+1,
 				'Profil'=>$_POST['profil'],
-				'Email'=>$_POST['email'],
 				'Nom'=>$_POST['nom'],
 				'Prenom'=>$_POST['prenom'],
 				'Adresse'=>$_POST['adresse'],
@@ -1466,6 +1468,7 @@ donnée de sortie:
 					}
 					else
 					{
+						//'Email'=>$_POST['email'],  pourquoi y a ca???
 						$infoError=array(
 							'heading'=>'Les infomations ne sont pas inserer dans la table',
 							'message'=>"suite a un probleme nous n'avons pu créer votre nouvel administrateur"
@@ -1499,12 +1502,15 @@ donnée de sortie:
 	}
 
 	public function ajoutMultipleEnfant()
-	{
+	{	if(!isset($_POST))
+		{
+			$_POST='';
+		}
 		$this->form_validation->set_rules('nom','nom','required');
-		$this->form_validation->set_rules('prenom','prenom','required');
 		$this->form_validation->set_rules('dateNaissance','date de naissance');
 		$this->form_validation->set_rules('classe','classe');
 		$this->form_validation->set_rules('email[]','emails');
+		$this->form_validation->set_rules('prenom','prenom','required');
 		$this->form_validation->set_rules('nomParent[]','Nom des parents');
 		$this->form_validation->set_rules('prenomParent[]','Prenom des parents');
 		$this->form_validation->set_rules('adresseParent[]','Adresse des parents');
@@ -1628,7 +1634,7 @@ donnée de sortie:
 				}
 			}
 			unset($_POST);
-			$this->ajoutMultipleEnfant;
+			$this->ajoutMultipleEnfant();
 				
 		}
 	}

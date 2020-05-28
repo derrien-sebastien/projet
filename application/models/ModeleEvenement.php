@@ -91,7 +91,8 @@ class ModeleEvenement extends CI_Model
       $this->db->from('ge_evenement');
       $this->db->join('ge_ev_marchand','ge_evenement.NoEvenement=ge_ev_marchand.NoEvenement AND ge_evenement.Annee=ge_ev_marchand.Annee');
       $this->db->where('ge_evenement.EnCours',1); 
-      $this->db->order_by('ge_evenement.NoEvenement','ge_evenement.Annee','Desc');
+      $this->db->order_by('ge_evenement.Annee','DESC');
+      $this->db->order_by('ge_evenement.NoEvenement','DESC');
       $evMarchand = $this->db->get();
       return $evMarchand->result(); 
    } 
@@ -107,7 +108,8 @@ class ModeleEvenement extends CI_Model
       $this->db->join('ge_ev_marchand','ge_evenement.NoEvenement=ge_ev_marchand.NoEvenement AND ge_evenement.Annee=ge_ev_marchand.Annee');
       $this->db->where('ge_ev_marchand.Annee', $Annee);
       $this->db->where('ge_ev_marchand.NoEvenement', $NoEvenement);
-      $this->db->order_by('ge_evenement.NoEvenement','ge_evenement.Annee','asc'); 
+      $this->db->order_by('ge_evenement.Annee','DESC');
+      $this->db->order_by('ge_evenement.NoEvenement','DESC');
       $maListe = $this->db->get();
       return $maListe->row();
    }
@@ -173,7 +175,8 @@ class ModeleEvenement extends CI_Model
       $this->db->from('ge_evenement');
       $this->db->join('ge_ev_non_marchand','ge_evenement.NoEvenement=ge_ev_non_marchand.NoEvenement AND ge_evenement.Annee=ge_ev_non_marchand.Annee');
       $this->db->where('ge_evenement.EnCours','1'); 
-      $this->db->order_by('ge_evenement.NoEvenement','ge_evenement.Annee','asc');
+      $this->db->order_by('ge_evenement.Annee','DESC');
+      $this->db->order_by('ge_evenement.NoEvenement','DESC');
       $evNonMarchand = $this->db->get();
       return $evNonMarchand->result(); 
    } 

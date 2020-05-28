@@ -14,10 +14,12 @@ foreach ($lesClasses as $uneClasse)
 echo form_open('Administrateur/afficherEleveClasse');//a renseigné
 echo '</br>';
 echo '</br>';
+echo '<div>';
+echo '</div>';
 echo "<table>\n";
     echo '<tr>';
         echo '<td>';
-            echo form_label('choisissez:','classe');
+            echo form_label('Sélectionnez une classe &nbsp;','classe');
         echo '</td>';
         echo '<td>';
             echo form_dropdown('classe',$classe);

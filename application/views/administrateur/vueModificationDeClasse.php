@@ -15,37 +15,38 @@ foreach($eleves as $unEleve)
     $lesEleves[$unEleve->NoEnfant]=$unEleve->Nom.' '.$unEleve->Prenom;
 }
 $dateDebut=array(
-    'type'=>'date',
-    'name'=>'dateDebut'
+    'type'  =>  'date',
+    'name'  =>  'dateDebut'
 );
 $submit=array(
-    'name'=>'modifications',
-    'value'=>'envoyer les modifications'
+    'name'  =>  'modifications',
+    'value' =>  'envoyer les modifications',
+    'class' =>  'btn btn-primary'
 );
 $hidden=array(
     'classe'=>$classe->NoClasse
 );
-echo '<h1>modification des eleve de : ';
-echo $classe->Nom;
-echo '</h1></br>';
 echo form_open_multipart('Administrateur/modifierClasse');
 echo form_hidden($hidden);
+echo '<h1>Modification des élèves de : ';
+echo $classe->Nom;
+echo '</h1></br>';
 echo '<table>';
     echo '<tr>';
         echo '<td>';
             echo 'Nom';
         echo '&emsp;</td>';
         echo '<td>';
-            echo 'prenom';
+            echo 'Prénom';
         echo '&emsp;</td>';
         echo '<td>';
-            echo 'date de naissance';
+            echo 'Date de naissance';
         echo '&emsp;</td>';
         echo '<td>';
-            echo 'supprimer de la classe';
+            echo 'Supprimer de la classe';
         echo '&emsp;</td>';
         echo '<td>';
-            echo 'date de sortie de la classe';
+            echo 'Date de sortie de la classe';
         echo '</td>';
     echo '</tr>';
     foreach($elevesDeLaClasse as $unEleve)
@@ -78,11 +79,11 @@ echo '<table>';
     }
 echo '</table>';
 echo '</br>';
-echo '<h1>ajouter des élèves</h1>';
+echo '<h1>Ajouter des élèves</h1>';
 echo '<table>';
     echo '<tr>';
         echo '<td>';
-            echo form_label('selection multiple possible','selection');
+            echo form_label('Selection multiple possible','selection');
         echo '</td>';
         echo '<td>';
             echo form_multiselect('selection[]', $lesEleves);
@@ -91,7 +92,7 @@ echo '<table>';
     echo '</br>';
     echo '<tr>';
         echo '<td>';
-            echo form_label("date d'entré en classe pour les enfants selectionnés",'dateDebut');
+            echo form_label("Date d'entrée en classe pour les enfants selectionnés",'dateDebut');
         echo '</td>';
         echo '<td>';
             echo form_input($dateDebut);

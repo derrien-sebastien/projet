@@ -107,9 +107,9 @@
             }
 
 ///////////////////////////////   FORMULAIRE   ////////////////////////////////////////
+echo form_open('Visiteur/formulaireLivraison');
 if(!isset($Personne->Email))
 {
-    echo form_open('Visiteur/formulaireLivraison');
     echo '<body id="bodyLogin">';
     echo '<div class="containerLogin">';
         echo '<img src="'.base_url().'assets/img_site/utilisateur.svg">';
@@ -127,34 +127,34 @@ if(!isset($Personne->Email))
 }
 else
 {
-    echo form_open('Visiteur/formulaireLivraison');
-        echo '<div class="container-fluid">';
-            echo '<h2 class="encadre" align="center">Vos informations</h2>';
-            echo '<div align="right">';
-                if(!isset($Personne->Nom, $Personne->Prenom, $Personne->Adresse, $Personne->CodePostal, $Personne->Ville))
-                {
-                    echo '(*) informations obligatoires';
-                }
-            echo '</div>';
-            echo form_hidden($hidden);  
-            echo '<div align="center">';           
-                echo form_label('<img src="'.base_url().'assets/img_site/utilisateur.svg" height="100" width="100">',"txtEmail");
-                echo form_label($email);
-            echo '</div>';
-            echo '<table id="infoTable">';
-                echo '<thead>';
-                    echo '<tr>';
-                        echo'<th>';
-                            echo form_label("Nom-Prénom");
-                        echo '</th>';
-                        echo'<th>';
-                            echo form_label("Adresse");
-                        echo '</th>';
-                        echo'<th>';
-                            echo form_label("Coordonnées Téléphoniques");
-                        echo '</th>';
-                    echo '</tr>';
-                echo '</thead>';
+    echo '</br>';   
+    echo '<div class="container-fluid">';
+        echo '<h1 class="encadre" align="center">Vos informations</h1>';
+        echo '<div align="right">';
+            if(!isset($Personne->Nom, $Personne->Prenom, $Personne->Adresse, $Personne->CodePostal, $Personne->Ville))
+            {                    
+                echo '(*) informations obligatoires';
+            }
+        echo '</div>';
+        echo form_hidden($hidden);  
+        echo '<div align="center">';           
+            echo form_label('<img src="'.base_url().'assets/img_site/utilisateur.svg" height="100" width="100">',"txtEmail");
+            echo form_label($email);
+        echo '</div>';
+        echo '<table id="infoTable">';
+            echo '<thead>';
+                echo '<tr>';
+                    echo'<th>';
+                        echo form_label("Nom-Prénom");
+                    echo '</th>';
+                    echo'<th>';
+                        echo form_label("Adresse");
+                    echo '</th>';
+                    echo'<th>';
+                        echo form_label("Coordonnées Téléphoniques");
+                echo '</th>';
+                echo '</tr>';
+            echo '</thead>';
                 echo '<tbody>';
                     echo '<tr>';
                         echo '<td>';
@@ -238,10 +238,7 @@ else
                                 echo form_label('Comment souhaitez-vous payer ?');
                             echo '</td">';
                             echo '<td>';
-                                echo '<a href="';
-                                    echo site_url('Visiteur/payementCb');
-                                    echo '"><button class="btn btn-primary">Paiement par carte bancaire</button>';
-                                echo '</a>';
+                                echo '<button name="payementCb" class="btn btn-primary">Paiement par carte bancaire</button>';
                             echo '</td>';
                             echo '<td>';
                                 echo form_submit($submit);

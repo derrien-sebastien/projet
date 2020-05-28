@@ -47,7 +47,7 @@
         'type'      =>  'number',
         'name'      =>  'anneeEvenement',
         'value'     =>  '2020',
-        'class'     =>  'form-control'    
+        'class'     =>  'form'    
     );
     if(isset($evenement->Annee))
     {
@@ -137,7 +137,9 @@
     );
     $ajouterProduit=array(
         'name'      =>  'ajoutProduit',
-        'value'     =>  'oui'
+        'value'     =>  'oui',
+        'checked'   => true
+
     );
     $dateRemiseProduit=array(
         'type'      =>  'date',
@@ -164,12 +166,10 @@
 
 echo '<div class="container-fluid">';
 echo    "<h1 class='encadre'>Création d'évènement</h1>";
-echo '</div>';
 echo '</br>';
-echo '<div class="container">';
 echo    form_open_multipart('Administrateur/formulaireEvenement');
 echo    form_hidden($hidden);
-echo '<table class="table table-striped">';// voir avec renan type de table souhaité 
+echo '<table class="table">';// voir avec renan type de table souhaité 
 if ($Provenance=='ajouter')
 {
     echo '<tr>';
@@ -293,9 +293,10 @@ if ($Provenance=='ajouter')
         echo "</td>";
     echo "</tr>";
     echo '</br>';
+
     echo "<tr>";
         echo "<td>";
-            echo form_label('Si cet évènement comptient des produits coché','AjoutProduit');
+            echo form_label('Cet évènement comptient des produits','AjoutProduit');
         echo "</td>";
         echo "<td>";
          echo form_checkbox($ajouterProduit);
@@ -304,7 +305,7 @@ if ($Provenance=='ajouter')
     echo "<br>\n";
     echo "<tr>";
         echo "<td>";
-            echo form_label('A quel date les produits seront remis au client : ');
+            echo form_label('A quelle date les produits seront remis au client : ');
         echo "</td>";
         echo "<td>";
             echo form_input($dateRemiseProduit);

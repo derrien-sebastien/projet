@@ -26,7 +26,7 @@ controleur a crée :
 */
 
 //un choix possible en modification de classe a mettre en griser si un selectionner
-
+echo '</br>';
 if(isset($enfantSansCorrespondant['0']))
 {
     $submit=array(
@@ -36,21 +36,21 @@ if(isset($enfantSansCorrespondant['0']))
     $LenfantSC=array();
     $inputEnfantSC=array();
 
-    echo "<H1>les enfants suivant n'ont pas de correspondant</h1>";
+    echo "<h1 class='encadre'>Enfants sans correspondant </h1>";
     echo form_open('Administrateur/modifCorrespondantEnfant');
     echo'<table>';
         echo '<tr>';
         echo '<td>';
-            echo 'nom&emsp;';
+            echo 'Nom&emsp;';
         echo '</td>';
         echo '<td>';
-            echo 'prenom&emsp;';
+            echo 'Prénom&emsp;';
         echo '</td>';
         echo '<td>';
-            echo 'date de naissance&emsp;';
+            echo 'Date de naissance&emsp;';
         echo '</td>';
         echo '<td>';
-            echo 'entrez un mail de correspondant';
+            echo 'Entrez un mail de correspondant';
         echo '</td>';
     echo '</tr>';
     foreach($enfantSansCorrespondant as $unEnfant)
@@ -85,7 +85,7 @@ if(isset($classesSansEnfants))
         'value'=>'envoyer'
     );
     echo "</br>";
-    echo "<h1>classes à completer </h1>";
+    echo "<h1 class='encadre'>Classes qui sont à compléter </h1>";
     echo form_open('Administrateur/modifierClasse');    
     echo '<table>';
         echo '<tr>';
@@ -127,7 +127,7 @@ if(isset($stockLimite))
         'name'=>'submit',
         'value'=>'submit'
     );
-    echo "<H1>les produit dont le stock est limite</h1>";
+    echo "<h1 class='encadre'>Produits dont le stock est trop limite</h1>";
     echo form_open('Administrateur/modifStockLimite');
     echo'<table>';
         echo '<tr>';
@@ -171,7 +171,7 @@ if(isset($evenementNormalementEnCours))
         'name'=>'submit',
         'value'=>'submit'
     );
-    echo "<H1>les évènements qui devrait etre actif </h1>";
+    echo "<h1 class='encadre'>Evènements qui devrait être actif </h1>";
     echo form_open('Administrateur/activation');
     echo'<table>';
         echo '<tr>';

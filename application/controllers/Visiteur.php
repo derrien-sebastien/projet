@@ -174,7 +174,7 @@ class Visiteur extends CI_Controller
                   }               
                   else
                   {
-                     redirect('Administrateur/accueil');
+                     redirect('Visiteur/accueil');
                   }
                }
                elseif ($this->session->profil=='membre')
@@ -393,23 +393,39 @@ class Visiteur extends CI_Controller
    /**********************************************************************
    **                          LE PANIER                               ***
    **********************************************************************/
-
-    function panier2()
+   function retourPanier()
    {
-      $this->indexVisiteur('visiteur/vuePanier2');   
+      
+      if(isset($_POST['viderPanier']))
+      {
+         $this->viderPanier($_POST['noEvenement'],$_POST['annee']);
+      }
+      if(isset($_POST['passerCommande']))
+      {
+         $this->passerCommande();
+      }
+      if(isset($_POST['submit']))
+      {
+         $this->majPanier($_POST['arriver']);
+      }
    }
-
-   function majPanier()
+   function majPanier($arriver=null)
    {
-      for ($i=1; $i <= $this->cart->total_items(); $i++)
+      $i=0;
+      foreach($_POST['produit']as $unProduit)
       {
          $data = array(
-         'rowid'  => $this->input->post($i.'[rowid]'),
-         'qty'    => $this->input->post($i.'[qty]')
-         );
-         $this->cart->update($data);
-      } // for
-   } // function
+            'rowid'  => $_POST[$i.'rowid'],
+            'qty'    => $_POST[$i.'qty']
+            );
+            $this->cart->update($data);
+         $i++;
+      }
+      if(isset($arriver))
+      {
+         $this->panier();
+      }
+   }
    
    public function panier($noEvenement = NULL, $annee=NULL )
    { 
@@ -431,7 +447,7 @@ class Visiteur extends CI_Controller
       $noProduit=$produit['2'];
       $DonneesProduit=$this->mProd->getRows($noEvenement, $annee, $noProduit);
       $data = array(
-            'id'    => $_POST['adress'],              //$DonneesProduit['NoProduit']/* .'/'.$DonneesProduit['NoEvenement'].'/'.$DonneesProduit['annee'] */,
+            'id'    => $_POST['adress'],              
             'qty'   => $_POST['qty'],
             'price' => $DonneesProduit['Prix'],
             'name'  => $DonneesProduit['LibelleCourt'],
@@ -491,10 +507,10 @@ class Visiteur extends CI_Controller
    /**********************************************************************
    **                        VIDER LE  PANIER                          ***
    **********************************************************************/
-   public function viderPanier($noEvenement,$annee)
+   public function viderPanier()
    {
       $this->cart->destroy();
-      $this->EvenementMarchand($noEvenement,$annee);
+      $this->panier();
       
    }
 
@@ -618,8 +634,9 @@ class Visiteur extends CI_Controller
 
    public function formulaireLivraison()
    {
+      var_dump('',$_POST);
       $urlDArriver =  $this->agent->referrer();
-      $this->form_validation->set_rules('txtEmail', 'Email', 'required');  //regle de validation du formulaire
+      $this->form_validation->set_rules('txtEmail', 'Email', 'required'); 
 		$this->form_validation->set_rules('txtNom','Nom','required');
       $this->form_validation->set_rules('txtPrenom','Prenom');
       $this->form_validation->set_rules('txtAdresse','Adresse','required');
@@ -707,32 +724,41 @@ class Visiteur extends CI_Controller
                   'imgProduit'   => $produit->Img_Produit,
                   'libelle'      => $produit->LibelleCourt               
                );
+               $libelleCourt=$produit->LibelleCourt;
                $total=$total+$unProduit['subtotal'];
                $i=$i+1;
-            }
-            if(!isset($_POST['submit']))
-            {
-               $donneesCB=array(
-                  'pbx_total'=> $total 
-               );
-               $this->payementCb($donneesCB);
-            }
-            else
-            {
-             
+            }            
             $donneesVue=array(
                'donneesCommandeGlobal' => $donneesCommandeGlobal,
-               'total'                 => $total,
-               'modeReglement'         => 'Cheque/Espece',
+               'total'                 => $total,               
                'Regler'                => 0,
                'noCommande'            => $noCommande
             );
-            
-            $this->indexVisiteur('visiteur/vueRecap',$donneesVue);
+            if(isset($_POST['submit']))
+            {
+               $donneesVue['modeReglement']= 'Cheque/Espece';
             }
+            else
+            {
+               $donneesVue['modeReglement']= 'Carte Bancaire';
+            }
+            $this->indexVisiteur('visiteur/vueRecap',$donneesVue);
          }
       }
    }
+   
+   /*if(isset($_POST['payementCb']))
+   {
+      $donneesCB=array(
+         'pbx_total'=> $total ,
+         'libelleCourt'=>$libelleCourt,
+        'numeroCommande'=>
+      );
+      $this->payementCb($donneesCB);
+   }
+   else
+   {*/
+    
 
    /**********************************************************************
    **                       FIN DE LA COMMANDE                         ***
@@ -761,7 +787,7 @@ class Visiteur extends CI_Controller
          'MontantTotal'       => $montantTotal,
          'Payer'              => 0,
          'ResteAPayer'        => $montantTotal,
-         'ModePaiement'       => 'Espece/Cheque',
+         'ModePaiement'       => $_POST['modeReglement'],
          'CommentaireAcheteur'=> $commentaire
       );
       $this->ModeleCommande->ajouterCommande($donneesCommande);
@@ -774,10 +800,23 @@ class Visiteur extends CI_Controller
             'NoProduit'    => $unProduit['noProduit'],
             'Quantite'     => $unProduit['qty']
          );
+         $numero=$unProduit['noEvenement'].'X'.$unProduit['annee'];
          $this->ModeleCommande->insererContenir($donneesContenir);
       }    
       $this->cart->destroy();
-      $this->indexVisiteur('templates/vueAccueilPrincipal');         
+      if ($_POST['modeReglement']=='Cheque/Espece')
+      {
+         $this->indexVisiteur('templates/vueAccueilPrincipal');  
+      }
+      elseif($_POST['modeReglement']=='Carte Bancaire')  
+      {
+         $donneesCB=array(
+            'pbx_total'=>$_POST['total'],
+            'numero'=>$numero,
+            'numeroCommande'=>$_POST['noCommande']
+         );
+         $this->payementCb($donneesCB);
+      }     
    }
 
    /**********************************************************************
@@ -796,9 +835,16 @@ class Visiteur extends CI_Controller
    function payementCb($donnees=NULL)
    {//0
       /*
+      $donneesCB=array(
+            'pbx_total'=>$_POST['total'],
+            'numero'=>$numero,
+            'numeroCommande'=>$_POST['noCommande']
+         ); explode $numero recherche libel court pour numero cmd
       Donnees entree
          $donnees	= array()
          -	$pbx_total (montant total de la transaction)
+         -  libelleCourt 
+         -  numerocommande
 
 
       Donnees fixe
@@ -840,10 +886,11 @@ class Visiteur extends CI_Controller
          -	$hmac
          
       */   
+      //$numeroCmd=libellecourtEvenementXnumeroCommande
       $pbx_site         = '1999888';// Test (voir Compte de test)=Correspond au numéro du site
       $pbx_rang         = '32';              		// Test
       $pbx_identifiant  = '107904482';     // Test = (modele identifiant site)
-      $pbx_cmd          = '2020124';   //'cmd_rabelaisY';   		// forcé ici// numero de comande// a modifier 
+      $pbx_cmd          = '2020127';   //'cmd_rabelaisY';   		// forcé ici// numero de comande// a modifier 
       $pbx_porteur      = $_SESSION['email'];  	// Valeur de test ici, en prod. = mail client
       $pbx_total        = $donnees['pbx_total']*100;                       
       $pbx_total        = str_replace(",", "", $pbx_total);
