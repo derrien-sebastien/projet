@@ -24,19 +24,42 @@ class ModeleCommande extends CI_Model
     /*********************************************************************************************************************************************/
     /*********************************************************************************************************************************************/
 
-    public function commandeParEvenement($envenement,$annee)
+    public function commandeParEvenement($pNoEvenement,$annee)
     {
         $this->db->select('*');
         $this->db->from('ge_personne');
         $this->db->join('ge_commande','ge_personne.NoPersonne = ge_commande.NoPersonne');
         $this->db->join('ge_contenir','ge_commande.NoCommande = ge_contenir.NoCommande');
         $this->db->join('ge_produit','ge_produit.NoProduit=ge_contenir.NoProduit AND ge_produit.Noevenement=ge_contenir.Noevenement AND ge_produit.annee=ge_contenir.annee' );
-        $this->db->where('ge_contenir.NoEvenement',$envenement);
-        $this->db->where('ge_contenir.annee',$annee);
+        $this->db->where('ge_contenir.NoEvenement',$pNoEvenement);
+        $this->db->where('ge_contenir.Annee',$annee);
         $this->db->order_by('ge_personne.NoPersonne');
         $maListe = $this->db->get(); 
         return $maListe->result();
     }
+
+    public function getUneCommande($noCommande)
+    {
+        $this->db->select('*');
+        $this->db->from('ge_commande');
+        $this->db->join('ge_contenir','ge_contenir.NoCommande = ge_commande.NoCommande');
+        $this->db->where('ge_commande.NoCommande',$noCommande);
+        $this->db->order_by('ge_contenir.NoEvenement');
+        $liste=$this->db->get();
+        return $liste->result();
+    }
+    
+    public function commandesEmail($email)
+    {
+        $this->db->select('*');
+        $this->db->from('ge_commande');
+        $this->db->join('ge_personne','ge_personne.NoPersonne = ge_commande.NoPersonne');        
+        $this->db->where('ge_personne.Email',$email);
+        $this->db->order_by('ge_commande.NoCommande','DESC');        
+        $liste=$this->db->get();
+        return $liste->result();
+    }
+
     public function maxCommande()
     {
        $this->db->select_max('NoCommande');
@@ -46,6 +69,7 @@ class ModeleCommande extends CI_Model
        $noMax= $ligne->NoCommande;	
        return $noMax;
     }
+
     public function getContenir($pNoCommande)
     {
        $this->db->select('*');
@@ -54,6 +78,7 @@ class ModeleCommande extends CI_Model
        $query=$this->db->get();	    
        return $query->result();
     }
+
     /*********************************************************************************************************************************************/
     /*********************************************************************************************************************************************/
     /*********************************************************************************************************************************************/

@@ -19,7 +19,7 @@ $submit=array(
 $hidden=array(
     'noCommande'=> $noCommande,
     'modeReglement'=>$modeReglement,
-    'totale'=>$total
+    'total'=>$total
 );
 echo form_open('visiteur/finCommande');
 echo form_hidden($hidden);

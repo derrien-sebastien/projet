@@ -10,6 +10,9 @@ si $modif possibiliter de modifier payer et remis */
         'annee'         =>  $annee,
         'noEvenement'   =>  $noEvenement    
     );
+    $commentaire=array(
+        'name'=>'commentaire',
+    );
     $submit=array(
         'name'          =>  'submit',
         'value'         =>  'Valider',
@@ -33,7 +36,6 @@ si $modif possibiliter de modifier payer et remis */
                 echo "<tr>";
                     echo "<td>";
                         echo "___________________________";
-                        echo "</br>";
                     echo "</td>";
                 echo "</tr>";
                 echo "<tr>";
@@ -48,7 +50,6 @@ si $modif possibiliter de modifier payer et remis */
                     echo "<td>";
                         echo "Prénom : ";
                         echo $uneLigne->Prenom;
-                        echo "</br>";
                     echo "</td>";
                     if(isset($uneLigne->TelPortable))
                     {
@@ -107,7 +108,6 @@ si $modif possibiliter de modifier payer et remis */
                         echo "</td>";
                     echo "</td>";
                 echo "</tr>";
-                echo "</br>";
                 echo "<tr>";
                     echo "<td>";
                     echo "</td>";
@@ -120,7 +120,6 @@ si $modif possibiliter de modifier payer et remis */
                         echo $uneLigne->ModePaiement;
                     echo "</td>";
                 echo "</tr>";
-                echo "</br>";
                 echo "<tr>";
                     echo "<td>";
                     echo "</td>";
@@ -129,17 +128,26 @@ si $modif possibiliter de modifier payer et remis */
                         echo $uneLigne->CommentaireAcheteur;
                     echo "</td>";
                 echo "</tr>";
-                echo "</br>";
                 echo "<tr>";
                     echo "<td>";
                     echo "</td>";
-                    echo "<td>";
-                        echo "Commentaire Administrateur :";
-                        echo $uneLigne->CommentaireAdministrateur;
-                    echo "</td>";
+                    if($modif=='modif' )
+                    {
+                        $commentaire['value']=$uneLigne->CommentaireAdministrateur;
+                        echo "<td>";
+                            echo "Commentaire Administrateur :";
+                            echo form_input($commentaire); 
+                        echo "</td>"; 
+                    }
+                    else
+                    {
+                        echo "<td>";
+                            echo "Commentaire Administrateur :";
+                            echo $uneLigne->CommentaireAdministrateur;
+                        echo "</td>";
+                    }
                 echo "</tr>";
             }
-            echo "</br>";
             echo "<tr>";
                 echo "<td>";
                 echo "</td>";

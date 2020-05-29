@@ -33,6 +33,9 @@
                   <li>
                     <a href="<?php echo site_url('Membre/Actif') ?>">S'inscrire/Se désinscrire de la newsletter</a>
                   </li>&nbsp;
+                  <li>
+                    <a href="<?php echo site_url('Membre/mesCommandes') ?>">Vos Commandes</a>
+                  </li> &nbsp;
                 </ul>
               </li> 
               <li class="dropdown">
@@ -49,25 +52,40 @@
 
             <?php if ($this->session->profil=='admin') : ?>
               <li class="dropdown">
-                <a class="dropdown-toggle" data-toggle="dropdown" href="#">Gestion des évènements
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="true"> 
+                  <span class="nav-label">Evènementiel</span> 
                   <span class="caret"></span>
                 </a>
                 <ul class="dropdown-menu">
-                  <li>
-                    <a href="<?php echo site_url('Administrateur/ajouterEvenement') ?>">Ajouter un évènement</a>
+                  <li class="dropdown-submenu">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> 
+                      <span class="nav-label">Gestion des évènements</span>
+                    </a>
+                    <ul class="dropdown-menu">
+                      <li>
+                        <a href="<?php echo site_url('Administrateur/ajouterEvenement') ?>">Ajouter un évènement</a>
+                      </li>&nbsp;
+                      <li>
+                        <a href="<?php echo site_url('Administrateur/modifierEvenement') ?>">Modifier un évènement</a>
+                      </li>&nbsp;
+                      <li>
+                      <a href="<?php echo site_url('Administrateur/changerLEtatDunEvenement') ?>">Activer/Désactiver un évènement</a>
+                      </li>
+                    </ul>
                   </li>&nbsp;
-                  <li>
-                    <a href="<?php echo site_url('Administrateur/modifierEvenement') ?>">Modifier un évènement</a>
-                  </li>&nbsp;
-                  <li>
-                    <a href="<?php echo site_url('Administrateur/changerLEtatDunEvenement') ?>">Activer/Désactiver un évènement</a>
-                  </li>&nbsp;
-                  <li>
-                    <a href="<?php echo site_url('Administrateur/ajouterProduit/0/0') ?>">Ajouter un Produit</a>
-                  </li>&nbsp;
-		              <li>
-                    <a href="<?php echo site_url('Administrateur/modifierProduit') ?>">Modifier un Produit</a>
-                  </li>&nbsp;
+                  <li class="dropdown-submenu">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> 
+                      <span class="nav-label">Gestion des produits</span>
+                    </a>
+                    <ul class="dropdown-menu">
+                      <li>
+                        <a href="<?php echo site_url('Administrateur/ajouterProduit/0/0') ?>">Ajouter un Produit</a>
+                      </li>&nbsp;
+                      <li>
+                        <a href="<?php echo site_url('Administrateur/modifierProduit') ?>">Modifier un Produit</a>
+                      </li>
+                    </ul>
+                  </li>
                 </ul>
               </li> 
               <li class="dropdown">
@@ -75,24 +93,59 @@
                   <span class="caret"></span>
                 </a>
                 <ul class="dropdown-menu">
-                  <li>
-                    <a href="<?php echo site_url('Administrateur/selectionCommande') ?>">Récapitulatif des commandes</a>
+                  <li class="dropdown-submenu">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> 
+                      <span class="nav-label">Gestion des classes</span>
+                    </a>
+                    <ul class="dropdown-menu">
+                      <li>
+                        <a href="<?php echo site_url('Administrateur/modifierClasse') ?>">Gestion des classes</a>
+                      </li>
+                    </ul>
                   </li>&nbsp;
-                  <li>
-                    <a href="<?php echo site_url('Administrateur/formulaireMail') ?>">Envoyer un mail</a>
+                  <li class="dropdown-submenu">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> 
+                      <span class="nav-label">Gestion des commandes</span>
+                    </a>
+                    <ul class="dropdown-menu">
+                      <li>
+                        <a href="<?php echo site_url('Administrateur/selectionCommande') ?>">Récapitulatif des commandes</a>
+                      </li>
+                    </ul>
                   </li>&nbsp;
-                  <li>
-                    <a href="<?php echo site_url('Administrateur/afficherProbleme') ?>">Gestion des problèmes d'administration</a>
+                  <li class="dropdown-submenu">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> 
+                      <span class="nav-label">Gestion des membres</span>
+                    </a>
+                    <ul class="dropdown-menu">
+                      <li>
+                        <a href="<?php echo site_url('Administrateur/ajouterUnMembre') ?>">Ajouter un membre</a>
+                      </li>&nbsp;
+                      <li>
+                        <a href="<?php echo site_url('Administrateur/ajouterAdmin') ?>">Ajouter un administrateur</a>
+                      </li>
+                    </ul>
                   </li>&nbsp;
-                  <li>
-                    <a href="<?php echo site_url('Administrateur/modifierClasse') ?>">Gestion des classes</a>
+                  <li class="dropdown-submenu">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> 
+                      <span class="nav-label">Gestion des problèmes</span>
+                    </a>
+                    <ul class="dropdown-menu">
+                      <li>
+                        <a href="<?php echo site_url('Administrateur/afficherProbleme') ?>">Gestion des problèmes d'administration</a>
+                      </li>
+                    </ul>
                   </li>&nbsp;
-                  <li>
-                    <a href="<?php echo site_url('Administrateur/ajouterUnMembre') ?>">Ajouter un membre</a>
-                  </li>&nbsp;
-                  <li>
-                    <a href="<?php echo site_url('Administrateur/ajouterAdmin') ?>">Ajouter un administrateur</a>
-                  </li>&nbsp;
+                  <li class="dropdown-submenu">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> 
+                      <span class="nav-label">Mailing</span>
+                    </a>
+                    <ul class="dropdown-menu">
+                      <li>
+                        <a href="<?php echo site_url('Administrateur/formulaireMail') ?>">Envoyer un mail</a>
+                      </li>
+                    </ul>
+                  </li>
                   <!-- accuser de reception a faire -->
                   <!-- relance mail-->                  
                 </ul>
@@ -122,3 +175,55 @@
     </nav>
     </br>
     </br>
+
+
+<style>
+
+.dropdown-submenu
+{
+  position:relative;
+}
+.dropdown-submenu>.dropdown-menu
+{
+  top:0;left:100%;
+  margin-top:-6px;
+  margin-left:-1px;
+  -webkit-border-radius:0 6px 6px 6px;
+  -moz-border-radius:0 6px 6px 6px;
+  border-radius:0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu
+{
+  display:block;
+}
+.dropdown-submenu>a:after
+{
+  display:block;
+  content:" ";
+  float:right;
+  width:0;
+  height:0;
+  border-color:transparent;
+  border-style:solid;
+  border-width:5px 0 5px 5px;
+  border-left-color:#cccccc;
+  margin-top:5px;
+  margin-right:-10px;
+}
+.dropdown-submenu:hover>a:after
+{
+  border-left-color:#ffffff;
+}
+.dropdown-submenu.pull-left
+{
+  float:none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu
+{
+  left:-100%;
+  margin-left:10px;
+  -webkit-border-radius:6px 0 6px 6px;
+  -moz-border-radius:6px 0 6px 6px;
+  border-radius:6px 0 6px 6px;
+}
+</style>

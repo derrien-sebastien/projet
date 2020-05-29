@@ -634,7 +634,6 @@ class Visiteur extends CI_Controller
 
    public function formulaireLivraison()
    {
-      var_dump('',$_POST);
       $urlDArriver =  $this->agent->referrer();
       $this->form_validation->set_rules('txtEmail', 'Email', 'required'); 
 		$this->form_validation->set_rules('txtNom','Nom','required');
@@ -802,7 +801,7 @@ class Visiteur extends CI_Controller
          );
          $numero=$unProduit['noEvenement'].'X'.$unProduit['annee'];
          $this->ModeleCommande->insererContenir($donneesContenir);
-      }    
+      }
       $this->cart->destroy();
       if ($_POST['modeReglement']=='Cheque/Espece')
       {
@@ -819,15 +818,6 @@ class Visiteur extends CI_Controller
       }     
    }
 
-   /**********************************************************************
-   **                  MODIFIER ADRESSE DE LIVRAISON                   ***
-   **********************************************************************/
-
-   public function adress()
-   {
-      $this->indexVisiteur('visiteur/vueAdresseDeLivraison');
-   }
-   
    /**********************************************************************
    **                  Paiement par Carte Bancaire                     ***
    **********************************************************************/
@@ -887,11 +877,11 @@ class Visiteur extends CI_Controller
             'numeroCommande'=>$_POST['noCommande']
          ); explode $numero recherche libel court pour numero cmd
       */
-      $donneesEvenement=explode("/",$donnees['numero']);
+      $donneesEvenement=explode("X",$donnees['numero']);
       $noEvenement=$donneesEvenement['0'];
-      $annne=$donneesEvenement['1'];   
-      $evenement=$this->ModeleEvenement->retournerUnEvenement($noEvenement, $annee);
-      $numeroCmd=$evenement->libellecourtEvenement.'X'.$donnees['numeroCommande'];
+      $annee=$donneesEvenement['1'];   
+      $evenement=$this->mEven->retournerUnEvenement($noEvenement,$annee);
+      $numeroCmd=$evenement->TxtHTMLEntete.'XR'.$donnees['numeroCommande'];
       $identifiantSite=$this->ModeleIdentifiantSite->getLastIdentifiant();
       $pbx_site         = $identifiantSite->Site;
       $pbx_rang         = $identifiantSite->Rang;              		
@@ -972,9 +962,7 @@ class Visiteur extends CI_Controller
       
          $this->indexVisiteur('visiteur/vuePaiement',$donneesPayement);
    }// -0
-   
       
-   
 }//fin class
 
 

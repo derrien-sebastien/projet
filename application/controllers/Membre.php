@@ -225,8 +225,8 @@ class Membre extends CI_Controller
   
     public function problem()
     {
-        $this->form_validation->set_rules( 'message',' ton message ducon', 'required');
-        $this->form_validation->set_rules( 'object','pourquoi tu me derange', 'required');
+        $this->form_validation->set_rules( 'message','Votre message', 'required');
+        $this->form_validation->set_rules( 'object','Objet de votre message', 'required');
         if($this->form_validation->run() === FALSE)
         {
             $this->indexMembre('membre/vueEnvoiMail');
@@ -272,13 +272,65 @@ class Membre extends CI_Controller
             }
             if($this->email->send())
             {
-                echo 'votre message a été remis'   ;
+                echo 'votre message a bien été envoyé.';
             }
             else
             {
-            echo 'votre message etait trop con';
+            echo "votre message n'a pas pu être envoyé.";
             }       
         }
     }
+
+  
+    public function mesCommandes()
+    {
+        $mesCommandes=$this->ModeleCommande->commandesEmail($_SESSION['email']);
+        $donneesVue=array(
+          'commandes'=>$mesCommandes
+        );
+        $this->indexMembre('membre/vueAffichageCommandes',$donneesVue);
+    }    
+    
+    public function afficherUneCommande()
+    {
+        foreach($_POST as $unPost)//$_POST['o']=array noCommande=qqch $_Post['1']=array NoCommande=qqch $_POST['2']=voir=VOIR
+        { 
+            if(isset($unPost['noCommande']))//a chaque numero commande
+            {
+                $noCommande = $unPost['noCommande'];//on recupere le numero commande pour memoriser le dernier
+            }
+            if($unPost=='VOIR')// si on est rendu au submit 
+            {
+                $ligneCommande=$this->ModeleCommande->getUneCommande($noCommande);
+                $i=0;
+                foreach($ligneCommande as $uneLigne)
+                {   
+                    $donnees=array(
+                        'NoEvenement'   =>  $uneLigne->NoEvenement,
+                        'Annee'         =>  $uneLigne->Annee,
+                        'NoProduit'     =>  $uneLigne->NoProduit
+                    );
+                    $produit=$this->ModeleProduit->getUnProduit($donnees);
+                    $evenement=$this->ModeleEvenement->retournerUnEvenement ($donnees['NoEvenement'], $donnees['Annee']);
+                    $donneesLigneCommande[$i]=array(
+                        'ligneCommande' =>  $uneLigne,
+                        'produit'       =>  $produit,
+                        'evenement'     =>  $evenement,
+                    );
+                    $i++;
+                }
+                $donneesVue=array(
+                    'donneesLigne'      =>  $donneesLigneCommande,
+                    'noCommande'        =>  $noCommande
+                );
+                $this->indexMembre('membre/vueUneCommande',$donneesVue);
+            }
+        }
+    }
+
+    /* public function modificationCommande()
+    {
+
+    } */
 
 }

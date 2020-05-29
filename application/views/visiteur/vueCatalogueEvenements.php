@@ -1,7 +1,7 @@
 <?php
 echo '<br>';
 echo '<div class="container-fluid">';
-    echo '<h1 class="encadre">Catalogue des évènements scolaires</h1>';
+    echo '<h1 class="encadre">Catalogue</h1>';
 echo '</div>';
 echo '<div class="container-fluid">';
     echo '<h2 class="souligne"><i class="glyphicon glyphicon-euro"></i>Nos produits actuellement en vente </h2>';

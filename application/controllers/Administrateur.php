@@ -1118,15 +1118,15 @@ donnée de sortie:
 		{
 			$lignesCommandes=$this->ModeleCommande->commandeParEvenement($noEvenement,$annee);
 			$donnees=array(
-				'lignesCommandes'=>$lignesCommandes,
-				'annee'=>$annee,
-				'noEvenement'=>$noEvenement			
+				'lignesCommandes'				=>	$lignesCommandes,
+				'annee'							=>	$annee,
+				'noEvenement'					=>	$noEvenement			
 			);
 			if(isset($modif))
 			{
 				$donnees['modif']=$modif;
 			}	
-			$this->indexAdmin('administrateur/vueRecapCommande copy',$donnees);
+			$this->indexAdmin('administrateur/vueRecapCommande',$donnees);
 		}
 		else
 		{
@@ -1141,11 +1141,11 @@ donnée de sortie:
 				foreach($indexProduit as $index)
 				{
 					$update=array(
-						'NoCommande'=>$indexs,
-						'Annee'=>$annee,
-						'NoEvenement'=>$noEvenement,
-						'NoProduit'=>$index,
-						'Remis'=>$_POST['remis'][$indexs][$index]
+						'NoCommande'			=>	$indexs,
+						'Annee'					=>	$annee,
+						'NoEvenement'			=>	$noEvenement,
+						'NoProduit'				=>	$index,
+						'Remis'					=>	$_POST['remis'][$indexs][$index]
 					);
 					$this->ModeleCommande->modifierRemis($update);
 				}
@@ -1153,19 +1153,20 @@ donnée de sortie:
 			foreach($indexPaye as $index)
 			{
 				$update=array(
-					'NoCommande'=>$index,					
-					'Payer'=>floatval($_POST['paye'][$index])
+					'NoCommande'				=>	$index,					
+					'Payer'						=>	floatval($_POST['paye'][$index]),
+					'CommentaireAdministrateur'	=>	$_POST['commentaire']
 				);
-				echo gettype($update['Payer']);
+				echo gettype($update['Payer']);// à supprimer
 				$this->ModeleCommande->modifierPaye($update);
 			}
 			
 			$lignesCommandes=$this->ModeleCommande->commandeParEvenement($noEvenement,$annee);
 			$donnees=array(
-				'lignesCommandes'=>$lignesCommandes,
-				'annee'=>$annee,
-				'noEvenement'=>$noEvenement,
-				'modif'=>null		
+				'lignesCommandes'				=>	$lignesCommandes,
+				'annee'							=>	$annee,
+				'noEvenement'					=>	$noEvenement,
+				'modif'							=>	null		
 			);
 			$this->indexAdmin('administrateur/vueRecapCommande',$donnees);
 		}

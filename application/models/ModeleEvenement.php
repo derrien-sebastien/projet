@@ -53,7 +53,7 @@ class ModeleEvenement extends CI_Model
    ** retourner les évènements de notre table ge_evenement en fonction du numero et de l'année **
    **********************************************************************************************/
 
-   public function retournerUnEvenement ($NoEvenement, $Annee)
+   public function retournerUnEvenement ($NoEvenement=NULL, $Annee=NULL)
    {
       $this->db->select('*');
       $this->db->from('ge_evenement');   

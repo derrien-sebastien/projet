@@ -37,7 +37,11 @@ $txtTelP=array(
     'name'      =>  'txtTelP',
     'class'     =>  'form-control'
 );
-
+$submit=array(
+    'name'      =>  'submit',
+    'value'     =>  'AJOUTER',
+    'class'     =>  'btn btn-primary'
+);
 ///////////////////////// Variables déjà connu ? On réassigne... //////////////////////// 
 
 if(isset($Personne->Nom))
@@ -76,7 +80,7 @@ echo '<br>';
     echo '<div class="container-fluid">';
         echo '<h1 class="encadre">Vos informations</h1>';
         echo '<h4 align="center"> Ci-joint les informations relatifs à votre compte vous pouvez compléter les informations et/ou les modifier à tout moment.</h4>';
-        echo '<h3 align="center">Valider en cliquant sur le bouton <button class="btn btn-primary">AJOUTER</button> en bas de page</h3>';            
+        echo '<h3 align="center">Valider en cliquant sur le bouton AJOUTER en bas de page</h3>';            
         echo '<table align="center">'; 
             echo '<tr>';
                 echo '<td>';
@@ -88,7 +92,6 @@ echo '<br>';
                     echo '</span>';
                 echo '</td>';
             echo '</tr>';
-            echo '<br>';
             echo '<tr>';
                 echo '<td>';
                     echo form_label('Prénom :','txtPrenom');
@@ -99,7 +102,6 @@ echo '<br>';
                     echo '</span>';
                 echo '</td>';
             echo '</tr>';
-            echo '<br>';
             echo '<tr>';
                 echo '<td>';
                     echo form_label('Adresse :','txtAdresse');
@@ -110,7 +112,6 @@ echo '<br>';
                     echo '</span>';
                 echo '</td>';
             echo '</tr>';
-            echo '<br>';
             echo '<tr>';
                 echo '<td>';
                     echo form_label('Code postal :','txtCp');
@@ -121,7 +122,6 @@ echo '<br>';
                     echo '</span>';
                 echo '</td>';
             echo '</tr>';
-            echo '<br>';
             echo '<tr>';
                 echo '<td>';                
                     echo form_label('Ville :','txtVille');
@@ -132,7 +132,6 @@ echo '<br>';
                     echo '</span>';
                 echo '</td>';
             echo '</tr>';
-            echo '<br>';
             echo '<tr>';
                 echo '<td>';
                     echo form_label('Téléphone fixe :','txtTelF');
@@ -143,7 +142,6 @@ echo '<br>';
                     echo '</span>';
                 echo '</td>';
             echo '</tr>';
-            echo '<br>';
             echo '<tr>';
                 echo '<td>';
                     echo form_label('Téléphone portable ?','txtTelP');
@@ -158,7 +156,7 @@ echo '<br>';
                 echo '<td>';
                 echo '</td>';
                 echo '<td>';
-                    echo form_submit('submit', 'AJOUTER','class="btn btn-primary"');              
+                    echo form_submit($submit);              
                 echo '</td>';
             echo '</tr>';
 echo '</table>';
