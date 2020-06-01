@@ -338,38 +338,41 @@ class Administrateur extends CI_Controller
 			if($provenance=='ajouter')//si on ajoute un evenement
 			{			 
 				$this->ModeleEvenement->ajouterEvenement($donneesAInserer);//création d'une nouvel ligne a la table 
-				if (isset($_POST['ajoutProduit']))//si on ajoute un produit 
+				if (isset($_POST['evenementMarchand']))//si on ajoute un produit 
 				{	
-					// ajout des produit selectionné
-					$i=1;
-					foreach ($_POST['produit'] as $unProduit)
+					if($_POST['evenementMarchand']=='oui')
 					{
-						if($unProduit!='//')
+						// ajout des produit selectionné
+						$i=1;
+						foreach ($_POST['produit'] as $unProduit)
 						{
-						$AncienEvenement=explode("/",$unProduit);
-   	 					$donneesProduit['Annee']=$AncienEvenement['0'];
-						$donneesProduit['NoEvenement']=$AncienEvenement['1'];
-						$donneesProduit['NoProduit']=$AncienEvenement['2'];
-						$Produit=$this->ModeleProduit->getUnProduit($donneesProduit);
-						$Produit['Annee']=$donnees['Annee'];
-						$Produit['NoEvenement']=$donnees['NoEvenement'];
-						$Produit['NoProduit']=$i;
-						$i++;
-						$this->ModeleProduit->ajouterProduit($Produit);
+							if($unProduit!='//')
+							{
+							$AncienEvenement=explode("/",$unProduit);
+							$donneesProduit['Annee']=$AncienEvenement['0'];
+							$donneesProduit['NoEvenement']=$AncienEvenement['1'];
+							$donneesProduit['NoProduit']=$AncienEvenement['2'];
+							$Produit=$this->ModeleProduit->getUnProduit($donneesProduit);
+							$Produit['Annee']=$donnees['Annee'];
+							$Produit['NoEvenement']=$donnees['NoEvenement'];
+							$Produit['NoProduit']=$i;
+							$i++;
+							$this->ModeleProduit->ajouterProduit($Produit);
+							}
+							else 
+							{
+								$new=1;
+							}
 						}
-						else 
-						{
-							$new=1;
-						}
-					}
-					//ajout evenement marchant
+						//ajout evenement marchant
 
-					$donnees['DateRemiseProduit']=$_POST['dateRemiseProduit'];
-					$this->ModeleEvenement->ajouterEvenementMarchand($donnees);
-					if ($new=1)
-					{
-						$donnees['Provenance']='ajouterEvenement';
-						$this->formulaireProduit($donnees);
+						$donnees['DateRemiseProduit']=$_POST['dateRemiseProduit'];
+						$this->ModeleEvenement->ajouterEvenementMarchand($donnees);
+						if ($new=1)
+						{
+							$donnees['Provenance']='ajouterEvenement';
+							$this->formulaireProduit($donnees);
+						}
 					}					
 				}
 				else
