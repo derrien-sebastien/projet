@@ -26,7 +26,6 @@ body
   padding: 0;
   margin: 0;
   background-color: rgb(134, 134, 134);
-  
 }
 
 #bodyLogin 
@@ -52,6 +51,27 @@ body
   margin-top: 100px;
   margin-bottom: 100px; 
 }
+.textarea-control {
+  display: block;
+  width: 100%;
+  height: 150px;
+  padding: 5px 50px;
+  font-size: 14px;
+  line-height: 1.42857143;
+  color: #555555;
+  background-color: #fff;
+  background-image: none;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+  -webkit-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+  -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+  -webkit-transition: border-color ease-in-out .15s, -webkit-box-shadow ease-in-out .15s;
+  transition: border-color ease-in-out .15s, -webkit-box-shadow ease-in-out .15s;
+  transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+  transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s, -webkit-box-shadow ease-in-out .15s;
+}
 .containerLogin img
 {
   width: 120px;
@@ -61,7 +81,7 @@ body
 }
 .lien
 {
-  color:  rgb(34, 34, 34);
+  color:  rgb(59, 0, 0);
   font-size: 18px;
 }
 .encadre
@@ -77,14 +97,26 @@ body
 {
   color: rgb(255, 255, 255)
 }
-input[type='email'],input[type='password']
+input[type='password2']
 {
+
   text-align: center;
   height: 45px;
+  width: 400px;
+  font-size: 18px;
+  margin-bottom: 20px;
+  background-color: rgb(77, 77, 77);
+  padding-left: 20px;
+}
+input[type='email'],input[type='password'],input[type='infoCompte']
+{
+  color: #000000;
+  text-align: center;
+  height: 40px;
   width: 300px;
   font-size: 18px;
   margin-bottom: 20px;
-  background-color: rgb(143, 143, 143);
+  background-color: rgb(77, 77, 77);
   padding-left: 20px;
 }
 .btnSubmit
@@ -207,7 +239,10 @@ span
   padding: 15px;
   text-align: center;
 }
-
+.h4modif
+{ 
+  color: rgb(99, 0, 0);
+}
 #envoiMail
 {
   font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
@@ -2913,7 +2948,7 @@ output {
   padding: 6px 12px;
   font-size: 14px;
   line-height: 1.42857143;
-  color: #555555;
+  color: #000000;
   background-color: #fff;
   background-image: none;
   border: 1px solid #ccc;

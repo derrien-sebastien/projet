@@ -31,14 +31,17 @@ echo '<div class="container-fluid">';
                         { 
                             
                             $hidden=array(
-                                $i.'rowid'=>$produit['rowid'],
-                                'produit[]'=>$produit['rowid']
+                                $i.'rowid'  =>$produit['rowid'],
+                                'produit[]' =>$produit['rowid']
                             );
                             
                             $qty=array(
-                                'name'  =>$i.'qty',
-                                'value' =>$produit['qty'],
-                                'type'  =>'number'
+                                'min'       =>  '0',
+                                'step'      =>  '1',
+                                'name'      =>  $i.'qty',
+                                'value'     =>  $produit['qty'],
+                                'type'      =>  'number',
+                                'size'      =>  '5' 
                             );
                             $i++;
                             echo form_hidden($hidden);
@@ -61,10 +64,10 @@ echo '<div class="container-fluid">';
                                 echo form_input($qty);
                                 echo '</td>';
                                 echo '<td style="color:rgb(128, 122, 122);" align="center">'.$produit["subtotal"].'€</td>';
-                                echo '<td style="color:rgb(128, 122, 122);"align="center">Supprimer';
+                                echo '<td style="color:rgb(128, 122, 122);"align="center">';
                                     echo '<a href="';
                                         echo site_url('Visiteur/removeItem/'.$produit['rowid'].'/'. $produit['id']);
-                                        echo '" ><i class="glyphicon glyphicon-trash"></i>';
+                                        echo '" >Supprimer<i class="glyphicon glyphicon-trash"></i>';
                                     echo '</a>';
                                 echo '</td>';
                             echo '</tr>';

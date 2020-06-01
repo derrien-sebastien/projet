@@ -16,7 +16,7 @@ echo '<div class="container-fluid">';
                     $adress     = "Visiteur/EvenementMarchand/$NoEvenement/$Annee";
                     $libEven    = $unEvenementMarchand->TxtHTMLEntete; 
                     echo '<div class="col-sm-4 col-lg-4 col-md-4">';
-                        echo '<div class="thumbnail">';
+                        echo '<div align="center">';
                             if(!isset($unEvenementMarchand->ImgEntete))
                             {
                                 echo '<a href="';
@@ -34,6 +34,7 @@ echo '<div class="container-fluid">';
                             echo '<div class="atc" align="center">';
                                 echo '<button class="btn btn-primary"><h4>'.anchor($adress,$libEven,array('class'=>'btn-primary')).'</h4></button>';
                             echo '</div>';
+                            echo'</br>';
                         echo '</div>';
                     echo '</div>';
                 }
@@ -58,7 +59,7 @@ echo '<div class="container-fluid">';
                     $adress     = "Visiteur/EvenementNonMarchand/$NoEvenement/$Annee";
                     $libEven    = $unEvenementNonMarchand->TxtHTMLEntete; 
                     echo '<div class="col-sm-4 col-lg-4 col-md-4">';
-                        echo '<div class="thumbnail">';
+                        echo '<div align="center">';
                             if(!isset($unEvenementNonMarchand->ImgEntete))
                             {
                                 echo '<a href="';
@@ -76,6 +77,7 @@ echo '<div class="container-fluid">';
                             echo '<div class="atc" align="center">';
                                 echo '<button class="btn btn-primary">'.anchor($adress,$libEven,array('class'=>'btn-primary')).'</button>';
                             echo '</div>';
+                            echo '</br>';
                         echo '</div>';
                     echo '</div>';
                 } 

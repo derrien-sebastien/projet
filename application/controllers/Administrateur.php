@@ -897,7 +897,7 @@ donnée de sortie:
 		}
 		else
 		{
-			echo "erreure de telechargement de piece jointe ";//a supprimer si ok
+			echo "erreure de telechargement de piece jointe ";//a supprimer si ok// à passer en donnée dans la vue
 		}
 		if(!isset($aTitrePersonel))
 		{
@@ -1157,7 +1157,7 @@ donnée de sortie:
 					'Payer'						=>	floatval($_POST['paye'][$index]),
 					'CommentaireAdministrateur'	=>	$_POST['commentaire']
 				);
-				echo gettype($update['Payer']);// à supprimer
+				echo gettype($update['Payer']);// à supprimer// à passer en donnée dans la vue
 				$this->ModeleCommande->modifierPaye($update);
 			}
 			

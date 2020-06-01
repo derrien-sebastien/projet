@@ -501,7 +501,7 @@ class Visiteur extends CI_Controller
          );
       }
       $this->cart->update($data);
-      echo $update?'ok':'err';
+      echo $update?'ok':'err';// à passer en donnée dans la vue
    }
 
    /**********************************************************************

@@ -25,7 +25,7 @@
                 </a>
                 <ul class="dropdown-menu">
                   <li>
-                    <a href="<?php echo site_url('Membre/InfosCompte') ?>">Gérer votre compte</a>
+                    <a href="<?php echo site_url('Membre/InfosCompte') ?>">Votre compte</a>
                   </li>&nbsp;&nbsp;
                   <li>
                     <a href="<?php echo site_url('Membre/ModificationMdp') ?>">Modifier votre mot de passe</a>

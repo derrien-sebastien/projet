@@ -3,37 +3,37 @@
 ////////////////////////////// Déclaration de nos Variables ////////////////////////////
 
 $txtNom=array(
-    'type'      =>  'text',
+    'type'      =>  'infoCompte',
     'name'      =>  'txtNom',
     'class'     =>  'form-control'
 );
 $txtPrenom=array(
-    'type'      =>  'text',
+    'type'      =>  'infoCompte',
     'name'      =>  'txtPrenom',
     'class'     =>  'form-control'
 );
 $txtAdresse=array(
-    'type'      =>  'text',
+    'type'      =>  'infoCompte',
     'name'      =>  'txtAdresse',
     'class'     =>  'form-control'
 );
 $txtCp=array(
-    'type'      =>  'text',
+    'type'      =>  'infoCompte',
     'name'      =>  'txtCp',
     'class'     =>  'form-control'
 );
 $txtVille=array(
-    'type'      =>  'text',
+    'type'      =>  'infoCompte',
     'name'      =>  'txtVille',
     'class'     =>  'form-control'
 );
 $txtTelF=array(
-    'type'      =>  'text',
+    'type'      =>  'infoCompte',
     'name'      =>  'txtTelF',
     'class'     =>  'form-control'
 );
 $txtTelP=array(
-    'type'      =>  'text',
+    'type'      =>  'infoCompte',
     'name'      =>  'txtTelP',
     'class'     =>  'form-control'
 );
@@ -81,75 +81,61 @@ echo '<br>';
         echo '<h1 class="encadre">Vos informations</h1>';
         echo '<h4 align="center"> Ci-joint les informations relatifs à votre compte vous pouvez compléter les informations et/ou les modifier à tout moment.</h4>';
         echo '<h3 align="center">Valider en cliquant sur le bouton AJOUTER en bas de page</h3>';            
-        echo '<table align="center">'; 
+        echo '<table class="table-responsive" align="center">'; 
             echo '<tr>';
                 echo '<td>';
-                    echo form_label('Nom :',"txtNom");
+                    echo form_label('Nom');
                 echo '</td>';
                 echo '<td>';
-                    echo '<span class="marge">';
-                        echo form_input($txtNom);                
-                    echo '</span>';
+                    echo form_input($txtNom);                
                 echo '</td>';
             echo '</tr>';
             echo '<tr>';
                 echo '<td>';
-                    echo form_label('Prénom :','txtPrenom');
+                    echo form_label('Prénom');
                 echo '</td>';
                 echo '<td>';
-                    echo '<span class="marge">';
-                        echo form_input($txtPrenom);                
-                    echo '</span>';
+                    echo form_input($txtPrenom);                
                 echo '</td>';
             echo '</tr>';
             echo '<tr>';
                 echo '<td>';
-                    echo form_label('Adresse :','txtAdresse');
+                    echo form_label('Adresse');
                 echo '</td>';
                 echo '<td>';
-                    echo '<span class="marge">';
-                        echo form_input($txtAdresse);                
-                    echo '</span>';
+                    echo form_input($txtAdresse);                
                 echo '</td>';
             echo '</tr>';
             echo '<tr>';
                 echo '<td>';
-                    echo form_label('Code postal :','txtCp');
+                    echo form_label('Code postal');
                 echo '</td>';
                 echo '<td>';
-                    echo '<span class="marge">';
-                        echo form_input($txtCp);
-                    echo '</span>';
+                    echo form_input($txtCp);
                 echo '</td>';
             echo '</tr>';
             echo '<tr>';
                 echo '<td>';                
-                    echo form_label('Ville :','txtVille');
+                    echo form_label('Ville');
                 echo '</td>';
                 echo '<td>';
-                    echo '<span class="marge">';
-                        echo form_input($txtVille);                
-                    echo '</span>';
+                    echo form_input($txtVille);            
                 echo '</td>';
             echo '</tr>';
             echo '<tr>';
                 echo '<td>';
-                    echo form_label('Téléphone fixe :','txtTelF');
+                    echo form_label('Téléphone fixe');
                 echo '</td>';
                 echo '<td>';
-                    echo '<span class="marge">';
                         echo form_input($txtTelF);                
-                    echo '</span>';
                 echo '</td>';
             echo '</tr>';
             echo '<tr>';
                 echo '<td>';
-                    echo form_label('Téléphone portable ?','txtTelP');
+                    echo form_label('Téléphone portable &emsp;');
                 echo '</td>';
                 echo '<td>';
-                    echo '<span class="marge">';
                         echo form_input($txtTelP);                
-                    echo '</span>';
                 echo '</td>';
             echo '</tr>';
             echo '<tr>';

@@ -12,7 +12,7 @@ sortie:
 ////////////////////////////// Déclaration de nos Variables ////////////////////////////
 
 $object=array(
-    'type'      =>  'text',
+    'type'      =>  'infoCompte',
     'name'      =>  'object',
     'class'     =>  'form-control'
 );

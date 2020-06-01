@@ -2,58 +2,60 @@
 
 ////////////////////////////// Déclaration de nos Variables ////////////////////////////
 
-$password=array(	
-    'name'          =>  'password',
-    'type'          =>  'password',	
-    'id'            =>  'password',
-    'class'         =>  'form-control'				
+$password1=array(	
+    'name'          =>  'password1',
+    'type'          =>  'password2',	
+    'id'            =>  'password1',
+    'class'         =>  'form-control',
+    'placeholder'	=>	'Ancien mot de passe'		
 );
+
 $password2=array(	
     'name'          =>  'password2',
-    'type'          =>  'password',	
+    'type'          =>  'password2',	
     'id'            =>  'password2',
-    'class'         =>  'form-control'				
+    'class'         =>  'form-control',
+    'placeholder'	=>	'Nouveau mot de passe'				
+);
+$password3=array(	
+    'name'          =>  'password3',
+    'type'          =>  'password2',	
+    'id'            =>  'password3',
+    'class'         =>  'form-control',
+    'placeholder'	=>	'Confirmer le nouveau mot de passe'					
+);
+$submit=array(
+    'name'          => 'submit',
+    'class'         => 'btn btn-primary',
+    'value'         => "MODIFIER"
 );
 $style=array(
     'class'         =>  'btnSubmit btn-lg btn-primary'
 );
 
 ///////////////////////////////   FORMULAIRE   ////////////////////////////////////////
-echo '</br>';
-echo '<div class="container-fluid">';
-echo    '<h1 class="encadre" align="center">Paramètre confidentiel de votre compte</h1>';
-echo    '</br>';
-echo    '<h3 align="center">Afin de modifier votre mot de passe saisissez deux mots de passe identiques</h3>';
-echo    form_open('membre/modificationMdp','class="form-horizontal" name="form"');
-echo    '<form onsubmit="return confirmationMotDePasse()" action="'.site_url('membre/ModificationMdp').'" method="post">';
-echo        '<table align="center">';
-echo            '<tr>';
-echo                '<td>';
-echo                    form_label('Saisissez votre nouveau mot de passe :','password'); 
-echo                '</td>';
-echo                '<td>';
-echo                    '<div style="color:#fff;" class="form_input">'; 
-echo                        form_input($password);
-echo                    '</div>';
-echo                '</td>';
-echo            '</tr>';
-echo            '<tr>';
-echo                '<td>';
-echo                    form_label('Confirmer le nouveau mot de passe :','password2'); 
-echo                '</td>';
-echo                '<td>';
-echo                    '<div style="color:#fff;" class="form_input">'; 
-echo                        form_input($password2);
-echo                    '</div>';
-echo                '</td>';
-echo            '</tr>';
-echo        '</table>';
-echo        '</br>';
-echo        '<p align="center">';
-echo        '<input type="submit" name="submit" value="Modifier" class="btn btn-primary"></p>';
-echo    form_close();
-echo '</div>';
-
+echo form_open('membre/modificationMdp');
+    echo '</br>';
+    echo '<div class="container-fluid">';
+        echo '<h1 class="encadre" align="center">Paramètre confidentiel de votre compte</h1>';
+        echo '</br>';
+        echo '<h2 align="center"> Saisissez votre ancien mot de passe</h2>';
+        echo '<div align="center">';
+            echo form_input($password1);
+        echo '</div>';
+        echo '<h2 align="center">Puis, saisissez deux mots de passe identiques</h2>';
+        echo '<form onsubmit="return confirmationMotDePasse()" action="'.site_url('membre/ModificationMdp').'" method="post">';
+        echo '<div align="center">';
+            echo form_input($password2);
+        echo '</div>';
+        echo '<div align="center">';
+            echo form_input($password3);
+        echo '</div>';       
+        echo '<div align="center">';
+            echo form_submit($submit);
+        echo '</div>';
+    echo '</div>';
+echo form_close();
 //////////////////////////////  FIN DE FORMULAIRE ///////////////////////////////////////
 
 ?>
@@ -64,11 +66,11 @@ echo '</div>';
 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 ----------------------------------------------------------------------------------------->
 
-<script>
+<!-- <script>
     function confirmationMotDePasse()
     {
-        var mdp = document.getElementById("password").value;
-        var confirmMdp = document.getElementById("password2").value;
+        var mdp = document.getElementById("password2").value;
+        var confirmMdp = document.getElementById("password3").value;
         if(mdp == confirmMdp)
         {
             return true;
@@ -76,10 +78,10 @@ echo '</div>';
         else
         {
             alert('Les mots de passe ne correspondent pas.');
-            document.getElementById("password").value = "";
             document.getElementById("password2").value = "";
-            document.getElementById("password").focus();
+            document.getElementById("password3").value = "";
+            document.getElementById("password2").focus();
             return false;
         }
     }
-</script>
+</script> -->

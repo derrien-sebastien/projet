@@ -113,9 +113,9 @@ class Membre extends CI_Controller
             }
             else
             {
-                echo '</br>';
-                echo '</br>';
-                echo '<h1>le mot de passe est obligatoire pour modifier ses informations personnel</h1>';
+                echo '</br>';// à passer en donnée dans la vue
+                echo '</br>';// à passer en donnée dans la vue
+                echo '<h1>le mot de passe est obligatoire pour modifier ses informations personnel</h1>';// à passer en donnée dans la vue
                 $this->ModificationMdp();
             }   
         }         
@@ -144,28 +144,42 @@ class Membre extends CI_Controller
 
     public function modificationMdp()
     {  
-        $this->form_validation->set_rules( 'password', 'mot de passe','required');
-        $this->form_validation->set_rules( 'password2', 'repetez mot de passe','required');
+        $this->form_validation->set_rules( 'password1', 'mot de passe','required');
+        $this->form_validation->set_rules( 'password2', 'mot de passe','required');
+        $this->form_validation->set_rules( 'password3', 'repetez mot de passe','required');
         if($this->form_validation->run() === FALSE)
         {
             $this->indexMembre('membre/vueModifierMotDePasse');
         }
         else 
         {
-            if($_POST['password']==$_POST['password2'])
+            if($_POST['password1']=='')
             {
-                $donnees=array(
-                'Email'=>$_SESSION['email'],
-                'MotDePasse'=>$_POST['password']
-                );
-                $this->ModelePersonne->modifierInfoPersonne($donnees);
-                redirect('visiteur/seDeConnecter');
+               $password=NULL;
             }
             else
             {
-                echo '<h1>le mot de passe saisi n\'est pas identique a la confirmation<h1>';
+               $password=$_POST['password1'];
+            }
+            if($password == NULL)
+            {
                 $this->indexMembre('membre/vueModifierMotDePasse');
-
+            }
+            elseif($this->ModelePersonne->presenceMdp($this->session->email))
+            {          
+                if($_POST['password2']==$_POST['password3'])
+                {
+                    $donnees=array(
+                    'Email'=>$_SESSION['email'],
+                    'MotDePasse'=>$_POST['password2']
+                    );
+                    $this->ModelePersonne->modifierInfoPersonne($donnees);
+                    redirect('visiteur/seDeConnecter');
+                }
+                else
+                {
+                    $this->indexMembre('membre/vueModifierMotDePasse');
+                }
             }
         }
     }
@@ -272,11 +286,11 @@ class Membre extends CI_Controller
             }
             if($this->email->send())
             {
-                echo 'votre message a bien été envoyé.';
+                echo 'votre message a bien été envoyé.';// à passer en donnée dans la vue
             }
             else
             {
-            echo "votre message n'a pas pu être envoyé.";
+            echo "votre message n'a pas pu être envoyé.";// à passer en donnée dans la vue
             }       
         }
     }

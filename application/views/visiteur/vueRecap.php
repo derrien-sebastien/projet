@@ -7,19 +7,19 @@
 //'noCommande' 
 
 $commentaire=array(
-    'name'      =>  'commentaire',
-    'type'      =>  'textarea',
-    'class'     =>  'textarea.form-control',
+    'name'          =>  'commentaire',
+    'type'          =>  'textarea',
+    'class'         =>  'textarea-control',
 );
 $submit=array(
-    'name'  => 'submit',
-    'class' => 'btn btn-primary',
-    'value' => 'valider'
+    'name'          => 'submit',
+    'class'         => 'btn btn-primary',
+    'value'         => 'valider'
 );
 $hidden=array(
-    'noCommande'=> $noCommande,
-    'modeReglement'=>$modeReglement,
-    'total'=>$total
+    'noCommande'    =>  $noCommande,
+    'modeReglement' =>  $modeReglement,
+    'total'         =>  $total
 );
 echo form_open('visiteur/finCommande');
 echo form_hidden($hidden);
@@ -45,12 +45,30 @@ echo '<div class="container-fluid">';
                         echo '<img src="'.base_url().'assets/images/'.$unProduit["imgProduit"].'"class="img-thumbnail" width="75"/>';
                     echo '</td>';
                 }
-                echo '<td>';
-                    echo form_label($unProduit["libelle"]);                
-                echo '</td>';
-                echo '<td>';
-                    echo form_label($unProduit["quantite"]);                
-                echo '</td>';            
+                if(!isset($unProduit["libelle"]))
+                {
+                    echo '<td>';
+                        echo form_label('Information non disponible.');                
+                    echo '</td>';
+                }
+                else
+                {
+                    echo '<td>';
+                        echo form_label($unProduit["libelle"]);                
+                    echo '</td>';
+                }
+                if(!isset($unProduit["quantite"]))
+                {
+                    echo '<td>';
+                        echo form_label('Information non disponible.');                
+                    echo '</td>';
+                }
+                else
+                {
+                    echo '<td>';
+                        echo form_label($unProduit["quantite"]);                
+                    echo '</td>';
+                }            
             echo '</tr>';
         }
         echo '<tr>';
@@ -88,16 +106,24 @@ echo '<div class="container-fluid">';
     echo '</table>';
     if($modeReglement== 'Cheque/Espece')
     {
-        echo '<div align="center">';
-            echo form_submit($submit);
-        echo '</div>';
+        if(isset($submit))
+        {
+            echo '<div align="center">';
+                echo form_submit($submit);
+            echo '</div>';
+        }
     }
     elseif($modeReglement== 'Carte Bancaire')
     {
-        echo '<div align="center">';
-            echo '<button name="payementCb" class="btn btn-primary">Redirection vers site payement en ligne</button>';
-        echo '</div>';
+        if(isset($submit))
+        {
+            echo '<div align="center">';
+                echo form_submit($submit);
+            echo '</div>';
+        }
     }
 echo '</div>';
 
 ?>
+
+

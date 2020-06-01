@@ -13,7 +13,7 @@ $qty = array(
     'step'          =>  '1',
     'type'          =>  'number', 
     'name'          =>  'qty',
-    'placeholder'   =>  'x 1',
+    'value'         =>  '1',
     'size'          =>  '5'
 );  
 
@@ -23,7 +23,7 @@ echo "<thead>\n";
     echo '<div class="container-fluid" align="center" width="80%">';// div 1
         echo '<tr>';
             echo '<td>';
-                echo '<div  class="img-thumbnail">';
+                echo '<div align="center">';
                     echo '<h1>'.$unEvenementMarchand['TxtHTMLEntete'].'</h1>';
                 echo '</div>';
             echo '</td>';
@@ -55,7 +55,7 @@ echo '<div class="col-lg-12">';
                 'adress'=>$adress
             );
             echo '<div class="col-sm-3 col-lg-4 col-md-3">';
-                echo '<div class="thumbnail">';           
+                echo '<div align="center">';           
                     echo '<h3 class="encadre" align="center">' .$libelle.'</h3>';
                     echo '</br>';
                     if(empty($image))
