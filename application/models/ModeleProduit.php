@@ -62,6 +62,39 @@ class ModeleProduit extends CI_Model
       }
       return !empty($result)?$result:false;
    } 
+   public function getRows2($noEv=null, $ann=null,$noProduit=null) //pour le panier
+   {
+      $this->db->select('*');
+      $this->db->from('ge_produit');
+      $this->db->join('ge_evenement','ge_evenement.NoEvenement=ge_produit.NoEvenement AND ge_evenement.Annee=ge_produit.Annee');
+      $this->db->join('ge_ev_marchand','ge_ev_marchand.NoEvenement=ge_produit.NoEvenement AND ge_ev_marchand.Annee=ge_produit.Annee');
+      $this->db->where('ge_evenement.EnCours', 1);
+      if($noProduit)
+      {
+         $this->db->where('ge_produit.NoEvenement', $noEv);
+         $this->db->where('ge_produit.Annee', $ann);
+         $this->db->where('ge_produit.NoProduit', $noProduit);
+         $query=$this->db->get();
+         $result=$query->row();
+      }
+      elseif($noEv && $ann )
+      {
+         
+         $this->db->where('ge_produit.NoEvenement', $noEv);
+         $this->db->where('ge_produit.Annee', $ann);
+         
+         $query=$this->db->get();
+         $result=$query->result();
+      }
+      else
+      {
+         
+         $this->db->order_by('LibelleCourt','asc');
+         $query=$this->db->get();
+         $result=$query->result();
+      }
+      return !empty($result)?$result:false;
+   } 
 
    /* public function obtenirCommande($id)
    {

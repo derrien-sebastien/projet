@@ -39,6 +39,7 @@ echo "<tbody>";
 
 echo '<div class="col-lg-12">';
 ////////////////////////////// Déclaration de nos Variables ////////////////////////////
+
     if(isset($lesProduits))
     {
         foreach($lesProduits as $unProduit)

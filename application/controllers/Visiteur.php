@@ -474,13 +474,14 @@ class Visiteur extends CI_Controller
             $produit=explode('X',$unProduit['id']);
             $noEvenement=$produit['0'];
             $annee=$produit['1'];
+            
          }
       }     
       $data = array(
           'rowid'   => $rowid,
           'qty'     => 0
       );
-      $DonneesProduit['lesProduits'] = $this->mProd->getRows($noEvenement, $annee);
+      $DonneesProduit['lesProduits'] = $this->mProd->getRows2($noEvenement, $annee);
       $DonneesProduit['unEvenementMarchand'] = $this->mEven->retournerEvenements($noEvenement, $annee);     
       $this->cart->update($data);
       $this->indexVisiteur('visiteur/vueEvenementMarchand',$DonneesProduit);
