@@ -135,11 +135,18 @@
         'name'      =>  'enCours',
         'value'     =>  '1'
     );
-    $ajouterProduit=array(
-        'name'      =>  'ajoutProduit',
+    $evenementMarchand=array(
+        'type'      => 'radio',
+        'name'      =>  'evenementMarchand',
         'value'     =>  'oui',
         'checked'   => true
 
+    );
+    $evenementNonMarchand=array(
+        'type'      => 'radio',
+        'name'      =>  'evenementMarchand',
+        'value'     =>  'non',
+        'checked'   => false
     );
     $dateRemiseProduit=array(
         'type'      =>  'date',
@@ -285,10 +292,18 @@ if ($Provenance=='ajouter')
 
     echo "<tr>";
         echo "<td>";
-            echo form_label('Cet évènement comptient des produits','AjoutProduit');
+            echo form_label('evenement marchand ','EvenementMarchand');
         echo "</td>";
         echo "<td>";
-         echo form_checkbox($ajouterProduit);
+         echo form_input($evenementMarchand);
+        echo "</td>";
+    echo "</tr>";
+    echo "<tr>";
+        echo "<td>";
+            echo form_label('evenement non marchand ','evenementNonMarchand');
+        echo "</td>";
+        echo "<td>";
+         echo form_input($evenementNonMarchand);
         echo "</td>";
     echo "</tr>";
     echo "<tr>";
