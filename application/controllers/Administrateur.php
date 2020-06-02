@@ -452,7 +452,6 @@ class Administrateur extends CI_Controller
 					{
 						redirect('Visiteur/EvenementNonMarchand/'.$donnees['NoEvenement'].'/'.$donnees['Annee']);
 					}
-					
 				}
 				else
 				{
