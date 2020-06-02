@@ -375,7 +375,7 @@ class Administrateur extends CI_Controller
 				else
 				{
 					$this->ModeleEvenement->ajouterEvenementNonMarchand($donnees);//ajout a la table non marchand					
-					redirect('visiteur/EvenementNonMarchand/'.$donnees['NoEvenement'].'/'.$donnees['Annee']);
+					redirect('Visiteur/EvenementNonMarchand/'.$donnees['NoEvenement'].'/'.$donnees['Annee']);
 				}
 			}
 			elseif($provenance=='modifier')//si on modifie un evenement
@@ -447,9 +447,8 @@ class Administrateur extends CI_Controller
 					}
 					else
 					{
-						redirect('visiteur/EvenementNonMarchand/'.$donnees['NoEvenement'].'/'.$donnees['Annee']);
+						redirect('Visiteur/EvenementNonMarchand/'.$donnees['NoEvenement'].'/'.$donnees['Annee']);
 					}
-					
 				}
 				else
 				{
