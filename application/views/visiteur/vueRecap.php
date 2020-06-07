@@ -4,7 +4,6 @@
 //'totale'  
 //'modeReglement' 
 //'Regler'
-//'noCommande' 
 
 $commentaire=array(
     'name'          =>  'commentaire',
@@ -17,7 +16,7 @@ $submit=array(
     'value'         => 'valider'
 );
 $hidden=array(
-    'noCommande'    =>  $noCommande,
+    
     'modeReglement' =>  $modeReglement,
     'total'         =>  $total
 );

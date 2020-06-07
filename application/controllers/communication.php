@@ -269,9 +269,14 @@ public function ajoutMultipleEnfant()
 	$sobre=array('fond'=>'yellow',
 	'texte'=>'blue');
 
-	if ($color==fluo){
-		$couleurchoisi=$fluo
+	if ($color==fluo)
+	{
+		$couleurchoisi=$fluo;
 	}
+	result()/*plusieur ligne*/ row() /*une ligne*/
+    $produit->Noproduit
+    result_array()/*plusieur ligne*/, row_array()/*une ligne*/
+    $produit['noCommande']$produit['noProduit']
 
     
     

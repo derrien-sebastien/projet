@@ -372,13 +372,13 @@ class Administrateur extends CI_Controller
 						{
 							$donnees['Provenance']='ajouterEvenement';
 							$this->formulaireProduit($donnees);
-						}
-					}					
-				}
-				else
-				{
-					$this->ModeleEvenement->ajouterEvenementNonMarchand($donnees);//ajout a la table non marchand					
-					redirect('Visiteur/EvenementNonMarchand/'.$donnees['NoEvenement'].'/'.$donnees['Annee']);
+						}		
+					}
+					else
+					{
+						$this->ModeleEvenement->ajouterEvenementNonMarchand($donnees);//ajout a la table non marchand					
+						redirect('Visiteur/EvenementNonMarchand/'.$donnees['NoEvenement'].'/'.$donnees['Annee']);
+					}
 				}
 			}
 			elseif($provenance=='modifier')//si on modifie un evenement
@@ -1103,7 +1103,7 @@ donnée de sortie:
 				$modif='';
 			}
 			$i=0;
-			$this->commande($noEvenement,$annee,$modif);
+			$this->commandesClients($noEvenement,$annee,$modif);
 		
 		}
 	}
@@ -1902,14 +1902,67 @@ donnée de sortie:
 	{
 		$this->load->view('administrateur/vueSelectionFormulaireEnfant');
 	}
-
-	
-			
-
-
 	} */
 /*
  ajouter eleve , retirer admin, modifier membre  (visiteur/activation),
  ajouter parent , migration classe
 */
+	public function commandesClients($noEvenment=null,$annee=null,$modif=null)
+	{
+		if(!isset($_POST['submit']))
+		{
+			$lignesCommandes=$this->ModeleCommande->commandeClient($noEvenment,$annee);
+			$nbCommande=$this->ModeleCommande->nbCommandeClient($noEvenment,$annee);
+			$donnees=array(
+				'ligneCommandes'=>$lignesCommandes,
+				'noEvenement'=>$noEvenment,
+				'annee'=>$annee,
+				'modif'=>$modif,
+				'commandes'=>$nbCommande
+			);
+			$this->indexAdmin('administrateur/vueCommandesClients',$donnees);
+		}
+		else
+		{
+			$i=0;
+			foreach($_POST['noProduit'] as $unProduit )
+			{
+				$donneesContenir=array(
+					'NoEvenement'=>$_POST['NoEvenement'],
+					'NoCommande'=>$_POST["noCommande"][$i],
+					'NoProduit'=>$unProduit,
+					'Annee'=>$_POST['Annee'],
+					'Remis'=>$_POST['remis'][$i]
+				);
+				$donneesCommande=array(
+					'NoCommande'=>$_POST["noCommande"][$i],
+					'NoPersonne'=>$_POST['noPersonne'][$i],
+					'ResteAPayer'=>strval($_POST['montantTotal'][$i]-$_POST['payer'][$i]),
+					'Payer'=>$_POST['payer'][$i]
+				);
+				$this->ModeleCommande->modifierPaye($donneesCommande);
+				$this->ModeleCommande->modifierRemis($donneesContenir);
+				$i++;
+			}
+			$this->selectionCommande();
+		}
+
+		//
+		
+	}
+
+	/* public function tableauDeBord($noEvenment=null,$annee=null)
+	{
+		$nombreDeCommande=$this->ModeleCommande->commandeClient($noEvenment,$annee);
+		$i=0;
+		foreach($nombreDeCommande as $commandes)
+		{
+			$lesCommandes[$i]=$commandes;
+			$i++;
+		}
+		$donnees['commandes']=$lesCommandes;
+		$this->indexAdmin('administrateur/tableauDeBord',$donnees);
+	} */
+
+
 }//fin  de class

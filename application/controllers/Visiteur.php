@@ -28,6 +28,8 @@ class Visiteur extends CI_Controller
       $this->load->model('ModelePersonne');
       $this->load->model('ModeleProduit','mProd');
       $this->load->library('user_agent');
+      $this->load->library('email');
+      
                                        ////  CONDITION 1 - Déclaration de la constante AnneeEnCour  //////
       if(date('m')<8)                  // si le mois est inférieur à 8 
 		{                                // alors
@@ -161,11 +163,11 @@ class Visiteur extends CI_Controller
                $this->session->set_userdata($dataSession);                                                   
                if($this->session->profil=='admin')
                {  
-                  if ($_POST['urlRedirect']!='http://[::1]/projet/index.php/Visiteur/seConnecter') 
+                  if ($_POST['urlRedirect']!= site_url('Visiteur/seConnecter')) /* http://[::1]/projet/index.php/Visiteur/seConnecter') */ 
                   {  
-                     if($_POST['urlRedirect']=='http://[::1]/projet/index.php/visiteur/accueil')
+                     if($_POST['urlRedirect']== site_url('Visiteur/accueil')) /* 'http://[::1]/projet/index.php/visiteur/accueil') */
                      {                        
-                        redirect('http://[::1]/projet/index.php/Administrateur/accueil');
+                        redirect('Administrateur/accueil');
                      } 
                      else
                      {
@@ -179,11 +181,11 @@ class Visiteur extends CI_Controller
                }
                elseif ($this->session->profil=='membre')
                {        
-                  if($_POST['urlRedirect']!= 'http://[::1]/projet/index.php/Visiteur/inscription')
+                  if($_POST['urlRedirect']!= site_url('Visiteur/inscription'))   /* 'http://[::1]/projet/index.php/Visiteur/inscription') */
                   {
                      $this->accueil();
                   }
-                  elseif ($_POST['urlRedirect']!='http://[::1]/projet/index.php/Visiteur/seConnecter') 
+                  elseif ($_POST['urlRedirect']!= site_url('Visiteur/seConnecter'))/* 'http://[::1]/projet/index.php/Visiteur/seConnecter')  */
                   {           
                      redirect($_POST['urlRedirect']);
                   }
@@ -205,7 +207,7 @@ class Visiteur extends CI_Controller
                }
                else
                {  
-                  $DonneesInjectees['urlRedirect']='http://[::1]/projet/index.php/Visiteur/catalogueEvenement';
+                  $DonneesInjectees['urlRedirect']=site_url('Visiteur/catalogueEvenement'); /* 'http://[::1]/projet/index.php/Visiteur/catalogueEvenement'; */
                   $this->indexVisiteur('visiteur/vueLogin', $DonneesInjectees);
                }
             }     
@@ -254,18 +256,25 @@ class Visiteur extends CI_Controller
             if(!$this->ModelePersonne->rechercherEmailPresent($donnees['Email']))
             {
                $this->ModelePersonne->insererInformationPersonne($donnees); 
-               $this->indexVisiteur('visiteur/vueCatalogueEvenements');
+               $this->email->from('ge_personne');
+               $this->email->to($DonneesPersonne['Email']);
+               $this->email->subject('Inscription ');
+               $message = "Votre mot de passe est : '".$nouveauMdp."'. Pensez à changer votre mot de passe.";
+               $this->email->message($message);
+               if (!$this->email->send())
+               {
+                  $this->email->print_debugger();
+               }
+               $this->catalogueEvenement();
             }
             else
             {
                $this->seConnecter();
-            }                                                                             
-              
+            }                                                                            
          }
          else
          {
             $this->indexVisiteur('visiteur/vueErreurMDPCorrespondant','','visiteur/vueAjouterPersonne');
-            
          }
       }
       else                                                                             
@@ -282,36 +291,36 @@ class Visiteur extends CI_Controller
 	{
       $this->form_validation->set_rules('txtEmail','email','required');
       if($this->form_validation->run() === FALSE)
-         { 
+      { 
+         $this->indexVisiteur('visiteur/vueMotDePasseOublie');
+      }
+      else
+      {    
+         if (!($this->ModelePersonne->rechercherEmailPresent($_POST['txtEmail'])))
+         {  //erreure de mail a refaire
+            $Value['Value'] = 'Adresse e-mail incorrect';
+            //$this->load->view('vueErreur');
             $this->indexVisiteur('visiteur/vueMotDePasseOublie');
          }
          else
-         {    
-            if (!($rechercherEmailPresent($_POST['txtEmail'])))
-            {  //erreure de mail a refaire
-               $Value['Value'] = 'Adresse e-mail incorrect';
-               //$this->load->view('vueErreur');
-               $this->indexVisiteur('visiteur/vueMotDePasseOublie');
-            }
-            else
+         {
+            $nouveauMdp='0123456789';
+            for ($i=1;$i<=10;$i++)
             {
-               $nouveauMdp='';
-               for ($i=1;$i<=10;$i++)
-               {
-                  $nouveauMdp= chr(floor(rand(0, 25)+97));
-               }   
-               $this->email->from('ge_personne');
-               $this->email->to($DonneesPersonne['Email']);
-               $this->email->subject('MOT DE PASSE GES');
-               $message = "Votre mot de passe est : '".$nouveauMdp."'. Pensez à changer votre mot de passe.";
-               $this->email->message($message);
-               if (!$this->email->send())
-               {
-                  $this->email->print_debugger();
-               }
-               redirect('Visiteur/catalogueEvenement');
-            }          
-         }
+               $nouveauMdp= chr(floor(rand(0, 25)+97));
+            }   
+            $this->email->from('ge_personne');
+            $this->email->to($DonneesPersonne['Email']);
+            $this->email->subject('MOT DE PASSE GES');
+            $message = "Votre mot de passe est : '".$nouveauMdp."'. Pensez à changer votre mot de passe.";
+            $this->email->message($message);
+            if (!$this->email->send())
+            {
+               $this->email->print_debugger();
+            }
+            redirect('Visiteur/catalogueEvenement');
+         }          
+      }
    }
 
    /**********************************************************************
@@ -349,7 +358,7 @@ class Visiteur extends CI_Controller
    **                       UN EVENEMENT MARCHAND                      ***
    **********************************************************************/
 
-   public function EvenementMarchand($noEvenement = NULL, $annee=NULL)
+   public function evenementMarchand($noEvenement = NULL, $annee=NULL)
    {
       $DonneesProduit['lesProduits'] = $this->mProd->obtenirLesProduits($noEvenement, $annee);   
       $DonneesProduit['unEvenementMarchand'] = $this->mEven->retournerEvenements($noEvenement, $annee);
@@ -393,6 +402,13 @@ class Visiteur extends CI_Controller
    /**********************************************************************
    **                          LE PANIER                               ***
    **********************************************************************/
+   public function panier()
+   { 
+      $DonneesProduit['lesProduits'] = $this->mProd->getRows();      
+      $DonneesProduit['prodPanier']=$this->cart->contents();
+      $this->indexVisiteur('visiteur/vuePanier', $DonneesProduit);
+   }
+   
    function retourPanier()
    {
       
@@ -408,6 +424,15 @@ class Visiteur extends CI_Controller
       {
          $this->majPanier($_POST['arriver']);
       }
+      if(isset($_POST['retourCatalogue']))
+      {
+         $this->catalogueEvenement();
+      }
+      if(isset($_POST['retourEven']))
+      {
+         $this->evenementMarchand($_POST['noEvenement'],$_POST['annee']);
+      }
+
    }
    function majPanier($arriver=null)
    {
@@ -427,13 +452,7 @@ class Visiteur extends CI_Controller
       }
    }
    
-   public function panier($noEvenement = NULL, $annee=NULL )
-   { 
-      $DonneesProduit['lesProduits'] = $this->mProd->getRows($noEvenement, $annee);      
-      $DonneesProduit['unEvenementMarchand'] = $this->mEven->retournerEvenements($noEvenement, $annee);
-      $DonneesProduit['prodPanier']=$this->cart->contents();
-      $this->indexVisiteur('visiteur/vuePanier', $DonneesProduit);
-   }
+   
 
    /**********************************************************************
    **                            AJOUTER                               ***
@@ -457,14 +476,14 @@ class Visiteur extends CI_Controller
             'noEvenement'=>$noEvenement
         );
       $this->cart->insert($data);
-      $this->EvenementMarchand($noEvenement,$annee);
+      $this->evenementMarchand($noEvenement,$annee);
    }
 
    /**********************************************************************
    **                            RETIRER                               ***
    **********************************************************************/
 
-   function removeItem($rowid)
+   function enleverDuPanier($rowid)
    {  
       $DonneesProduit['prodPanier']=$this->cart->contents();
       foreach($DonneesProduit['prodPanier'] as $unProduit )
@@ -481,28 +500,10 @@ class Visiteur extends CI_Controller
           'rowid'   => $rowid,
           'qty'     => 0
       );
-      $DonneesProduit['lesProduits'] = $this->mProd->getRows2($noEvenement, $annee);
+      $DonneesProduit['lesProduits'] = $this->mProd->obtenirLesProduits($noEvenement, $annee);
       $DonneesProduit['unEvenementMarchand'] = $this->mEven->retournerEvenements($noEvenement, $annee);     
       $this->cart->update($data);
-      $this->indexVisiteur('visiteur/vueEvenementMarchand',$DonneesProduit);
-   }
-
-   /**********************************************************************
-   **               MAJ DE LA QUANTITE DE PRODUIT DU PANIER           ***
-   **********************************************************************/
-
-   public function updateItemQty()
-   {
-      $data=array();
-      for($i=1;$i<=$this->cart->total_items();$i++)
-      {
-         $data=array(
-            'rowid'     =>  $_POST[$i.'rowid'],
-            'qty'       =>  $_POST['Qty']
-         );
-      }
-      $this->cart->update($data);
-      echo $update?'ok':'err';// à passer en donnée dans la vue
+      $this->indexVisiteur('visiteur/vuePanier',$DonneesProduit);
    }
 
    /**********************************************************************
@@ -703,8 +704,7 @@ class Visiteur extends CI_Controller
                'TelFixe' => $telF
             );           
             $this->ModelePersonne->modifierInfoPersonne($donneesInsererPersonne);
-            $personne=$this->ModelePersonne->rechercheInfoPersonne($_SESSION['email']);            
-            $noCommande=$this->ModeleCommande->maxCommande()+1;
+            $personne=$this->ModelePersonne->rechercheInfoPersonne($_SESSION['email']);     
             $donneesCommandeGlobal=array();
             $i=0;
             $total=0;
@@ -732,7 +732,6 @@ class Visiteur extends CI_Controller
                'donneesCommandeGlobal' => $donneesCommandeGlobal,
                'total'                 => $total,               
                'Regler'                => 0,
-               'noCommande'            => $noCommande
             );
             if(isset($_POST['submit']))
             {
@@ -781,7 +780,7 @@ class Visiteur extends CI_Controller
       }
       $personne=$this->ModelePersonne->rechercheInfoPersonne($_SESSION['email']);
       $donneesCommande=array(
-         'NoCommande'         => $_POST['noCommande'],
+        /*  'NoCommande'         => $_POST['noCommande'], */
          'NoPersonne'         => $personne->NoPersonne,
          'DateCommande'       => date('Y-m-d H:i:s'),
          'MontantTotal'       => $montantTotal,
@@ -790,11 +789,11 @@ class Visiteur extends CI_Controller
          'ModePaiement'       => $_POST['modeReglement'],
          'CommentaireAcheteur'=> $commentaire
       );
-      $this->ModeleCommande->ajouterCommande($donneesCommande);
+      $noCommande=$this->ModeleCommande->ajouterCommande($donneesCommande);
       foreach($this->cart->contents() as $unProduit)
       {
          $donneesContenir=array(
-            'NoCommande'   => $_POST['noCommande'],
+            'NoCommande'   => $noCommande,
             'NoEvenement'  => $unProduit['noEvenement'],
             'Annee'        => $unProduit['annee'],
             'NoProduit'    => $unProduit['noProduit'],
@@ -806,14 +805,14 @@ class Visiteur extends CI_Controller
       $this->cart->destroy();
       if ($_POST['modeReglement']=='Cheque/Espece')
       {
-         $this->indexVisiteur('templates/vueAccueilPrincipal');  
+         $this->indexVisiteur('templates/vueAccueilPrincipal');  //Envoi Mail pour le récap  --PRIORITAIRE
       }
       elseif($_POST['modeReglement']=='Carte Bancaire')  
       {
          $donneesCB=array(
             'pbx_total'=>$_POST['total'],
             'numero'=>$numero,
-            'numeroCommande'=>$_POST['noCommande']
+            'numeroCommande'=>$noCommande
          );
          $this->payementCb($donneesCB);
       }     
@@ -823,7 +822,7 @@ class Visiteur extends CI_Controller
    **                  Paiement par Carte Bancaire                     ***
    **********************************************************************/
 
-   function payementCb($donnees=NULL)
+   Protected function payementCb($donnees=NULL)
    {//0
       /*
 
@@ -878,11 +877,12 @@ class Visiteur extends CI_Controller
             'numeroCommande'=>$_POST['noCommande']
          ); explode $numero recherche libel court pour numero cmd
       */
+      
       $donneesEvenement=explode("X",$donnees['numero']);
       $noEvenement=$donneesEvenement['0'];
       $annee=$donneesEvenement['1'];   
       $evenement=$this->mEven->retournerUnEvenement($noEvenement,$annee);
-      $numeroCmd=$evenement->TxtHTMLEntete.'XR'.$donnees['numeroCommande'];
+      $numeroCmd=$evenement->NoEvenement.$evenement->Annee.'-'.$donnees['numeroCommande'];// enlever TxtHTMLEntete pour mettre numero evene annee noproduit  no commande 
       $identifiantSite=$this->ModeleIdentifiantSite->getLastIdentifiant();
       $pbx_site         = $identifiantSite->Site;
       $pbx_rang         = $identifiantSite->Rang;              		
@@ -964,6 +964,51 @@ class Visiteur extends CI_Controller
          $this->indexVisiteur('visiteur/vuePaiement',$donneesPayement);
    }// -0
       
+   public function commandeValideEmail()
+   {
+      $Addresse='adressMailSite@ovh.fr';
+      $personne=$this->ModelePersonne->rechercheInfoPersonne($_SESSION['email']);
+      $lastCommande=$this->ModeleCommande->lastCommande($_SESSION['email']);
+      $objet='Commande n°'.$lastCommande->NoCommande;
+      $commande=$this->ModeleCommande->commandeDunClient($personne->NoPersonne);
+      
+   
+      $this->email->from($Addresse); 
+      $this->email->to($_SESSION['email']);
+      $this->email->subject($objet); 
+      $this->email->message( "               
+                        
+         Bonjour ".$personne->Nom."&nbsp;".$personne->Prenom." , merci de votre confiance. \n
+         Votre N° de commande :".$lastCommande->NoCommande."\n
+         A été validée.\n \n
+         Information sur votre commande: \n
+         Vous avez commandé ".$commande->Quantite."&nbsp".$commande->LibelleCourt."\n
+         Pour un montant de ".$commande->MontantTotal."€ \n
+         Facturée à: ".$personne->Email." \n
+         Date de commande: ".date("d-m-Y")." \n
+         Mode de paiement par ".$commande->ModePaiement." \n
+         Vous avez payer ".$this->cart->total()."€ \n
+         Nous vous invitons à concervez ces informations."
+      ); 
+      var_dump('',$personne, $commande,$this->email->message());
+      $this->email->send(); 
+	 
+
+      /* $this->email->from('your@example.com', 'Your Name');
+      $this->email->to($_SESSION['email']);
+      $this->email->cc('another@another-example.com');
+      $this->email->bcc('them@their-example.com');
+
+      $this->email->subject('Email Test');
+      $this->email->message('Testing the email class.');
+
+      $this->email->send(); */
+
+      /* $this->indexVisiteur('visiteur/vuePaiementAccepte'); 
+      */
+     // }
+   }
 }//fin class
+
 
 

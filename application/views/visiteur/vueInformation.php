@@ -52,7 +52,7 @@
             
             $submit=array(
                 'name'              =>  'submit',
-                'value'             =>  'Paiement par chèque/espèces',
+                'value'             =>  'FINALISER LA COMMANDE AVEC PAIEMENT DIFFERE',
                 'class'             =>  'btn btn-primary'
             );
             $hidden=array();
@@ -250,15 +250,14 @@ echo form_open('Visiteur/formulaireLivraison');
                 echo '</br>';
                 if($this->cart->total_items() > 0)
                 {
-                    if(isset($Personne->Nom, $Personne->Prenom, $Personne->Adresse, $Personne->CodePostal, $Personne->Ville))
-                    { 
+                     
                         echo '<h3 class="souligne" align="center">Choisissez votre mode de paiement</h3>'; 
                         echo '</br>'; 
                         echo '<div align="center">';
-                            echo '<button name="payementCb" class="btn btn-primary">Paiement par carte bancaire</button>&emsp;';
+                            echo '<button name="payementCb" class="btn btn-primary">PAYER EN LIGNE</button>&emsp;';
                             echo form_submit($submit); 
                         echo '</div>'; 
-                    }
+                    
                 }            
             echo '</div>';
         echo '</br>';  
