@@ -78,6 +78,16 @@ class ModeleCommande extends CI_Model
        $query=$this->db->get();	    
        return $query->result();
     }
+    public function getNbProduit($NoEvenement,$annee)
+    {
+        $this->db->select('*');
+        $this->db->from('ge_contenir');
+        $this->db->join('ge_produit','ge_produit.NoProduit=ge_contenir.NoProduit AND ge_produit.NoEvenement=ge_contenir.NoEvenement AND ge_produit.annee=ge_contenir.annee' );
+        $this->db->where('ge_contenir.NoEvenement',$NoEvenement);
+        $this->db->where('ge_contenir.Annee',$annee);
+        $query=$this->db->get();	    
+        return $query->result();
+    }
 
     /*********************************************************************************************************************************************/
     /*********************************************************************************************************************************************/
