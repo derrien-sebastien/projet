@@ -4,7 +4,7 @@
 		    <!--                              NAVBAR                                   -->
 		    <!--------------------------------------------------------------------------->	
 		    <!--------------------------------------------------------------------------->         
-       
+ 
     <nav class="navbar navbar-inverse navbar-fixed-top">
       <div class="container-fluid">
         <div class="navbar-header">
@@ -38,14 +38,14 @@
                   </li> &nbsp;
                 </ul>
               </li> 
-              <li class="dropdown">
+              <!-- <li class="dropdown">
                 <a class="dropdown-toggle" data-toggle="dropdown" href="#"><i class="glyphicon  glyphicon-envelope"></i>&nbsp;Réclamation<span class="caret"></span></a>
                 <ul class="dropdown-menu">
                   <li>
                     <a href="<?php echo site_url('Membre/problem') ?>">Signaler un problème</a>
                   </li>
                 </ul>
-              </li>   
+              </li>    -->
             <?php endif; ?>
            
             <!--administrateur-->
@@ -149,7 +149,8 @@
                   <!-- accuser de reception a faire -->
                   <!-- relance mail-->                  
                 </ul>
-              </li>
+              </li>      
+              <!-- IDENTIFIANT MAIL DU CLIENT A AJOUTER -->
             <?php endif; ?>
           </ul>
               
@@ -166,6 +167,9 @@
                 <a href="<?php echo site_url('Visiteur/seConnecter') ?>">Connexion</a>                    
               </li>  
             <?php }elseif ($this->session->userdata('email') == True) { ?>
+              <li >
+              <a href="#"><?php echo form_label('Bienvenu &nbsp;'.$this->session->email) ?></a>
+              </li>
               <li>
                 <a href="<?php echo site_url('Visiteur/seDeConnecter') ?>">Déconnexion</a>
               </li>
@@ -175,55 +179,3 @@
     </nav>
     </br>
     </br>
-
-
-<style>
-
-.dropdown-submenu
-{
-  position:relative;
-}
-.dropdown-submenu>.dropdown-menu
-{
-  top:0;left:100%;
-  margin-top:-6px;
-  margin-left:-1px;
-  -webkit-border-radius:0 6px 6px 6px;
-  -moz-border-radius:0 6px 6px 6px;
-  border-radius:0 6px 6px 6px;
-}
-.dropdown-submenu:hover>.dropdown-menu
-{
-  display:block;
-}
-.dropdown-submenu>a:after
-{
-  display:block;
-  content:" ";
-  float:right;
-  width:0;
-  height:0;
-  border-color:transparent;
-  border-style:solid;
-  border-width:5px 0 5px 5px;
-  border-left-color:#cccccc;
-  margin-top:5px;
-  margin-right:-10px;
-}
-.dropdown-submenu:hover>a:after
-{
-  border-left-color:#ffffff;
-}
-.dropdown-submenu.pull-left
-{
-  float:none;
-}
-.dropdown-submenu.pull-left>.dropdown-menu
-{
-  left:-100%;
-  margin-left:10px;
-  -webkit-border-radius:6px 0 6px 6px;
-  -moz-border-radius:6px 0 6px 6px;
-  border-radius:6px 0 6px 6px;
-}
-</style>

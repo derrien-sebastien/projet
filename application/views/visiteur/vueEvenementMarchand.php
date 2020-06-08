@@ -39,6 +39,7 @@ echo "<tbody>";
 
 echo '<div class="col-lg-12">';
 ////////////////////////////// Déclaration de nos Variables ////////////////////////////
+
     if(isset($lesProduits))
     {
         foreach($lesProduits as $unProduit)
@@ -110,6 +111,11 @@ echo '<div align="center">';
     echo '<a href="';
         echo site_url('Visiteur/catalogueEvenement');
         echo '"><button class="btn btn-primary">Retour au catalogue</button>';
+    echo '</a>';
+    echo '&emsp;';
+    echo '<a href="';
+        echo site_url('Visiteur/panier');
+        echo '"><button class="btn btn-primary">Voir le panier</button>';
     echo '</a>';
 echo '</div>';
 echo '</br>';

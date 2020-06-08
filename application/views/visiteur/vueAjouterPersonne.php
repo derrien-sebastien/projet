@@ -12,6 +12,11 @@ $mdp2=array(
 	'type'	=>	'password',
 	'name'	=>	'password2'
 );
+$submit=array(
+	'name'              =>  'Envoyer',
+	'value'             =>  'ENVOYER',
+	'class'             =>  'btn btn-primary'
+);
 echo '<div>';
 echo 	'<h1>Souhaitez-vous ajouter cette adresse mail ?</h1>';
 echo '</div>';
@@ -50,7 +55,7 @@ echo 			'</td>';
 echo 		'</tr>';
 echo 	'</table>';
 echo '</br></br>';
-echo form_submit('submit', 'Envoyer');
+echo form_submit($submit);
 echo form_close();
 //////////////////////////////  FIN DE FORMULAIRE ///////////////////////////////////////
 ?>

@@ -259,6 +259,24 @@ public function ajoutMultipleEnfant()
 			$this->ajoutMultipleEnfant;
 				
 		}
-    }
+	}
+	
+	<?php
+	$fluo=array(
+		'fond'=>'red',
+		'texte'=>'blue'
+	);
+	$sobre=array('fond'=>'yellow',
+	'texte'=>'blue');
+
+	if ($color==fluo)
+	{
+		$couleurchoisi=$fluo;
+	}
+	result()/*plusieur ligne*/ row() /*une ligne*/
+    $produit->Noproduit
+    result_array()/*plusieur ligne*/, row_array()/*une ligne*/
+    $produit['noCommande']$produit['noProduit']
+
     
     

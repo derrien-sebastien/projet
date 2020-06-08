@@ -63,58 +63,6 @@ class ModeleProduit extends CI_Model
       return !empty($result)?$result:false;
    } 
 
-   /* public function obtenirCommande($id)
-   {
-      $this->db->select('comm.*,pers.Nom,pers.Email,pers.TelPortable,pers.Ville');
-      $this->db->from('ge_commande.'as comm');
-      $this->db->join(ge_personne.'as pers','pers.NoPersonne = comm.NoPersonne', 'left');
-      $this->db->where('comm.NoCommande', $id);
-      $query = $this->db->get();
-      $result = $query->row_array();
-      
-      $this->db->select('cont.*','prod.Img_Produit','prod_LibelleCourt','prod.Prix');
-      $this->db->from(ge_contenir.'as cont');
-      $this->db->join(ge_produit.'as prod','prod.NoProduit=cont.NoProduit','left');
-      $this->db->where('cont.NoProduit',$id);
-      $query2 = $this->db->get();
-      $result['items'] = ($query2->num_rows() > 0)?$query2->result_array():array();
-      return !empty($result)?$result:false;
-   }
-
-   public function insererCustomer($data)
-   {
-      if(!array_key_exists("created",$data))
-      {
-         $data['created'] = date("Y-m-d H:i:s");
-      }
-      if(!array_key_exists("modified",$data))
-      {
-         $data['modified'] = date("Y-m-d H:i:s");
-      }
-      $insert = $this->db->insert(ge_personne, $data);
-      return $insert?$this->db->insert_id():false;
-   }
-
-   public function insererCommande($data)
-   {
-      if(!array_key_exists("created",$data))
-      {
-         $data['DateCommande'] = date("Y-m-d H:i:s");
-      }
-      if(!array_key_exists("modified",$data))
-      {
-         $data['DateValidation'] = date("Y-m-d H:i:s");
-      }
-      $insert = $this->db->insert(ge_commande, $data);
-      return $insert?$this->db->insert_id():false;
-   }
-
-   public function insererProduitCommande($data=array())
-   {
-      $insert = $this->db->insert_batch($this->ge_contenir, $data);
-      return $insert?true:false;
-   } */
-
   /************************************************************************************
   **   Tous les produits en cours de vente et en stock de notre table ge_produit     **
   *************************************************************************************/

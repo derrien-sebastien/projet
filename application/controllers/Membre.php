@@ -237,7 +237,7 @@ class Membre extends CI_Controller
         }
     }  
   
-    public function problem()
+    /* public function problem()
     {
         $this->form_validation->set_rules( 'message','Votre message', 'required');
         $this->form_validation->set_rules( 'object','Objet de votre message', 'required');
@@ -293,7 +293,7 @@ class Membre extends CI_Controller
             echo "votre message n'a pas pu être envoyé.";// à passer en donnée dans la vue
             }       
         }
-    }
+    } */
 
   
     public function mesCommandes()
@@ -342,9 +342,63 @@ class Membre extends CI_Controller
         }
     }
 
-    /* public function modificationCommande()
+     public function modificationCommande()
     {
-
-    } */
+        if(isset($_POST['modification']))
+        {
+            $i=0;
+            $memoire=0;
+            foreach($_POST['NoProduit'] as $unProduit)
+            {
+                if(isset($_POST['NoCommande'][$i]))
+                {
+                    $uneLigne=$this->ModeleCommande->getUneLigneCommande($_POST['NoCommande'][$i],$_POST['NoProduit'][$i]);
+                }
+                if(isset($_POST['Qty'][$i]))
+                {
+                    if($_POST['Qty']!=$uneLigne['Quantite'])
+                    {   
+                        $uneLigne['Quantite']=$_POST['Qty'][$i];                    
+                        $this->ModeleCommande->modifierContenir($uneLigne);
+                        $memoire=1;
+                        $noCommande=$uneLigne['NoCommande'];
+                    }
+                }
+                $i++;
+            }
+        }
+        elseif(isset($_POST['MontantTotal']))  
+        {
+            var_dump($_POST);
+            $memoire=0;
+            $donneesCB=array(
+            'pbx_total'=>$_POST['MontantTotal'],
+            'numero'=>$numero,
+            'numeroCommande'=>$_POST['NoCommande']
+            );
+            redirect('Visiteur/payementCb'); 
+        }     
+        if($memoire==1)
+        {
+            $lignes=$this->ModeleCommande->getUneCommande($noCommande);
+            $montantTotal=0;
+            foreach($lignes as $uneLigne)
+            {
+                $donnees=array(
+                    'NoEvenement'=>$uneLigne->NoEvenement,
+                    'Annee'=>$uneLigne->Annee,
+                    'NoProduit'=>$uneLigne->NoProduit
+                );
+                $produit=$this->ModeleProduit->getUnProduit($donnees);
+                $montantTotal=$montantTotal+($uneLigne->Quantite*$produit->Prix);                
+            }
+            $donneesCommande=array(
+                'NoCommande'=>$noCommande,
+                'MontantTotal'=>$montantTotal
+            );
+            $this->ModeleCommande-> modifierPaye($donneesCommande);
+        }
+        $this->mesCommandes();
+    } 
 
 }

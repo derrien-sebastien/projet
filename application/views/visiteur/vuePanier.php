@@ -28,7 +28,12 @@ echo '<div class="container-fluid">';
                         echo form_open('Visiteur/retourPanier');
                         $i=0;
                         foreach($this->cart->contents() as $produit)
-                        { 
+                        {
+                            if(!isset($noEvenement))
+                            {
+                                    $noEvenement=$produit['noEvenement'];
+                                    $annee=$produit['annee'];
+                            }
                             
                             $hidden=array(
                                 $i.'rowid'  =>$produit['rowid'],
@@ -66,7 +71,7 @@ echo '<div class="container-fluid">';
                                 echo '<td style="color:rgb(128, 122, 122);" align="center">'.$produit["subtotal"].'€</td>';
                                 echo '<td style="color:rgb(128, 122, 122);"align="center">';
                                     echo '<a href="';
-                                        echo site_url('Visiteur/removeItem/'.$produit['rowid'].'/'. $produit['id']);
+                                        echo site_url('Visiteur/enleverDuPanier/'.$produit['rowid'].'/'. $produit['id']);
                                         echo '" >Supprimer<i class="glyphicon glyphicon-trash"></i>';
                                     echo '</a>';
                                 echo '</td>';
@@ -83,14 +88,22 @@ echo '<div class="container-fluid">';
                         echo '</tr>'; 
                         echo '</tbody>';
                         echo '</table>';
-                        $hidden2['noEvenement']=$unEvenementMarchand['NoEvenement'];
-                        $hidden2['annee']=$unEvenementMarchand['Annee'];
+                        $hidden2['noEvenement']=$noEvenement;
+                        $hidden2['annee']=$annee;
                         echo '<div align="center">';
                             echo '<button name="passerCommande" class="btn btn-primary">PASSER COMMANDE</button>';
                             echo " \n ";
                             echo '<button name="submit"class="btn btn-primary">METTRE A JOUR LE PANIER</button>';
                             echo " \n ";
                             echo '<button name="viderPanier"class="btn btn-primary">VIDER LE PANIER</button>';
+                        echo '</div>';
+                        echo '</br>';
+                        echo '</br>';
+                        echo '<div align="center">';
+                            echo '<button name="retourCatalogue" class="btn btn-primary">RETOUR AU CATALOGUE</button>';
+                            echo '&emsp;';
+                            echo '<button name="retourEven"class="btn btn-primary">RETOUR AUX PRODUITS</button>';
+                            echo '</a>';
                         echo '</div>';
                         echo form_hidden($hidden2);
                         echo form_close();
