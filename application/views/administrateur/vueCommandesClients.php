@@ -13,6 +13,24 @@ $submit=array(
 echo '<div class="container-fluid">';
   echo '<div class="row">';
     echo '<div class="col-lg-12" >';
+    if(isset($produitsCommandes))
+    {
+      foreach($produitsCommandes as $unProduitCommander)
+      {
+        echo form_label('le produit '.$unProduitCommander->LibelleCourt.' a été commander '.$unProduitCommander->nbProduit.' fois');
+        echo '</br>';
+      }
+    }
+    if(isset($montantTotalCommandes))
+    {
+      echo form_label("le montant totale des commande pour cette evenement s'élève a : ".$montantTotalCommandes->MontantDesCommandes.'€');
+      echo '</br>';
+    }
+    if(isset($montantPaye))
+    {
+      echo form_label("le montant déjà payé pour cette evenement s'élève a : ".$montantPaye->MontantPaye.'€');
+      echo '</br>';
+    }
       echo '<h1 class="encadre">Les commandes passées par les clients </h1>';
       echo'</br>';
       foreach($commandes as $commande)

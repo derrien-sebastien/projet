@@ -134,15 +134,35 @@ class ModeleCommande extends CI_Model
     }
     public function getNbProduit($NoEvenement,$annee)
     {
-        $this->db->select('*');
+        $this->db->select('COUNT(*) as nbProduit, LibelleCourt');
         $this->db->from('ge_contenir');
         $this->db->join('ge_produit','ge_produit.NoProduit=ge_contenir.NoProduit AND ge_produit.NoEvenement=ge_contenir.NoEvenement AND ge_produit.annee=ge_contenir.annee' );
         $this->db->where('ge_contenir.NoEvenement',$NoEvenement);
         $this->db->where('ge_contenir.Annee',$annee);
+        $this->db->group_by('LibelleCourt');
         $query=$this->db->get();	    
         return $query->result();
     }
-
+    public function MontantTotalParEvenement($NoEvenement,$annee)
+    {
+        $this->db->select_sum('MontantTotal' , 'MontantDesCommandes');
+        $this->db->from('ge_commande');
+        $this->db->join('ge_contenir','ge_contenir.NoCommande = ge_commande.NoCommande');
+        $this->db->where('ge_contenir.NoEvenement',$NoEvenement);
+        $this->db->where('ge_contenir.Annee',$annee);
+        $query=$this->db->get();	    
+        return $query->row();        
+    }
+    public function MontantPayeParEvenement($NoEvenement,$annee)
+    {
+        $this->db->select_sum('Payer' , 'MontantPaye');
+        $this->db->from('ge_commande');
+        $this->db->join('ge_contenir','ge_contenir.NoCommande = ge_commande.NoCommande');
+        $this->db->where('ge_contenir.NoEvenement',$NoEvenement);
+        $this->db->where('ge_contenir.Annee',$annee);
+        $query=$this->db->get();	    
+        return $query->row();        
+    }
     /*********************************************************************************************************************************************/
     /*********************************************************************************************************************************************/
     /*********************************************************************************************************************************************/
