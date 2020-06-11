@@ -12,7 +12,7 @@ libelleEvenement libelleProduit Mqty prix dateRemise noCommande DejaPayer
 $submit=array(
     'name'              =>  'voir',
     'value'             =>  'VOIR',
-    'class'             =>  'btn btn-primary'
+    'class'             =>  'btn'
 );
 echo '<div class="container-fluid">';
     echo '<div class="row">';
@@ -77,4 +77,11 @@ echo '<div class="container-fluid">';
             echo '</table>';
         echo '</div>';
     echo '</div>';
-echo '</div>';  
+echo '</div>'; 
+?> 
+</br>
+</br>
+</br>
+</br>
+</br>
+</br>

@@ -113,6 +113,15 @@ class ModeleEvenement extends CI_Model
       $maListe = $this->db->get();
       return $maListe->row();
    }
+   public function nbEvenementMarchand($Annee)
+   {
+      $this->db->select('COUNT(*) as NombreDEvenement');
+      $this->db->from('ge_evenement');
+      $this->db->join('ge_ev_marchand','ge_evenement.NoEvenement=ge_ev_marchand.NoEvenement AND ge_evenement.Annee=ge_ev_marchand.Annee');
+      $this->db->where('ge_ev_marchand.Annee', $Annee);;
+      $maListe = $this->db->get();
+      return $maListe->row();
+   }
 
    public function presenceEvenement($donnees)
    {

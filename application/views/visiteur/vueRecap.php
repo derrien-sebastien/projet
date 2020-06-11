@@ -12,7 +12,7 @@ $commentaire=array(
 );
 $submit=array(
     'name'          => 'submit',
-    'class'         => 'btn btn-primary',
+    'class'         => 'btn',
     'value'         => 'valider'
 );
 $hidden=array(
@@ -28,7 +28,9 @@ echo '<div class="container-fluid">';
     echo '<div align="center">';
         echo form_label("<h3><B>Si vous désirez être livré à une adresse differente de votre domicile veuillez l'indiquer en commentaire</B></h3>");
     echo '</div>';
-    echo '<table>';
+    
+            echo '<table class="tableCommande">';
+
         foreach($donneesCommandeGlobal as $unProduit)
         {
             echo '<tr>';
@@ -103,6 +105,7 @@ echo '<div class="container-fluid">';
             echo '</td>';
         echo '</tr>';
     echo '</table>';
+    
     if($modeReglement== 'Cheque/Espece')
     {
         if(isset($submit))

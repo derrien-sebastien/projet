@@ -12,7 +12,7 @@ libelleEvenement libelleProduit Mqty prix dateRemise noCommande DejaPayer
 $submit=array(
     'name'              =>  'voir',
     'value'             =>  'VOIR',
-    'class'             =>  'btn btn-primary'
+    'class'             =>  'btn'
 );
 echo '<body class="bodyCommande">';
     echo '<section class="sectionCommande">';
@@ -82,6 +82,7 @@ echo '<body class="bodyCommande">';
         } 
     echo '</section>';
 ?>
+
 <script>
     $(window).on("load resize ", function() 
     {

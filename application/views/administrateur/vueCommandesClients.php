@@ -32,13 +32,15 @@ echo '<div class="container-fluid">';
       echo '</br>';
     }
       echo '<h1 class="encadre">Les commandes passées par les clients </h1>';
-      echo'</br>';
+      echo '</br>';
+      echo '<h2 align="center">Actuellement</h2>';
+    
       foreach($commandes as $commande)
       {
         echo '<div align="center">';
-          echo 'Actuellement';
-          echo '&nbsp;<h3>'.$commande->nbLignes.'</h3>&nbsp;Commandes en cours sur cette évènement';
+          echo '<h3>Actuellement '.$commande->nbLignes.'&nbsp;Commandes en cours sur cette évènement</h3>';
         echo '</div>';
+
       } 
       echo '<h2 align="center">Ci-dessous, les commandes passées sur notre site.</h2>';
       echo form_open('Administrateur/commandesClients');
@@ -66,7 +68,7 @@ echo '<div class="container-fluid">';
           echo '<h3 class="encadre">'.$uneLigne->LibelleCourt.'</h3>';
           if($modif=='')
           {
-            echo '<table class="table table-bordered table-dark">';
+              echo '<table class="table table-bordered table-dark">';
           }
           else
           {
@@ -149,7 +151,14 @@ echo '<div class="container-fluid">';
             {
               if($uneLigne->Payer != 0)
               {
-                echo '<td class="tdRecapCommande" align="center">';
+                if($uneLigne->Payer==$uneLigne->MontantTotal)
+                {
+                  echo '<td class=" codeCouleurValide" align="center">';
+                }
+                else
+                {
+                  echo '<td class=" codeCouleurNonValide" align="center">';
+                }
                   echo $uneLigne->Payer;
                 echo '</td>';
               }

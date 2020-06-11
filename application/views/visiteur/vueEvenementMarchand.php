@@ -5,7 +5,7 @@
 $submit=array(
     'name'      =>'submit',
     'value'     =>'Ajouter au panier',
-    'class'     =>'btn btn-primary'
+    'class'     =>'btn'
     
 );
 $qty = array(
@@ -110,105 +110,15 @@ echo '</br>';
 echo '<div align="center">';
     echo '<a href="';
         echo site_url('Visiteur/catalogueEvenement');
-        echo '"><button class="btn btn-primary">Retour au catalogue</button>';
+        echo '"><button class="btn">Retour au catalogue</button>';
     echo '</a>';
     echo '&emsp;';
     echo '<a href="';
         echo site_url('Visiteur/panier');
-        echo '"><button class="btn btn-primary">Voir le panier</button>';
+        echo '"><button class="btn">Voir le panier</button>';
     echo '</a>';
 echo '</div>';
 echo '</br>';
 echo '</br>';
 echo form_close();
 ?>
-<!----------------------------------------------------------------------------------------
-||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
-||||||||||||||||||||||||||||||||       SCRIPT       ||||||||||||||||||||||||||||||||||||||
-||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
------------------------------------------------------------------------------------------>
-<script>
-function updateCartItem(obj,rowid)
-{
-    $.get("<?php echo site_url('visiteur/updateItemQty'); ?>", 
-    {rowid:rowid, qty:obj.value},
-    function(resp)
-    {
-        if(resp == 'ok')
-        {
-            location.reload();
-        }
-        else
-        {
-            alert('cart update failed, please try again.');
-        }
-
-    });
-}
-
-</script>
-    <!-- echo '<div class="col-sm-4 col-lg-4 col-md-4">';
-        echo '<div class="thumbnail">';
-            echo '<h3 class="encadre" align="center">Votre Panier</h3>';
-            echo '<a align="right" href="';
-                echo site_url('Visiteur/panier'); 
-                echo '" class="cart-link" title="View Cart">';
-                echo '<i class="glyphicon glyphicon-shopping-cart"></i>';
-                echo '<span>';
-                    echo $this->cart->total_items(); 
-                echo '</span>';
-            echo '</a>';
-            echo '<table class="table table-striped">';
-                echo '<thead>';
-                    echo '<tr>';
-                        echo '<td>Produit</td>';
-                        echo '<td>libellé </td>';
-                        echo '<td>Prix </td>';
-                        echo '<td>Quantité</td>';
-                        echo '<td>Votre Total</td>';
-                        echo '<td>Vos Actions</td>';
-                    echo '</tr>';
-                echo '</thead>';
-                echo '<tbody>';
-                    if($this->cart->total_items() > 0)
-                    {
-    ////////////////////////////// Déclaration de nos variables pour le PANIER ////////////////////////////
-                        foreach($this->cart->contents() as $produit)
-                        { 
-                            echo '<tr>';
-                                echo '<td><img src="'.base_url().'assets/images/'.$produit["image"].'"class="img-thumbnail" width="75"/></td>';
-                                echo '<td>'.$produit["name"].'</td>';
-                                echo '<td>'.$produit["price"].'€</td>';         
-                                echo '<td>'.$produit["qty"].'</td>';
-                                echo '<td>'.$produit["subtotal"].'€</td>';
-                                echo '<td>';
-                                    echo '<a href="';
-                                        echo site_url('Visiteur/removeItem/'.$produit['rowid']);
-                                        echo '"><i class="glyphicon glyphicon-trash"></i>';
-                                    echo '</a>';
-                                echo '</td>';
-                            echo '</tr>';
-                        } 
-                    }
-                    else
-                    { 
-                        echo '<tr>';
-                            echo '<td colspan="6"><p>Aucun produit</p></td>';
-                        echo '</tr>';
-                    }
-                echo '</tbody>';
-            echo '</table>';
-            if($this->cart->total_items() > 0)
-            {
-                echo '<a href="';
-                    echo site_url('Visiteur/passerCommande');
-                    echo '"><button class="btn btn-primary">PASSER COMMANDE</button>';
-                echo '</a>';
-                echo " \n ";
-                echo '<a href="';
-                    echo site_url('Visiteur/viderPanier/'.$unEvenementMarchand['NoEvenement'].'/'.$unEvenementMarchand['Annee']);                   
-                    echo '"><button class="btn btn-primary">vider panier</button>';
-                echo '</a>';
-            }      
-        echo '</div>';
-    echo '</div>'; --> 

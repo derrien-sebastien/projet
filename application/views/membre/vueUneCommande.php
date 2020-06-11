@@ -139,7 +139,7 @@ echo '<section class="sectionCommande">';
                     if($MMC!=0)
                     {
                         echo '<div align="center">';
-                        echo '<button name="payementCb" class="btn btn-primary">PAYER EN LIGNE</button>&emsp;';
+                        echo '<button name="payementCb" class="btn">PAYER EN LIGNE</button>&emsp;';
                             echo form_submit($submit);
                             echo '&emsp;';
                             echo form_submit($submit2); 

@@ -19,7 +19,7 @@ $password=array(
 	'id'=>'password',
 	'placeholder'=>'Mot de passe'				
 );
-$style=array('class'=>'btnSubmit btn-lg btn-primary');
+$style=array('class'=>'btn');
 ///////////////////////////////   FORMULAIRE   ////////////////////////////////////////
 if (isset($provenance))
 {

@@ -1103,7 +1103,7 @@ donnée de sortie:
 				$modif='';
 			}
 			$i=0;
-			$this->commandesClients($noEvenement,$annee,$modif);
+			$this->commandesClientsParPersonne($noEvenement,$annee,$modif);
 		
 		}
 	}
@@ -1907,12 +1907,97 @@ donnée de sortie:
  ajouter eleve , retirer admin, modifier membre  (visiteur/activation),
  ajouter parent , migration classe
 */
+public function commandesClientsParPersonne($noEvenment=null,$annee=null,$modif=null)
+{
+	if(!isset($_POST['submit']))
+	{/* 
+		$statParProduit=$this->ModeleCommande->getNbProduit($noEvenment,$annee);
+		$statParEven=$this->ModeleCommande->commandeClientParPersonne($noEvenment,$annee);
+		$statPayeParEven=$this->ModeleCommande->MontantPayeParEvenement($noEvenment,$annee); */
+		$lignesCommandes=$this->ModeleCommande->commandeClientParPersonne($noEvenment,$annee);
+		$nbCommande=$this->ModeleCommande->nbCommandeClient($noEvenment,$annee);
+		$i=0;
+		foreach($lignesCommandes as $uneLigneCommande)
+		{
+		
+			$nbLigneParClient=$this->ModeleCommande->nbDeLigneParClient($uneLigneCommande->NoEvenement, $uneLigneCommande->Annee,$uneLigneCommande->NoPersonne);
+			$nbligneParCommande=$this->ModeleCommande->nbDeLignesParCommande($uneLigneCommande->NoEvenement, $uneLigneCommande->Annee,$uneLigneCommande->NoCommande);
+			$lesLignes[$i]=array(
+				'contenu'=>$uneLigneCommande,
+				'nbLigneParPersonne'=>$nbLigneParClient->NbDeLignes,
+				'nbLigneParCommande'=>$nbligneParCommande->NbDeLignes
+			);
+			$i++;
+		}
+		$donnees=array(
+				'ligneCommandes'=>$lesLignes,
+				'noEvenement'=>$noEvenment,
+				'annee'=>$annee,
+				'modif'=>$modif,
+				/* 'nbProduit'=>$statParProduit,
+				'totalEven'=>$statPayeParEven,
+				'payerClient'=>$statParEven */
+		);
+		$this->indexAdmin('administrateur/vueCommandeParClient',$donnees);
+	}
+	else
+	{
+		$i=0;
+		foreach($_POST['noProduit'] as $unProduit )
+		{
+			$donneesContenir=array(
+					'NoEvenement'=>$_POST['NoEvenement'],
+					'NoCommande'=>$_POST["noCommande"][$i],
+					'NoProduit'=>$unProduit,
+					'Annee'=>$_POST['Annee'],
+					'Remis'=>$_POST['remis'][$i]
+			);
+			$donneesCommande=array(
+					'NoCommande'=>$_POST["noCommande"][$i],
+					'NoPersonne'=>$_POST['noPersonne'][$i],
+					'ResteAPayer'=>strval($_POST['montantTotal'][$i]-$_POST['payer'][$i]),
+					'Payer'=>$_POST['payer'][$i]
+			);
+			$this->ModeleCommande->modifierPaye($donneesCommande);
+			$this->ModeleCommande->modifierRemis($donneesContenir);
+			$i++;
+		}
+	}
+	/* $_POST['evenement']=explode("x",$donnees['noEvenement'],$donnees['annee']);
+	$noEvenement=$donnees['noEvenement']['0'];
+	$annee=$donnees['annee']['1'];
+	$lignesCommandes=$this->ModeleCommande->commandeClientParPersonne($noEvenement,$annee);
+	
+	$i=0;
+	foreach($lignesCommandes as $uneLigneCommande)
+	{
+			$nbLigneParClient=$this->ModeleCommande->nbDeLigneParClient($uneLigneCommande->NoEvenement, $uneLigneCommande->Annee,$uneLigneCommande->NoPersonne);
+			$nbligneParCommande=$this->ModeleCommande->nbDeLignesParCommande($uneLigneCommande->NoEvenement, $uneLigneCommande->Annee,$uneLigneCommande->NoCommande);
+			$lesLignes[$i]=array(
+				'contenu'=>$uneLigneCommande,
+				'nbLigneParPersonne'=>$nbLigneParClient->NbDeLignes,
+				'nbLigneParCommande'=>$nbligneParCommande->NbDeLignes
+			);
+			$i++;
+		}
+		$donnees=array(
+				'ligneCommandes'=>$lesLignes,
+				'noEvenement'=>$noEvenment,
+				'annee'=>$annee,
+				'modif'=>$modif,	
+				'commandes'=>$nbCommande
+		);
+		$this->indexAdmin('administrateur/vueCommandeParClient',$donnees); */
+}
+
+
 	public function commandesClients($noEvenment=null,$annee=null,$modif=null)
 	{
 		if(!isset($_POST['submit']))
 		{
 			$lignesCommandes=$this->ModeleCommande->commandeClient($noEvenment,$annee);
 			$nbCommande=$this->ModeleCommande->nbCommandeClient($noEvenment,$annee);
+			//commandeClientParPersonne
 			$donnees=array(
 				'ligneCommandes'=>$lignesCommandes,
 				'noEvenement'=>$noEvenment,
@@ -1946,23 +2031,54 @@ donnée de sortie:
 			}
 			$this->selectionCommande();
 		}
-
-		//
-		
+		$lignesCommandes=$this->ModeleCommande->commandeClient($noEvenment,$annee);
+		$nbCommande=$this->ModeleCommande->nbCommandeClient($noEvenment,$annee);
+		//commandeClientParPersonne
+		$donnees=array(
+			'ligneCommandes'=>$lignesCommandes,
+			'noEvenement'=>$noEvenment,
+			'annee'=>$annee,
+			'modif'=>$modif,
+			'commandes'=>$nbCommande
+		);
+		$this->indexAdmin('administrateur/vueCommandesClients',$donnees);
 	}
-
-	/* public function tableauDeBord($noEvenment=null,$annee=null)
+	public function affichageStatistique()
 	{
-		$nombreDeCommande=$this->ModeleCommande->commandeClient($noEvenment,$annee);
-		$i=0;
-		foreach($nombreDeCommande as $commandes)
+		if(!isset($_POST['existant']))
 		{
-			$lesCommandes[$i]=$commandes;
-			$i++;
+			$donneesInjectees['lesEvenements']= $this->ModeleEvenement->getEvenementGeneral(AnneeEnCour);
+			$donneesInjectees['Provenance']='statistique';
+			$this->indexAdmin('administrateur/vueSelectionEvenements',$donneesInjectees);
 		}
-		$donnees['commandes']=$lesCommandes;
-		$this->indexAdmin('administrateur/tableauDeBord',$donnees);
-	} */
+		else
+		{
+			$evenement=explode("/",$_POST['evenement']);
+			$noEvenement=$evenement['1'];
+			$annee=$evenement['0'];
+			$this->statistiques($noEvenement,$annee);
+		}
+	}
+	public function statistiques($noEvenement=null,$annee=null)
+	{
+		$evenement=$this->ModeleEvenement->getEvenementMarchand($annee,$noEvenement);
+		$montantTotalVentes=$this->ModeleCommande->MontantTotalParEvenement($noEvenement,$annee);
+		$motantTotalDejaPaye=$this->ModeleCommande->MontantPayeParEvenement($noEvenement,$annee);
+		$quantiterParArticle=$this->ModeleCommande->getNbProduit($noEvenement,$annee)	;	
+		$nbEvenementAnnee=$this->ModeleEvenement->nbEvenementMarchand($annee);
+		$montantTotalVenteAnnees=$this->ModeleCommande->MontantTotalParAnnee($annee);
+		$nbCommande=$this->ModeleCommande->nbCommandeClient($noEvenement, $annee);
 
+		$donnees=array(
+			'evenement'=>$evenement,
+			'montantTotalVentes'=>$montantTotalVentes,
+			'motantTotalDejaPaye'=>$motantTotalDejaPaye,
+			'quantiterParArticle'=>$quantiterParArticle,
+			'nbEvenementAnnee'=>$nbEvenementAnnee,
+			'montantTotalVenteAnnees'=>$montantTotalVenteAnnees,
+			'nbCommande'=>$nbCommande
 
+		);
+		$this->indexAdmin('administrateur/vueStatistique',$donnees);
+	}
 }//fin  de class
