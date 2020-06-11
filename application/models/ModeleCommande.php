@@ -37,28 +37,110 @@ class ModeleCommande extends CI_Model
         $query=$this->db->get();
         return $query->result();
     }
-    public function commandeDunClient($pNoPersonne)
+    public function nbDeLigneParClient($pNoEven, $pAnnee,$pNoPers)
     {
-        $this->db->Select('cont.Quantite,cont.NoProduit,prod.LibelleCourt,comm.ModePaiement,comm.NoPersonne,comm.Payer,comm.NoCommande,comm.MontantTotal,comm.ResteAPayer,pers.Email,pers.Nom,pers.Prenom');
-        $this->db->from('ge_commande as comm');
-        $this->db->join('ge_contenir  as cont','comm.NoCommande = cont.NoCommande');
-        $this->db->join('ge_personne as pers','comm.NoPersonne = pers.NoPersonne');
-        $this->db->join('ge_produit as prod','cont.NoProduit = prod.NoProduit AND cont.NoEvenement=prod.NoEvenement AND cont.Annee=prod.Annee');//+AND
-        $this->db->where('comm.NoPersonne',$pNoPersonne);
+        $this->db->select('COUNT(*) as NbDeLignes');
+        $this->db->from('ge_contenir as cont');
+        $this->db->join('ge_commande as comm','cont.NoCommande = comm.NoCommande');
+        $this->db->where('cont.NoEvenement',$pNoEven);
+        $this->db->where('cont.Annee',$pAnnee);
+        $this->db->where('comm.NoPersonne',$pNoPers);
         $query=$this->db->get();
         return $query->row();
     }
-    public function nbCommandeClient($pNoEven, $pAnnee)
+    public function nbDeLignesParCommande($pNoEven, $pAnnee,$pNoComm)
     {
-        $this->db->Select('COUNT(*) as nbLignes');
+        $this->db->select('COUNT(*) as NbDeLignes');
+        $this->db->from('ge_contenir as cont');
+        $this->db->join('ge_commande as comm','cont.NoCommande = comm.NoCommande');
+        $this->db->where('cont.NoEvenement',$pNoEven);
+        $this->db->where('cont.Annee',$pAnnee);
+        $this->db->where('comm.NoCommande',$pNoComm);
+        $query=$this->db->get();
+        return $query->row();
+    }
+    public function commandeClientParPersonne($pNoEven, $pAnnee)
+    {
+        $this->db->Select('cont.NoEvenement, cont.Annee,cont.Quantite,cont.Remis,cont.NoProduit,comm.NoPersonne,comm.Payer,comm.NoCommande,comm.MontantTotal,comm.ResteAPayer,pers.Email,pers.Nom,pers.Prenom,prod.LibelleCourt');
         $this->db->from('ge_contenir as cont');
         $this->db->join('ge_commande as comm','cont.NoCommande = comm.NoCommande');
         $this->db->join('ge_personne as pers','comm.NoPersonne = pers.NoPersonne');
         $this->db->join('ge_produit as prod','cont.NoProduit = prod.NoProduit AND cont.NoEvenement=prod.NoEvenement AND cont.Annee=prod.Annee');//+AND
         $this->db->where('cont.NoEvenement',$pNoEven);
         $this->db->where('cont.Annee',$pAnnee);
+        $this->db->order_by('pers.Email');
+        $this->db->order_by('cont.NoCommande');
         $query=$this->db->get();
         return $query->result();
+    }
+    public function derniereCommandeDunClient($email)
+    {
+        $this->db->select_max('NoCommande');
+        $this->db->from('ge_commande');
+        $this->db->join('ge_personne','ge_personne.NoPersonne = ge_commande.NoPersonne');        
+        $this->db->where('ge_personne.Email',$email);
+        $maListe=$this->db->get();
+        $variableIntermediaire=$maListe->row();
+        $noCommande=$variableIntermediaire->NoCommande;
+
+
+        $this->db->Select('cont.Quantite,cont.NoProduit,prod.LibelleCourt,comm.ModePaiement,comm.NoPersonne,comm.Payer,comm.NoCommande,comm.MontantTotal,comm.ResteAPayer');
+        $this->db->from('ge_commande as comm');
+        $this->db->join('ge_contenir  as cont','comm.NoCommande = cont.NoCommande');
+        $this->db->join('ge_produit as prod','cont.NoProduit = prod.NoProduit AND cont.NoEvenement=prod.NoEvenement AND cont.Annee=prod.Annee');//+AND
+        $this->db->where('comm.NoCommande',$noCommande);
+        $query=$this->db->get();
+        return $query->result();
+    }
+    public function getNbProduit($NoEvenement,$annee)
+    {
+        $this->db->select('COUNT(*) as nbProduit, LibelleCourt');
+        $this->db->from('ge_contenir');
+        $this->db->join('ge_produit','ge_produit.NoProduit=ge_contenir.NoProduit AND ge_produit.NoEvenement=ge_contenir.NoEvenement AND ge_produit.annee=ge_contenir.annee' );
+        $this->db->where('ge_contenir.NoEvenement',$NoEvenement);
+        $this->db->where('ge_contenir.Annee',$annee);
+        $this->db->group_by('LibelleCourt');
+        $query=$this->db->get();	    
+        return $query->result();
+    }
+    public function MontantTotalParEvenement($NoEvenement,$annee)
+    {
+        $this->db->select_sum('MontantTotal' , 'MontantDesCommandes');
+        $this->db->from('ge_commande');
+        $this->db->join('ge_contenir','ge_contenir.NoCommande = ge_commande.NoCommande');
+        $this->db->where('ge_contenir.NoEvenement',$NoEvenement);
+        $this->db->where('ge_contenir.Annee',$annee);
+        $query=$this->db->get();	    
+        return $query->row();        
+    }
+    public function MontantTotalParAnnee($annee)
+    {
+        $this->db->select_sum('MontantTotal' , 'MontantDesCommandes');
+        $this->db->from('ge_commande');
+        $this->db->join('ge_contenir','ge_contenir.NoCommande = ge_commande.NoCommande');
+        $this->db->where('ge_contenir.Annee',$annee);
+        $query=$this->db->get();	    
+        return $query->row();
+    }
+    public function MontantPayeParEvenement($NoEvenement,$annee)
+    {
+        $this->db->select_sum('Payer' , 'MontantPaye');
+        $this->db->from('ge_commande');
+        $this->db->join('ge_contenir','ge_contenir.NoCommande = ge_commande.NoCommande');
+        $this->db->where('ge_contenir.NoEvenement',$NoEvenement);
+        $this->db->where('ge_contenir.Annee',$annee);
+        $query=$this->db->get();	    
+        return $query->row();        
+    }
+    public function nbCommandeClient($NoEvenement, $annee)
+    {
+        $this->db->Select('COUNT("comm.NoCommande") as nbCommande');
+        $this->db->from('ge_commande as comm');
+        $this->db->join('ge_contenir as cont','cont.NoCommande = comm.NoCommande');
+        $this->db->where('cont.NoEvenement',$NoEvenement);
+        $this->db->where('cont.Annee',$annee);
+        $query=$this->db->get();
+        return $query->row();
     }
     public function commandeParEvenement($pNoEvenement,$annee)
     {
@@ -73,7 +155,6 @@ class ModeleCommande extends CI_Model
         $maListe = $this->db->get(); 
         return $maListe->result();
     }
-
     public function getUneCommande($noCommande)
     {
         $this->db->select('*');
@@ -104,16 +185,6 @@ class ModeleCommande extends CI_Model
         $liste=$this->db->get();
         return $liste->result();
     }
-    public function lastCommande($email)
-    {
-        $this->db->select_max('NoCommande');
-        $this->db->from('ge_commande');
-        $this->db->join('ge_personne','ge_personne.NoPersonne = ge_commande.NoPersonne');        
-        $this->db->where('ge_personne.Email',$email);
-        $query=$this->db->get();
-        return $query->row();	    
-    }
-
     public function maxCommande()
     {
         $this->db->select_max('NoCommande');
@@ -123,7 +194,6 @@ class ModeleCommande extends CI_Model
         $noMax= $ligne->NoCommande;	
         return $noMax;
     }
-
     public function getContenir($pNoCommande)
     {
         $this->db->select('*');
@@ -220,5 +290,15 @@ class ModeleCommande extends CI_Model
        $this->db->where('NoCommande', $pDonneesAInserer['NoCommande']);
        return $this->db->update('ge_commande', $pDonneesAInserer);
     }
+
+    /*********************************************************************************************************************************************/
+    /*********************************************************************************************************************************************/
+    /*********************************************************************************************************************************************/
+    /**************************                                                                              *************************************/
+    /**************************                   UPDATE () DE NOTRE TABLE GE_COMMANDE                       *************************************/
+    /**************************                                                                              *************************************/
+    /*********************************************************************************************************************************************/
+    /*********************************************************************************************************************************************/
+    /*********************************************************************************************************************************************/
 
 }

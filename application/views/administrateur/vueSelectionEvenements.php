@@ -21,7 +21,7 @@ $commande=array(
 $submit=array(
     'name'      =>  'existant',
     'value'     =>  'envoyer',
-    'class'     =>  'btn btn-primary'
+    'class'     =>  'btn'
 );
 $selected='';
 ////////////////////////////////////////////////////////////////////////
@@ -29,11 +29,21 @@ $selected='';
 /////////////////////////////   FORMULAIRE  ////////////////////////////
 ////////////////////////////////////////////////////////////////////////
 
-if($Provenance==='modifier')
+if($Provenance=='statistique')
+{
+
+    echo '<div class="container-fluid">';
+        echo "<h1 class='encadre'>Choissisez un évènement à modifier</h1>";
+    echo '</div>';
+    echo '</br>';
+    echo form_open('Administrateur/affichageStatistique');     
+}
+if($Provenance=='modifier')
 {
     echo '<div class="container-fluid">';
         echo "<h1 class='encadre'>Choissisez un évènement à modifier</h1>";
     echo '</div>';
+    echo '</br>';
     echo form_open('Administrateur/modifierEvenement');
     echo "<input type='hidden' name='Provenance' value='".$Provenance."'>"; 
 }
@@ -42,6 +52,7 @@ elseif($Provenance=='commande')
     echo '<div class="container-fluid">';
         echo "<h1 class='encadre'>Choissisez un évènement pour voir les commandes associées</h1>";
     echo '</div>';
+    echo '</br>';
     echo form_open('Administrateur/selectionCommande');
     echo "<input type='hidden' name='Provenance' value='".$Provenance."'>";  
 }
@@ -50,6 +61,7 @@ elseif($Provenance=='ajouter')
     echo '<div class="container-fluid">';
         echo "<h1 class='encadre'>Pour pré-remplir le formulaire avec un évènement existant sélectionner le dans la liste ci-dessous </h1>";
     echo '</div>';
+    echo '</br>';
     $donnees['Provenance']='ajouter';
     echo form_open('Administrateur/ajouterEvenement',$donnees);
 }
@@ -59,6 +71,7 @@ elseif($Provenance=='activer')
     echo '<div class="container-fluid">';
         echo "<h1 class='encadre'>Choissisez un évènement pour le mettre en ligne</h1>";
     echo '</div>';
+    echo '</br>';
 }
 else
 {
@@ -72,12 +85,15 @@ echo '<div align="center">';
             echo form_label('Sélectionnez pour modifier la commande &nbsp&nbsp '); 
             echo form_checkbox($commande);
         }
+        echo '</br>';
         echo '<div align="center">';
             echo form_submit($submit);
         echo '</div>';
     echo '</div>';
 echo '</div>';
+echo '</br>';
 echo form_close();
+echo '</br>';
 
 //////////////////////////////  FIN DU FORMULAIRE ///////////////////////////////////////
 

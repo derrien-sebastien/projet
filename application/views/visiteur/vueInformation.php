@@ -53,11 +53,11 @@
             $submit=array(
                 'name'              =>  'submit',
                 'value'             =>  'FINALISER LA COMMANDE AVEC PAIEMENT DIFFERE',
-                'class'             =>  'btn btn-primary'
+                'class'             =>  'btn'
             );
             $hidden=array();
             $style=array(
-                'class'		        =>	'btnSubmit btn-lg btn-primary'
+                'class'		        =>	'btn'
             );
 
 ///////////////////////// Variables déjà connu ? On réassigne... //////////////////////// 
@@ -254,10 +254,9 @@ echo form_open('Visiteur/formulaireLivraison');
                         echo '<h3 class="souligne" align="center">Choisissez votre mode de paiement</h3>'; 
                         echo '</br>'; 
                         echo '<div align="center">';
-                            echo '<button name="payementCb" class="btn btn-primary">PAYER EN LIGNE</button>&emsp;';
+                            echo '<button name="payementCb" class="btn">PAYER EN LIGNE</button>&emsp;';
                             echo form_submit($submit); 
                         echo '</div>'; 
-                    
                 }            
             echo '</div>';
         echo '</br>';  

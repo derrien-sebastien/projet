@@ -19,20 +19,20 @@ echo '<div class="container-fluid">';
                         echo '<div align="center">';
                             if(!isset($unEvenementMarchand->ImgEntete))
                             {
-                                echo '<a href="';
+                                echo '<a title="voir évènement" href="';
                                     echo site_url($adress);
                                     echo '"><img src="'.base_url().'assets/img_site/Pas_dimage_disponible.svg'.'"class="img-thumbnail" style="width: 250px; height: 200px;"/>'; 
                                 echo '</a>';
                             }
                             else
                             {
-                                echo '<a href="';
+                                echo '<a title="voir évènement" href="';
                                     echo site_url($adress);
                                     echo '"><img src="'.base_url().'assets/images/'.$unEvenementMarchand->ImgEntete.'"class="img-thumbnail" alt="Image absente." style="width: 250px; height: 200px;"/>'; 
                                 echo '</a>';
                             }
                             echo '<div class="atc" align="center">';
-                                echo '<button class="btn btn-primary"><h4>'.anchor($adress,$libEven,array('class'=>'btn-primary')).'</h4></button>';
+                                echo '<button class="btn"><h4>'.anchor($adress,$libEven).'</h4></button>';
                             echo '</div>';
                             echo'</br>';
                         echo '</div>';
@@ -62,20 +62,20 @@ echo '<div class="container-fluid">';
                         echo '<div align="center">';
                             if(!isset($unEvenementNonMarchand->ImgEntete))
                             {
-                                echo '<a href="';
+                                echo '<a title="voir évènement" href="';
                                     echo site_url($adress);
                                     echo '"><img src="'.base_url().'assets/img_site/Pas_dimage_disponible.svg'.'"class="img-thumbnail" style="width: 250px; height: 200px;"/>'; 
                                 echo '</a>';
                             }
                             else
                             {
-                                echo '<a href="';
+                                echo '<a title="voir évènement" href="';
                                     echo site_url($adress);
                                     echo '"><img src="'.base_url().'assets/images/'.$unEvenementNonMarchand->ImgEntete.'"class="img-thumbnail" style="width: 250px; height: 200px;"/>'; 
                                 echo '</a>';
                             }
                             echo '<div class="atc" align="center">';
-                                echo '<button class="btn btn-primary">'.anchor($adress,$libEven,array('class'=>'btn-primary')).'</button>';
+                                echo '<button class="btn ">'.anchor($adress,$libEven).'</button>';
                             echo '</div>';
                             echo '</br>';
                         echo '</div>';
@@ -90,3 +90,9 @@ echo '<div class="container-fluid">';
     echo '</div>';
 echo '</div>';
 ?>
+</br>
+</br>
+</br>
+</br>
+</br>
+</br>

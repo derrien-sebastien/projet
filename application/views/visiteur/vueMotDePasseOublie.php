@@ -8,7 +8,7 @@ $email=array(
     'value'       =>  set_value('txtEmail')
 );
 $style=array(
-    'class'       =>  'btnSubmit btn-lg btn-primary'
+    'class'       =>  'btn'
   );
 ///////////////////////////////   FORMULAIRE   ////////////////////////////////////////
 echo form_open('visiteur/oublieMotDePasse'); 

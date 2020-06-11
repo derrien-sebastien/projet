@@ -148,7 +148,7 @@ echo        '<tr>';
 echo            '<td>';
 echo            '</td>';
 echo            '<td>';
-echo                form_submit('submit', 'AJOUTER','class="btn btn-primary"');              
+echo                form_submit('submit', 'AJOUTER','class="btn"');              
 echo            '</td>';
 echo        '</tr>';
 echo    '</table>';

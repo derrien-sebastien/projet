@@ -163,9 +163,9 @@ class Visiteur extends CI_Controller
                $this->session->set_userdata($dataSession);                                                   
                if($this->session->profil=='admin')
                {  
-                  if ($_POST['urlRedirect']!= site_url('Visiteur/seConnecter')) /* http://[::1]/projet/index.php/Visiteur/seConnecter') */ 
+                  if ($_POST['urlRedirect']!= site_url('Visiteur/seConnecter')) 
                   {  
-                     if($_POST['urlRedirect']== site_url('Visiteur/accueil')) /* 'http://[::1]/projet/index.php/visiteur/accueil') */
+                     if($_POST['urlRedirect']== site_url('Visiteur/accueil')) 
                      {                        
                         redirect('Administrateur/accueil');
                      } 
@@ -181,7 +181,7 @@ class Visiteur extends CI_Controller
                }
                elseif ($this->session->profil=='membre')
                {        
-                  if($_POST['urlRedirect']!= site_url('Visiteur/inscription'))   /* 'http://[::1]/projet/index.php/Visiteur/inscription') */
+                  if($_POST['urlRedirect']!= site_url('Visiteur/inscription'))
                   {
                      $this->accueil();
                   }
@@ -259,7 +259,8 @@ class Visiteur extends CI_Controller
                $this->email->from('ge_personne');
                $this->email->to($DonneesPersonne['Email']);
                $this->email->subject('Inscription ');
-               $message = "Votre mot de passe est : '".$nouveauMdp."'. Pensez à changer votre mot de passe.";
+               $message = "Vous venez de vous inscrire sur notre site. Pour confirmer veuillez cliquer sur le lien suivant :
+               <a href='http://[::1]/projet/index.php/Visiteur/confirmationMail'>http://[::1]/projet/index.php/Visiteur/confirmationMail</a>";
                $this->email->message($message);
                if (!$this->email->send())
                {
@@ -805,7 +806,8 @@ class Visiteur extends CI_Controller
       $this->cart->destroy();
       if ($_POST['modeReglement']=='Cheque/Espece')
       {
-         $this->indexVisiteur('templates/vueAccueilPrincipal');  //Envoi Mail pour le récap  --PRIORITAIRE
+         $this->commandeValideEmail();
+         $this->catalogueEvenement();  //Envoi Mail pour le récap  --PRIORITAIRE
       }
       elseif($_POST['modeReglement']=='Carte Bancaire')  
       {
@@ -963,50 +965,46 @@ class Visiteur extends CI_Controller
       
          $this->indexVisiteur('visiteur/vuePaiement',$donneesPayement);
    }// -0
-      
+     /* if ($Erreur == "00000")
+{*/ 
    public function commandeValideEmail()
    {
       $Addresse='adressMailSite@ovh.fr';
       $personne=$this->ModelePersonne->rechercheInfoPersonne($_SESSION['email']);
-      $lastCommande=$this->ModeleCommande->lastCommande($_SESSION['email']);
-      $objet='Commande n°'.$lastCommande->NoCommande;
-      $commande=$this->ModeleCommande->commandeDunClient($personne->NoPersonne);
-      
+      $commandes=$this->ModeleCommande->derniereCommandeDunClient($_SESSION['email']);
+      foreach($commandes as $uneCommande)
+      {
+         $noCommande=$uneCommande->NoCommande;
+         $modePayement=$uneCommande->ModePaiement;
+         $paye=$uneCommande->Payer;
+      }
+      $objet='Commande n°'.$noCommande;
+      $message=
+      "<h4>Bonjour,</br>".$personne->Nom."&nbsp;".$personne->Prenom." , merci de votre confiance.</br></h4>
+         Votre N° de commande :".$noCommande."</br>
+         A été validée.</br></br>
+         <h4 text-decoration: 5px underline rgba(20, 20, 20, 0.521);>Information sur votre commande:</h4></br>";
+         foreach($commandes as $uneCommande)
+         {
+         $message=$message."Vous avez commandé ".$uneCommande->Quantite."&nbsp".$uneCommande->LibelleCourt."</br>
+         Pour un montant de ".$uneCommande->MontantTotal."€ </br>";         
+         }
+         $message=$message."Facturée à: ".$personne->Email." </br>
+                              Date de commande: ".date("d-m-Y")."</br>
+                              Mode de paiement par ".$modePayement."</br>
+                              Vous avez payer ".$paye."€</br>
+                              Nous vous invitons à concervez ces informations.";
    
+         $config['mailtype'] = 'html';
+         $config['charset'] = 'utf-8';
+
+
+      $this->email->initialize($config);
       $this->email->from($Addresse); 
       $this->email->to($_SESSION['email']);
       $this->email->subject($objet); 
-      $this->email->message( "               
-                        
-         Bonjour ".$personne->Nom."&nbsp;".$personne->Prenom." , merci de votre confiance. \n
-         Votre N° de commande :".$lastCommande->NoCommande."\n
-         A été validée.\n \n
-         Information sur votre commande: \n
-         Vous avez commandé ".$commande->Quantite."&nbsp".$commande->LibelleCourt."\n
-         Pour un montant de ".$commande->MontantTotal."€ \n
-         Facturée à: ".$personne->Email." \n
-         Date de commande: ".date("d-m-Y")." \n
-         Mode de paiement par ".$commande->ModePaiement." \n
-         Vous avez payer ".$this->cart->total()."€ \n
-         Nous vous invitons à concervez ces informations."
-      ); 
-      var_dump('',$personne, $commande,$this->email->message());
+      $this->email->message($message); 
       $this->email->send(); 
-	 
-
-      /* $this->email->from('your@example.com', 'Your Name');
-      $this->email->to($_SESSION['email']);
-      $this->email->cc('another@another-example.com');
-      $this->email->bcc('them@their-example.com');
-
-      $this->email->subject('Email Test');
-      $this->email->message('Testing the email class.');
-
-      $this->email->send(); */
-
-      /* $this->indexVisiteur('visiteur/vuePaiementAccepte'); 
-      */
-     // }
    }
 }//fin class
 

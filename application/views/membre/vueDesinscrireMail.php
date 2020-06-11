@@ -10,7 +10,7 @@ $data = array(
 $submit=array(
 	'name'=>'submit',
 	'value'=>'TRANSMETTRE',
-	'class'=>'btn btn-primary'
+	'class'=>'btn'
 );
 
 ///////////////////////// Variables déjà connu ? On réassigne... //////////////////////// 
@@ -30,6 +30,7 @@ echo form_open('membre/actif');
 				echo form_label('Pour recevoir nos mails cocher la case et confirmer');	
 			}
 		echo '</div>';
+		echo '</br></br></br>';
 		echo '<div align="center">';
 			echo form_submit($submit);
 		echo '</div>';
@@ -37,3 +38,9 @@ echo form_open('membre/actif');
 echo form_close();
 //////////////////////////////  FIN DE FORMULAIRE ///////////////////////////////////////
 ?>
+</br>
+</br>
+</br>
+</br>
+</br>
+</br>

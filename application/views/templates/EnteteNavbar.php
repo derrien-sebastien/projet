@@ -4,7 +4,7 @@
 		    <!--                              NAVBAR                                   -->
 		    <!--------------------------------------------------------------------------->	
 		    <!--------------------------------------------------------------------------->         
- 
+
     <nav class="navbar navbar-inverse navbar-fixed-top">
       <div class="container-fluid">
         <div class="navbar-header">
@@ -14,7 +14,7 @@
 
             <!--visiteur-->
             <li>
-              <a href="<?php echo site_url('Visiteur/panier') ?>"><i class="glyphicon glyphicon-shopping-cart"></i><span><?php echo $this->cart->total_items(); ?></span>Panier</a>
+              <a href="<?php echo site_url('Visiteur/panier') ?>"><i class="glyphicon glyphicon-shopping-cart"></i><span><?php echo $this->cart->total_items(); ?></span>Panier&emsp;<?php echo $this->cart->total(); ?></span>€</a>
             </li>
          
           
@@ -38,22 +38,21 @@
                   </li> &nbsp;
                 </ul>
               </li> 
-              <!-- <li class="dropdown">
+              <li class="dropdown">
                 <a class="dropdown-toggle" data-toggle="dropdown" href="#"><i class="glyphicon  glyphicon-envelope"></i>&nbsp;Réclamation<span class="caret"></span></a>
                 <ul class="dropdown-menu">
                   <li>
                     <a href="<?php echo site_url('Membre/problem') ?>">Signaler un problème</a>
                   </li>
                 </ul>
-              </li>    -->
+              </li>
             <?php endif; ?>
            
             <!--administrateur-->
 
             <?php if ($this->session->profil=='admin') : ?>
               <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="true"> 
-                  <span class="nav-label">Evènementiel</span> 
+              <a class="dropdown-toggle" data-toggle="dropdown" href="#">Evènementiel 
                   <span class="caret"></span>
                 </a>
                 <ul class="dropdown-menu">
@@ -110,6 +109,9 @@
                     <ul class="dropdown-menu">
                       <li>
                         <a href="<?php echo site_url('Administrateur/selectionCommande') ?>">Récapitulatif des commandes</a>
+                      </li>&nbsp;
+                      <li>
+                        <a href="<?php echo site_url('Administrateur/affichageStatistique') ?>">Statistiques</a>
                       </li>
                     </ul>
                   </li>&nbsp;
@@ -167,9 +169,6 @@
                 <a href="<?php echo site_url('Visiteur/seConnecter') ?>">Connexion</a>                    
               </li>  
             <?php }elseif ($this->session->userdata('email') == True) { ?>
-              <li >
-              <a href="#"><?php echo form_label('Bienvenu &nbsp;'.$this->session->email) ?></a>
-              </li>
               <li>
                 <a href="<?php echo site_url('Visiteur/seDeConnecter') ?>">Déconnexion</a>
               </li>
@@ -179,3 +178,4 @@
     </nav>
     </br>
     </br>
+    <div class="page-wrap">

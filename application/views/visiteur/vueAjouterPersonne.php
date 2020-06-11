@@ -15,7 +15,7 @@ $mdp2=array(
 $submit=array(
 	'name'              =>  'Envoyer',
 	'value'             =>  'ENVOYER',
-	'class'             =>  'btn btn-primary'
+	'class'             =>  'btn'
 );
 echo '<div>';
 echo 	'<h1>Souhaitez-vous ajouter cette adresse mail ?</h1>';

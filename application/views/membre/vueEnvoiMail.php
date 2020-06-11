@@ -31,7 +31,7 @@ $pieceJointe=array(
 $submit=array(
     'name'      =>  'submit',
     'value'     =>  'Envoyer',
-    'class'     =>  'btn btn-primary'
+    'class'     =>  'btn'
 );
 
 ///////////////////////// Variables déjà connu ? On réassigne... ////////////////////////

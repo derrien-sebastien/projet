@@ -79,11 +79,9 @@ echo '<div class="container-fluid">';
                             $totale=$totale+$produit['subtotal'];
                         } 
                         echo '<tr>';
-                            echo '<td colspan="3"  align="center" style="color:rgb(128, 122, 122);">';
-                                echo 'Montant total :';
-                            echo '</td>';
-                            echo '<td colspan="6" align="right"  style="color:rgb(128, 122, 122);">';
-                                echo $totale;
+                            echo '<td colspan="6" style="color:rgb(128, 122, 122);">';
+                                echo '<h4 colspan="5" align="right">Montant total :';
+                                echo $totale.'</h4>';
                             echo '</td>';
                         echo '</tr>'; 
                         echo '</tbody>';
@@ -91,18 +89,18 @@ echo '<div class="container-fluid">';
                         $hidden2['noEvenement']=$noEvenement;
                         $hidden2['annee']=$annee;
                         echo '<div align="center">';
-                            echo '<button name="passerCommande" class="btn btn-primary">PASSER COMMANDE</button>';
+                            echo '<button name="passerCommande" class="btn">PASSER COMMANDE</button>';
                             echo " \n ";
-                            echo '<button name="submit"class="btn btn-primary">METTRE A JOUR LE PANIER</button>';
+                            echo '<button name="submit"class="btn">METTRE A JOUR LE PANIER</button>';
                             echo " \n ";
-                            echo '<button name="viderPanier"class="btn btn-primary">VIDER LE PANIER</button>';
+                            echo '<button name="viderPanier"class="btn">VIDER LE PANIER</button>';
                         echo '</div>';
                         echo '</br>';
                         echo '</br>';
                         echo '<div align="center">';
-                            echo '<button name="retourCatalogue" class="btn btn-primary">RETOUR AU CATALOGUE</button>';
+                            echo '<button name="retourCatalogue" class="btn">RETOUR AU CATALOGUE</button>';
                             echo '&emsp;';
-                            echo '<button name="retourEven"class="btn btn-primary">RETOUR AUX PRODUITS</button>';
+                            echo '<button name="retourEven"class="btn">RETOUR AUX PRODUITS</button>';
                             echo '</a>';
                         echo '</div>';
                         echo form_hidden($hidden2);
@@ -118,7 +116,7 @@ echo '<div class="container-fluid">';
                         echo '<div align="center">';
                         echo '<a href="';
                             echo site_url('Visiteur/catalogueEvenement');
-                            echo '"><button class="btn btn-primary">Retour au catalogue</button>';
+                            echo '"><button class="btn">Retour au catalogue</button>';
                         echo '</a>';
                         echo '</div>';
                     }                     
@@ -126,12 +124,15 @@ echo '<div class="container-fluid">';
         echo '</div>';
     echo '</div>'; 
 echo '</div>';
-
-
 ?>
-<!----------------------------------------------------------------------------------------
-||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
-||||||||||||||||||||||||||||||||       SCRIPT       ||||||||||||||||||||||||||||||||||||||
-||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
------------------------------------------------------------------------------------------>
+</br>
+</br>
+</br>
+</br>
+</br>
+</br>
+
+
+
+
 
