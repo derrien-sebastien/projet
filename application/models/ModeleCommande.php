@@ -202,7 +202,7 @@ class ModeleCommande extends CI_Model
         $query=$this->db->get();	    
         return $query->result();
     }
-    public function getNbProduit($NoEvenement,$annee)
+    public function etNbProduit($NoEvenement=null,$annee=null)
     {
         $this->db->select('COUNT(*) as nbProduit, LibelleCourt');
         $this->db->from('ge_contenir');
@@ -213,7 +213,7 @@ class ModeleCommande extends CI_Model
         $query=$this->db->get();	    
         return $query->result();
     }
-    public function MontantTotalParEvenement($NoEvenement,$annee)
+    public function ontantTotalParEvenement($NoEvenement,$annee)
     {
         $this->db->select_sum('MontantTotal' , 'MontantDesCommandes');
         $this->db->from('ge_commande');
@@ -223,7 +223,7 @@ class ModeleCommande extends CI_Model
         $query=$this->db->get();	    
         return $query->row();        
     }
-    public function MontantPayeParEvenement($NoEvenement,$annee)
+    public function ontantPayeParEvenement($NoEvenement,$annee)
     {
         $this->db->select_sum('Payer' , 'MontantPaye');
         $this->db->from('ge_commande');

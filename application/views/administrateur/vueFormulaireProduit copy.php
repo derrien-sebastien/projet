@@ -47,7 +47,7 @@ elseif($provenance=='modifierEvenement'||$provenance=='ajouterEvenement')
 $annee=array(
 	'name'=>'annee',
 	'type'=>'number',
-	'value'=>'2020'
+	'value'=>'2020'//amené la variable année en cour
 );
 
 if(isset($evenement))

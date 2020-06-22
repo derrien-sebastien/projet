@@ -228,6 +228,44 @@ class Visiteur extends CI_Controller
       Données sortantes :
 
    */
+   public function formulaireTest()
+   {
+      $this->form_validation->set_rules( 'prenom', 'votre prenom ', 'required'); 
+      $this->form_validation->set_rules( 'nom', 'mot de passe');
+      if ($this->form_validation->run() === FALSE)
+      {
+      
+         $personne = $this->ModelePersonne->getUnePersonne(5);
+         $donneesVue=array (
+            'prenon'=>$personne->Prenom, 
+            'nom'=>$personne->Nom, 
+            'noPersonne'=>5
+         );
+         $this->indexVisiteur('vueFormulaire',$donneesVue);
+      }
+      else
+      {
+      
+         $donneesAModifier=array (
+            'prenon'=>$_POST['prenom'],
+            'nom'=>$_POST['nom'],
+            'noPersonne'=>$_POST['noPersonne']
+         );
+         $this->ModelePersonne->update($donneesAModifier);
+         $personne = $this->ModelePersonne->getUnePersonne(5);
+         $donneesVue=array (
+            'prenon'=>$personne->Prenom, 
+            'nom'=>$personne->Nom
+         );
+         $this->indexVisiteur('vueOk',$donneesVue);
+         // //$personne = modelePersonne getUnePersonne(noPersonne)
+         //donneesvue (prenon, nom, noPersonne)
+         //afficher vue ok( $donneesVue)
+      }
+   }
+
+
+
    public function inscription()
    { 
       $this->form_validation->set_rules( 'txtEmail', 'Identifiant', 'required'); 
